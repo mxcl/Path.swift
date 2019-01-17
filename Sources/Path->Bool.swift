@@ -15,6 +15,10 @@ public extension Path {
         return FileManager.default.fileExists(atPath: string, isDirectory: &isDir) && !isDir.boolValue
     }
 
+    var isExecutable: Bool {
+        return FileManager.default.isExecutableFile(atPath: string)
+    }
+
     var exists: Bool {
         return FileManager.default.fileExists(atPath: string)
     }

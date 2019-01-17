@@ -42,14 +42,24 @@ public extension Path {
     }
 
     @discardableResult
+    public func move(to: Path, overwrite: Bool = false) throws -> Path {
+        if overwrite, to.exists {
+            try FileManager.default.removeItem(at: to.url)
+        }
+        try FileManager.default.moveItem(at: url, to: to.url)
+        return to
+    }
+
+    @discardableResult
     public func move(into: Path) throws -> Path {
         if !into.exists {
             try into.mkpath()
         } else if !into.isDirectory {
             throw CocoaError.error(.fileWriteFileExists)
         }
-        try FileManager.default.moveItem(at: url, to: into.join(basename()).url)
-        return self
+        let rv = into/basename()
+        try FileManager.default.moveItem(at: url, to: rv.url)
+        return rv
     }
 
     @inlinable

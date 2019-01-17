@@ -14,6 +14,10 @@ public extension Bundle {
     public var resources: Path? {
         return resourcePath.flatMap(Path.init)
     }
+
+    public var path: Path {
+        return Path(string: bundlePath)
+    }
 }
 
 public extension String {
