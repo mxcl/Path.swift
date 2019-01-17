@@ -114,16 +114,16 @@ We provide `ls()`, called because it behaves like the Terminal `ls` function,
 the name thus implies its behavior, ie. that it is not recursive.
 
 ```swift
-for path in Path.home.ls() {
-    print(path.path)
-    print(path.kind)  // .directory or .file
+for entry in Path.home.ls() {
+    print(entry.path)
+    print(entry.kind)  // .directory or .file
 }
 
-for path in Path.home.ls() where path.kind == .file {
+for entry in Path.home.ls() where entry.kind == .file {
     //…
 }
 
-for path in Path.home.ls() where path.mtime > yesterday {
+for entry in Path.home.ls() where entry.path.mtime > yesterday {
     //…
 }
 
