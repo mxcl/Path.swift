@@ -47,7 +47,11 @@ public extension Data {
     func write(to: Path, atomically: Bool = false) throws -> Path {
         let opts: NSData.WritingOptions
         if atomically {
+        #if os(macOS)
             opts = .atomicWrite
+        #else
+            opts = .atomic
+        #endif
         } else {
             opts = []
         }
