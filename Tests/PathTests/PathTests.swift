@@ -37,12 +37,12 @@ class PathTests: XCTestCase {
 
     func testExists() {
         XCTAssert(Path.root.exists)
-        XCTAssert((Path.root/"Users").exists)
+        XCTAssert((Path.root/"bin").exists)
     }
 
     func testIsDirectory() {
         XCTAssert(Path.root.isDirectory)
-        XCTAssert((Path.root/"Users").isDirectory)
+        XCTAssert((Path.root/"bin").isDirectory)
     }
 
     func testMktemp() throws {

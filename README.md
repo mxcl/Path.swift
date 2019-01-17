@@ -4,6 +4,8 @@ A file-system pathing library focused on developer experience and robust
 end‐results.
 
 ```swift
+import Path
+
 // convenient static members
 let home = Path.home
 
@@ -26,7 +28,7 @@ try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
 // were meant to be directory destinations
 ```
 
-Paths are just string representations, there *may not* be a real file there.
+Paths are just string representations, there *might not* be a real file there.
 
 # Support mxcl
 

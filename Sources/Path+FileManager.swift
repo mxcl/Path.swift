@@ -73,24 +73,37 @@ public extension Path {
         return try "".write(to: self)
     }
 
-    @inlinable
-    @discardableResult
-    public func mkdir() throws -> Path {
+    private func _foo(go: () throws -> Void) throws {
+    #if !os(Linux)
         do {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
+            try go()
         } catch CocoaError.Code.fileWriteFileExists {
             // noop
+        }
+    #else
+        do {
+            try go()
+        } catch {
+            let error = error as NSError
+            guard error.domain == NSCocoaErrorDomain, error.code == CocoaError.Code.fileWriteFileExists.rawValue else {
+                throw error
+            }
+        }
+    #endif
+    }
+
+    @discardableResult
+    public func mkdir() throws -> Path {
+        try _foo {
+            try FileManager.default.createDirectory(at: self.url, withIntermediateDirectories: false, attributes: nil)
         }
         return self
     }
 
-    @inlinable
     @discardableResult
     public func mkpath() throws -> Path {
-        do {
+        try _foo {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
-        } catch CocoaError.Code.fileWriteFileExists {
-            // noop
         }
         return self
     }

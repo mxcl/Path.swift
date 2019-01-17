@@ -15,7 +15,7 @@ extension PathTests {
     ]
 }
 
-#if !os(macOS)
+#if os(Linux)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(PathTests.__allTests),
