@@ -1,4 +1,4 @@
-# Path.swift
+# Path.swift ![badge-platforms] ![badge-languages]
 
 A file-system pathing library focused on developer experience and robust
 end‐results.
@@ -114,16 +114,16 @@ We provide `ls()`, called because it behaves like the Terminal `ls` function,
 the name thus implies its behavior, ie. that it is not recursive.
 
 ```swift
-for path in Path.home.ls() {
-    print(path.path)
-    print(path.kind)  // .directory or .file
+for entry in Path.home.ls() {
+    print(entry.path)
+    print(entry.kind)  // .directory or .file
 }
 
-for path in Path.home.ls() where path.kind == .file {
+for entry in Path.home.ls() where entry.kind == .file {
     //…
 }
 
-for path in Path.home.ls() where path.mtime > yesterday {
+for entry in Path.home.ls() where entry.path.mtime > yesterday {
     //…
 }
 
@@ -145,3 +145,7 @@ package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.0.0"
 ### Get push notifications for new releases
 
 https://codebasesaga.com/canopy/
+
+
+[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux-lightgrey.svg
+[badge-languages]: https://img.shields.io/badge/swift-4.2-orange.svg
