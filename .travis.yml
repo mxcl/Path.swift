@@ -1,12 +1,24 @@
 # only run for: merge commits, releases and pull-requests
 if: type != push OR branch = master OR branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
 
+os: osx
+language: swift
+osx_image: xcode10.1
+xcode_project: Path.swift.xcodeproj
+xcode_scheme: Path
+  
 jobs:
   include:
-    - os: osx
-      language: swift
-      osx_image: xcode10.1
-      script: swift test
+    - script: swift test
+      
+    - &xcodebuild
+      before_install: swift package generate-xcodeproj
+      xcode_destination: platform=iOS Simulator,OS=latest,name=iPhone XS
+    - <<: *xcodebuild
+      xcode_destination: platform=tvOS Simulator,OS=latest,name=Apple TV
+    - <<: *xcodebuild
+      xcode_destination: platform=watchOS Simulator,OS=latest,name=Apple Watch - 38mm
+      
     - env: SWIFT_VERSION=4.2.1
       os: linux
       language: generic
