@@ -147,5 +147,5 @@ package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.0.0"
 https://codebasesaga.com/canopy/
 
 
-[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux-lightgrey.svg
+[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
 [badge-languages]: https://img.shields.io/badge/swift-4.2-orange.svg
