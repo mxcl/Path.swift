@@ -16,10 +16,10 @@ let docs = Path.home/"Documents"
 let path = Path(userInput) ?? Path.cwd/userInput
 
 // chainable syntax so you have less boilerplate
-try Path.home.join("foo").mkpath().join("bar").chmod(0o555)
+try Path.home.join("foo").mkpath().join("bar").touch().chmod(0o555)
 
 // easy file-management
-try Path.root.join("foo").copy(to: Path.root.join("bar"))
+try Path.root.join("foo").copy(to: Path.root/"bar")
 
 // careful API to avoid common bugs
 try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
@@ -28,7 +28,8 @@ try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
 // were meant to be directory destinations
 ```
 
-Paths are just string representations, there *might not* be a real file there.
+We emphasize safety and correctness, just like Swift, and also just
+like Swift, we provide a thoughtful and comprehensive (yet concise) API.
 
 # Support mxcl
 
@@ -132,6 +133,38 @@ let dirs = Path.home.ls().directories().filter {
 }
 
 let swiftFiles = Path.home.ls().files(withExtension: "swift")
+```
+
+# Rules & Caveats
+
+Paths are just string representations, there *might not* be a real file there.
+
+```swift
+Path.home/"b"      // => /Users/mxcl/b
+
+// joining multiple strings works as you’d expect
+Path.home/"b"/"c"  // => /Users/mxcl/b/c
+
+// joining multiple parts at a time is fine
+Path.home/"b/c"    // => /Users/mxcl/b/c
+
+// joining with absolute paths omits prefixed slash
+Path.home/"/b"     // => /Users/mxcl/b
+
+// of course, feel free to join variables:
+let b = "b"
+let c = "c"
+Path.home/b/c      // => /Users/mxcl/b/c
+
+// tilde is not special here
+Path.root/"~b"     // => /~b
+Path.root/"~/b"    // => /~/b
+
+// but is here
+Path("~/foo")!     // => /Users/foo
+
+// this does not work though
+Path("~foo")       // => nil
 ```
 
 # Installation
