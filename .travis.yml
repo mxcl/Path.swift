@@ -26,7 +26,7 @@ jobs:
         xcodebuild \
           -project Path.swift.xcodeproj \
           -scheme Path.swift-Package \
-          -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch - 40mm' \
+          -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch Series 4 - 40mm' \
           build | xcpretty
 
       
