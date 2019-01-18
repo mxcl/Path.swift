@@ -5,7 +5,7 @@ os: osx
 language: swift
 osx_image: xcode10.1
 xcode_project: Path.swift.xcodeproj
-xcode_scheme: Path.swift-Package
+xcode_scheme: "Path.swift-Package"
   
 jobs:
   include:
