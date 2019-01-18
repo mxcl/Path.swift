@@ -1,4 +1,4 @@
-# Path.swift ![badge-platforms] ![badge-languages]
+# Path.swift ![badge-platforms] ![badge-languages] [![Build Status](https://travis-ci.com/mxcl/Path.swift.svg)](https://travis-ci.com/mxcl/Path.swift)
 
 A file-system pathing library focused on developer experience and robust
 end‐results.
