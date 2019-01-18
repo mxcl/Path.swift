@@ -6,7 +6,7 @@ public class TemporaryDirectory {
 
     public init() throws {
     #if !os(Linux)
-        url = try FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: URL(fileURLWithPath: "/"), create: true)
+        url = try FileManager.default.url(for: .itemReplacementDirectory, in: .userDomainMask, appropriateFor: FileManager.default.temporaryDirectory, create: true)
     #else
         let envs = ProcessInfo.processInfo.environment
         let env = envs["TMPDIR"] ?? envs["TEMP"] ?? envs["TMP"] ?? "/tmp"

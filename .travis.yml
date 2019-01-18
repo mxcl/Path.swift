@@ -20,8 +20,15 @@ jobs:
       xcode_destination: platform=tvOS Simulator,OS=latest,name=Apple TV
       name: tvOS
     - <<: *xcodebuild
-      xcode_destination: platform=watchOS Simulator,OS=latest,name=Apple Watch - 38mm
       name: watchOS
+      script: |
+        set -o pipefail
+        xcodebuild \
+          -project Path.swift.xcodeproj \
+          -scheme Path.swift-Package \
+          -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch - 40mm' \
+          build | xcpretty
+
       
     - env: SWIFT_VERSION=4.2.1
       os: linux
