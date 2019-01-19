@@ -1,26 +1,31 @@
 import Foundation
 
 public extension Bundle {
+    /// Returns the path for requested resource in this bundle.
     func path(forResource: String, ofType: String?) -> Path? {
         let f: (String?, String?) -> String? = path(forResource:ofType:)
         let str = f(forResource, ofType)
         return str.flatMap(Path.init)
     }
 
+    /// Returns the path for the shared-frameworks directory in this bundle.
     public var sharedFrameworks: Path? {
         return sharedFrameworksPath.flatMap(Path.init)
     }
 
+    /// Returns the path for the resources directory in this bundle.
     public var resources: Path? {
         return resourcePath.flatMap(Path.init)
     }
 
+    /// Returns the path for this bundle.
     public var path: Path {
         return Path(string: bundlePath)
     }
 }
 
 public extension String {
+    /// Initializes this `String` with the contents of the provided path.
     @inlinable
     init(contentsOf path: Path) throws {
         try self.init(contentsOfFile: path.string)
@@ -36,6 +41,7 @@ public extension String {
 }
 
 public extension Data {
+    /// Initializes this `Data` with the contents of the provided path.
     @inlinable
     init(contentsOf path: Path) throws {
         try self.init(contentsOf: path.url)
