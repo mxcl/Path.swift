@@ -183,6 +183,12 @@ package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.0.0"
 
 https://codebasesaga.com/canopy/
 
+# Alternatives
+
+* [PathKit](https://github.com/kylef/PathKit) by Kyle Fuller
+* [Files](https://github.com/JohnSundell/Files) by John Sundell
+* [Utility](https://github.com/apple/swift-package-manager) by Apple
+
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
 [badge-languages]: https://img.shields.io/badge/swift-4.2-orange.svg
