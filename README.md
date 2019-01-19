@@ -179,7 +179,7 @@ Path.root/"~b"     // => /~b
 Path.root/"~/b"    // => /~/b
 
 // but is here
-Path("~/foo")!     // => /Users/foo
+Path("~/foo")!     // => /Users/mxcl/foo
 
 // this does not work though
 Path("~foo")       // => nil
