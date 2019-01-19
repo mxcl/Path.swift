@@ -41,6 +41,10 @@ can continue to make tools and software you need and love. I appreciate it x.
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
+# Handbook
+
+Our [online API documentation] is automatically updated for new releases.
+
 ## Codable
 
 We support `Codable` as you would expect:
@@ -182,3 +186,4 @@ https://codebasesaga.com/canopy/
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
 [badge-languages]: https://img.shields.io/badge/swift-4.2-orange.svg
+[online API documentation]: https://mxcl.github.io/Path.swift/
