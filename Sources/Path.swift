@@ -12,7 +12,17 @@ public struct Path: Equatable, Hashable, Comparable {
     }
 
     public static var home: Path {
-        return Path(string: NSHomeDirectory())
+        let string: String
+      #if os(macOS)
+        if #available(OSX 10.12, *) {
+            string = FileManager.default.homeDirectoryForCurrentUser.path
+        } else {
+            string = NSHomeDirectory()
+        }
+      #else
+        string = NSHomeDirectory()
+      #endif
+        return Path(string: string)
     }
 
     @inlinable
