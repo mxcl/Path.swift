@@ -1,6 +1,11 @@
 # only run for: merge commits, releases and pull-requests
 if: type != push OR branch = master OR branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
 
+stages:
+  - name: test
+  - name: deploy
+    if: branch =~ ^\d+\.\d+\.\d+$
+
 os: osx
 language: swift
 osx_image: xcode10.1
@@ -11,7 +16,7 @@ jobs:
   include:
     - script: swift test
       name: macOS
-      
+
     - &xcodebuild
       before_install: swift package generate-xcodeproj
       xcode_destination: platform=iOS Simulator,OS=latest,name=iPhone XS
@@ -29,7 +34,7 @@ jobs:
           -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch Series 4 - 40mm' \
           build | xcpretty
 
-      
+
     - env: SWIFT_VERSION=4.2.1
       os: linux
       name: Linux
@@ -38,3 +43,22 @@ jobs:
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test
+
+    - <<: *xcodebuild
+      stage: deploy
+      name: Jazzy
+      install: gem install jazzy
+      script: |
+        jazzy \
+          --min-acl internal \
+          --no-hide-documentation-coverage \
+          --theme fullwidth \
+          --output output \
+          --readme README.md \
+          --root-url https://Path.swift.github.io/ \
+          --github_url https://github.com/mxcl/Path.swift
+      deploy:
+        provider: pages
+        skip-cleanup: true
+        github-token: $GITHUB_TOKEN
+        local-dir: output
