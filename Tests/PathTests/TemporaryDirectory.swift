@@ -1,8 +1,9 @@
+@testable import Path
 import Foundation
 
-public class TemporaryDirectory {
-    public let url: URL
-    public var path: Path { return Path(string: url.path) }
+class TemporaryDirectory {
+    let url: URL
+    var path: Path { return Path(string: url.path) }
 
     /**
      Creates a new temporary directory.
@@ -19,7 +20,7 @@ public class TemporaryDirectory {
      - Parameter appropriateFor: The temporary directory will be located on this
      volume.
     */
-    public init(appropriateFor: URL? = nil) throws {
+    init(appropriateFor: URL? = nil) throws {
       #if !os(Linux)
         let appropriate: URL
         if let appropriateFor = appropriateFor {
@@ -45,7 +46,7 @@ public class TemporaryDirectory {
     }
 }
 
-public extension Path {
+extension Path {
     static func mktemp<T>(body: (Path) throws -> T) throws -> T {
         let tmp = try TemporaryDirectory()
         return try body(tmp.path)
