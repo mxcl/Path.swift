@@ -55,7 +55,7 @@ jobs:
           --theme fullwidth \
           --output output \
           --readme README.md \
-          --root-url https://Path.swift.github.io/ \
+          --root-url https://mxcl.github.io/Path.swift/ \
           --github_url https://github.com/mxcl/Path.swift
       deploy:
         provider: pages
