@@ -16,14 +16,14 @@ let docs = Path.home/"Documents"
 let path = Path(userInput) ?? Path.cwd/userInput
 
 // chainable syntax so you have less boilerplate
-try Path.home.join("foo").mkpath().join("bar").touch().chmod(0o555)
+try Path.home.join("foo").mkdir().join("bar").touch().chmod(0o555)
 
 // easy file-management
 try Path.root.join("foo").copy(to: Path.root/"bar")
 
 // careful API to avoid common bugs
 try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
-// ^^ other libraries would make the `to:` form handle both these cases
+// ^^ other libraries would make the above `to:` form handle both these cases
 // but that can easily lead to bugs where you accidentally write files that
 // were meant to be directory destinations
 ```
@@ -83,6 +83,20 @@ let decoder = JSONDecoder()
 decoder.userInfo[.relativePath] = Path.home
 decoder.decode(from: data)
 ```
+
+## Initializing with absolute strings
+
+```swift
+let path = Path.root/absolutePathString
+```
+
+This may seem a little strange, why not just provide a normal initializer? In
+fact we do, and it returns an optional (`Path?`), because paths are always
+absolute, this is logically mandatory.
+
+This is why the above form is prefered, with the above you will always get a 
+valid path object without requiring you do `if let`
+
 
 ## Initializing from user-input
 
@@ -173,11 +187,20 @@ Path("~foo")       // => nil
 
 # Installation
 
-SwiftPM only:
+SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.0.0"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.3.0"))
 ```
+
+CocoaPods:
+
+```ruby
+pod 'Path.swift' ~> 0.3.0
+```
+
+Please note! We are pre 1.0, thus we can change the API as we like! We will tag
+1.0 as soon as possible.
 
 ### Get push notifications for new releases
 
