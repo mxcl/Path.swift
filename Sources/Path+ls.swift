@@ -1,13 +1,19 @@
 import Foundation
 
 public extension Path {
-    /// Same as the `ls` command ∴ is ”shallow”
-    /// - Parameter skipHiddenFiles: Same as the `ls -a` if false. Otherwise returns only the non hidden files. Default is false.
-    func ls(skipHiddenFiles: Bool = false) throws -> [Entry] {
-        let options: FileManager.DirectoryEnumerationOptions = skipHiddenFiles ? [.skipsHiddenFiles] : []
-        let paths = try FileManager.default.contentsOfDirectory(at: url,
-                                                                includingPropertiesForKeys: nil,
-                                                                options: options)
+    /**
+     Same as the `ls -a` command ∴ is ”shallow”
+     - Parameter includeHiddenFiles: If `true`, hidden files are included in the results. Defaults to `true`.
+     - Important: `includeHiddenFiles` does not work on Linux
+     */
+    func ls(includeHiddenFiles: Bool = true) throws -> [Entry] {
+        var opts = FileManager.DirectoryEnumerationOptions()
+    #if !os(Linux)
+        if !includeHiddenFiles {
+            opts.insert(.skipsHiddenFiles)
+        }
+    #endif
+        let paths = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil, options: opts)
         func convert(url: URL) -> Entry? {
             guard let path = Path(url.path) else { return nil }
             return Entry(kind: path.isDirectory ? .directory : .file, path: path)
