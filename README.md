@@ -16,14 +16,14 @@ let docs = Path.home/"Documents"
 let path = Path(userInput) ?? Path.cwd/userInput
 
 // chainable syntax so you have less boilerplate
-try Path.home.join("foo").mkpath().join("bar").touch().chmod(0o555)
+try Path.home.join("foo").mkdir().join("bar").touch().chmod(0o555)
 
 // easy file-management
 try Path.root.join("foo").copy(to: Path.root/"bar")
 
 // careful API to avoid common bugs
 try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
-// ^^ other libraries would make the `to:` form handle both these cases
+// ^^ other libraries would make the above `to:` form handle both these cases
 // but that can easily lead to bugs where you accidentally write files that
 // were meant to be directory destinations
 ```
@@ -40,6 +40,8 @@ can continue to make tools and software you need and love. I appreciate it x.
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
+
+[Other donation/tipping options](http://mxcl.github.io/donate/)
 
 # Handbook
 
@@ -96,6 +98,11 @@ let path = Path(userInput) ?? Path.cwd/userInput
 This is explicit, not hiding anything that code-review may miss and preventing
 common bugs like accidentally creating `Path` objects from strings you did not
 expect to be relative.
+
+Our initializer is nameless because we conform to `LosslessStringConvertible`,
+the same conformance as that `Int`, `Float` etc. conform. The protocol enforces
+a nameless initialization and since it is appropriate for us to conform to it,
+we do.
 
 ## Extensions
 
@@ -165,7 +172,7 @@ Path.root/"~b"     // => /~b
 Path.root/"~/b"    // => /~/b
 
 // but is here
-Path("~/foo")!     // => /Users/foo
+Path("~/foo")!     // => /Users/mxcl/foo
 
 // this does not work though
 Path("~foo")       // => nil
@@ -173,11 +180,20 @@ Path("~foo")       // => nil
 
 # Installation
 
-SwiftPM only:
+SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.0.0"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.3.0"))
 ```
+
+CocoaPods:
+
+```ruby
+pod 'Path.swift' ~> 0.3.0
+```
+
+Please note! We are pre 1.0, thus we can change the API as we like! We will tag
+1.0 as soon as possible.
 
 ### Get push notifications for new releases
 
