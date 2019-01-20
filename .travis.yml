@@ -50,13 +50,14 @@ jobs:
       install: gem install jazzy
       script: |
         jazzy \
-          --min-acl internal \
           --no-hide-documentation-coverage \
           --theme fullwidth \
           --output output \
           --readme README.md \
           --root-url https://mxcl.github.io/Path.swift/ \
-          --github_url https://github.com/mxcl/Path.swift
+          --github_url https://github.com/mxcl/Path.swift \
+          --module Path \
+          --module-version $TRAVIS_TAG
       deploy:
         provider: pages
         skip-cleanup: true
@@ -64,3 +65,8 @@ jobs:
         local-dir: output
         on:
           tags: true
+
+    - stage: deploy
+      name: CocoaPods
+      install: gem install cocoapods --pre
+      script: pod trunk push --allow-warnings
