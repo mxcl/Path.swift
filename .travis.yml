@@ -47,13 +47,22 @@ jobs:
     - <<: *xcodebuild
       stage: deploy
       name: Jazzy
+      before_install: |
+        cat << EOF > .jazzy.yml
+        custom_categories:
+          - name: Path
+            children:
+              - Path
+              - /(_:_:)
+        EOF
+        touch Contents.md
       install: gem install jazzy
       script: |
         jazzy \
           --no-hide-documentation-coverage \
           --theme fullwidth \
           --output output \
-          --readme README.md \
+          --readme Contents.md \
           --root-url https://mxcl.github.io/Path.swift/ \
           --github_url https://github.com/mxcl/Path.swift \
           --module Path \
