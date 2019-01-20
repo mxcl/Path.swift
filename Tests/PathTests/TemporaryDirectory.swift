@@ -52,3 +52,20 @@ extension Path {
         return try body(tmp.path)
     }
 }
+
+
+#if !os(macOS) && !os(Linux)
+import XCTest
+
+// SwiftPM generates code that is improperly escaped thus we require this to
+// compile on iOS & tvOS.
+public typealias XCTestCaseEntry = (testCaseClass: XCTestCase.Type, allTests: [(String, (XCTestCase) throws -> Void)])
+
+public func testCase<T: XCTestCase>(_ allTests: [(String, (T) -> () throws -> Void)]) -> XCTestCaseEntry {
+    fatalError()
+}
+
+public func testCase<T: XCTestCase>(_ allTests: [(String, (T) -> () -> Void)]) -> XCTestCaseEntry {
+    fatalError()
+}
+#endif

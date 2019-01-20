@@ -6,8 +6,10 @@ extension PathTests {
         ("testCodable", testCodable),
         ("testConcatenation", testConcatenation),
         ("testEnumeration", testEnumeration),
+        ("testEnumerationSkippingHiddenFiles", testEnumerationSkippingHiddenFiles),
         ("testExists", testExists),
         ("testIsDirectory", testIsDirectory),
+        ("testJoin", testJoin),
         ("testMkpathIfExists", testMkpathIfExists),
         ("testMktemp", testMktemp),
         ("testRelativePathCodable", testRelativePathCodable),
@@ -15,7 +17,7 @@ extension PathTests {
     ]
 }
 
-#if os(Linux)
+#if !os(macOS)
 public func __allTests() -> [XCTestCaseEntry] {
     return [
         testCase(PathTests.__allTests),

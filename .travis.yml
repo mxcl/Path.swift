@@ -2,6 +2,7 @@
 if: type != push OR branch = master OR branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
 
 stages:
+  - name: pretest
   - name: test
   - name: deploy
     if: branch =~ ^\d+\.\d+\.\d+$
@@ -34,7 +35,6 @@ jobs:
           -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch Series 4 - 40mm' \
           build | xcpretty
 
-
     - env: SWIFT_VERSION=4.2.1
       os: linux
       name: Linux
@@ -43,30 +43,34 @@ jobs:
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test
+      
+    - stage: pretest
+      name: Check if Linux tests are up-to-date
+      install: swift test --generate-linuxmain
+      script: git diff --exit-code
 
-    - <<: *xcodebuild
-      stage: deploy
+    - stage: deploy
       name: Jazzy
       before_install: |
-        cat << EOF > .jazzy.yml
+        cat << EOF > .jazzy.yaml
+        module: Path
+        module_version: $TRAVIS_TAG
         custom_categories:
           - name: Path
             children:
               - Path
               - /(_:_:)
+        xcodebuild_arguments:
+          - UseModernBuildSystem=NO
+        output: output
+        github_url: https://github.com/mxcl/Path.swift
         EOF
-        touch Contents.md
-      install: gem install jazzy
+      install: |
+        gem install jazzy
+        swift package generate-xcodeproj
       script: |
-        jazzy \
-          --no-hide-documentation-coverage \
-          --theme fullwidth \
-          --output output \
-          --readme Contents.md \
-          --root-url https://mxcl.github.io/Path.swift/ \
-          --github_url https://github.com/mxcl/Path.swift \
-          --module Path \
-          --module-version $TRAVIS_TAG
+        jazzy
+        rm -rf output/docsets
       deploy:
         provider: pages
         skip-cleanup: true
@@ -75,7 +79,25 @@ jobs:
         on:
           tags: true
 
-    - stage: deploy
-      name: CocoaPods
+    - name: CocoaPods
+      before_install: |
+        cat << EOF > Path.swift.podspec
+        Pod::Spec.new do |s|
+          s.name             = 'Path.swift'
+          s.version          = '$TRAVIS_TAG'
+          s.summary          = 'Delightful, robust file-pathing functions'
+          s.homepage         = 'https://github.com/mxcl/Path.swift'
+          s.license          = { :type => 'Unlicense', :file => 'LICENSE.md' }
+          s.author           = { 'mxcl' => 'mxcl@me.com' }
+          s.source           = { :git => 'https://github.com/mxcl/Path.swift.git', :tag => s.version.to_s }
+          s.social_media_url = 'https://twitter.com/mxcl'
+          s.osx.deployment_target = '10.10'
+          s.ios.deployment_target = '8.0'
+          s.tvos.deployment_target = '10.0'
+          s.watchos.deployment_target = '3.0'
+          s.source_files = 'Sources/*'
+          s.swift_version = "4.2"
+        end
+        EOF
       install: gem install cocoapods --pre
       script: pod trunk push --allow-warnings
