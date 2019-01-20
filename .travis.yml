@@ -17,11 +17,6 @@ jobs:
   include:
     - script: swift test
       name: macOS
-      
-    - stage: pretest
-      name: Check if Linux tests are up-to-date
-      install: swift test --generate-linuxmain
-      script: git diff --exit-code
 
     - &xcodebuild
       before_install: swift package generate-xcodeproj
@@ -48,6 +43,11 @@ jobs:
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test
+      
+    - stage: pretest
+      name: Check if Linux tests are up-to-date
+      install: swift test --generate-linuxmain
+      script: git diff --exit-code
 
     - stage: deploy
       name: Jazzy
@@ -79,8 +79,7 @@ jobs:
         on:
           tags: true
 
-    - stage: deploy
-      name: CocoaPods
+    - name: CocoaPods
       before_install: |
         cat << EOF > Path.swift.podspec
         Pod::Spec.new do |s|
