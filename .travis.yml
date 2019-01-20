@@ -2,6 +2,7 @@
 if: type != push OR branch = master OR branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
 
 stages:
+  - name: pretest
   - name: test
   - name: deploy
     if: branch =~ ^\d+\.\d+\.\d+$
@@ -16,6 +17,11 @@ jobs:
   include:
     - script: swift test
       name: macOS
+      
+    - stage: pretest
+      name: Check if Linux tests are up-to-date
+      install: swift test --generate-linuxmain
+      script: git diff --exit-code
 
     - &xcodebuild
       before_install: swift package generate-xcodeproj
@@ -33,7 +39,6 @@ jobs:
           -scheme Path.swift-Package \
           -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch Series 4 - 40mm' \
           build | xcpretty
-
 
     - env: SWIFT_VERSION=4.2.1
       os: linux
