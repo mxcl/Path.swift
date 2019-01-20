@@ -1,4 +1,4 @@
-# Path.swift
+# Path.swift ![badge-platforms] ![badge-languages] [![Build Status](https://travis-ci.com/mxcl/Path.swift.svg)](https://travis-ci.com/mxcl/Path.swift)
 
 A file-system pathing library focused on developer experience and robust
 end‐results.
@@ -16,19 +16,20 @@ let docs = Path.home/"Documents"
 let path = Path(userInput) ?? Path.cwd/userInput
 
 // chainable syntax so you have less boilerplate
-try Path.home.join("foo").mkpath().join("bar").chmod(0o555)
+try Path.home.join("foo").mkdir().join("bar").touch().chmod(0o555)
 
 // easy file-management
-try Path.root.join("foo").copy(to: Path.root.join("bar"))
+try Path.root.join("foo").copy(to: Path.root/"bar")
 
 // careful API to avoid common bugs
 try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
-// ^^ other libraries would make the `to:` form handle both these cases
+// ^^ other libraries would make the above `to:` form handle both these cases
 // but that can easily lead to bugs where you accidentally write files that
 // were meant to be directory destinations
 ```
 
-Paths are just string representations, there *might not* be a real file there.
+We emphasize safety and correctness, just like Swift, and also just
+like Swift, we provide a thoughtful and comprehensive (yet concise) API.
 
 # Support mxcl
 
@@ -39,6 +40,12 @@ can continue to make tools and software you need and love. I appreciate it x.
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
+
+[Other donation/tipping options](http://mxcl.github.io/donate/)
+
+# Handbook
+
+Our [online API documentation] is automatically updated for new releases.
 
 ## Codable
 
@@ -92,6 +99,11 @@ This is explicit, not hiding anything that code-review may miss and preventing
 common bugs like accidentally creating `Path` objects from strings you did not
 expect to be relative.
 
+Our initializer is nameless because we conform to `LosslessStringConvertible`,
+the same conformance as that `Int`, `Float` etc. conform. The protocol enforces
+a nameless initialization and since it is appropriate for us to conform to it,
+we do.
+
 ## Extensions
 
 We have some extensions to Apple APIs:
@@ -134,14 +146,66 @@ let dirs = Path.home.ls().directories().filter {
 let swiftFiles = Path.home.ls().files(withExtension: "swift")
 ```
 
-# Installation
+# Rules & Caveats
 
-SwiftPM only:
+Paths are just string representations, there *might not* be a real file there.
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.0.0"))
+Path.home/"b"      // => /Users/mxcl/b
+
+// joining multiple strings works as you’d expect
+Path.home/"b"/"c"  // => /Users/mxcl/b/c
+
+// joining multiple parts at a time is fine
+Path.home/"b/c"    // => /Users/mxcl/b/c
+
+// joining with absolute paths omits prefixed slash
+Path.home/"/b"     // => /Users/mxcl/b
+
+// of course, feel free to join variables:
+let b = "b"
+let c = "c"
+Path.home/b/c      // => /Users/mxcl/b/c
+
+// tilde is not special here
+Path.root/"~b"     // => /~b
+Path.root/"~/b"    // => /~/b
+
+// but is here
+Path("~/foo")!     // => /Users/mxcl/foo
+
+// this does not work though
+Path("~foo")       // => nil
 ```
+
+# Installation
+
+SwiftPM:
+
+```swift
+package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.4.0"))
+```
+
+CocoaPods:
+
+```ruby
+pod 'Path.swift' ~> 0.4.0
+```
+
+Please note! We are pre 1.0, thus we can change the API as we like! We will tag
+1.0 as soon as possible.
 
 ### Get push notifications for new releases
 
 https://codebasesaga.com/canopy/
+
+# Alternatives
+
+* [PathKit](https://github.com/kylef/PathKit) by Kyle Fuller
+* [Files](https://github.com/JohnSundell/Files) by John Sundell
+* [Utility](https://github.com/apple/swift-package-manager) by Apple
+
+
+[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
+[badge-languages]: https://img.shields.io/badge/swift-4.2-orange.svg
+[online API documentation]: https://mxcl.github.io/Path.swift/

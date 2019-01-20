@@ -13,12 +13,14 @@ public extension Path {
 }
 
 public extension Array where Element == Path.Entry {
+    /// Filters the list of entries to be a list of Paths that are directories.
     var directories: [Path] {
         return compactMap {
             $0.kind == .directory ? $0.path : nil
         }
     }
 
+    /// Filters the list of entries to be a list of Paths that are files with the specified extension
     func files(withExtension ext: String) -> [Path] {
         return compactMap {
             $0.kind == .file && $0.path.extension == ext ? $0.path : nil

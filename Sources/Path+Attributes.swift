@@ -43,14 +43,18 @@ public extension Path {
         return self
     }
 
-    /// - Returns: modification-time or creation-time if none
+    /**
+     Returns the modification-time.
+     - Note: Returns the creation time if there is no modification time.
+     - Note: Returns UNIX-time-zero if neither are available, though this *should* be impossible.
+     */
     public var mtime: Date {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
             return attrs[.modificationDate] as? Date ?? attrs[.creationDate] as? Date ?? Date()
         } catch {
-            //TODO print(error)
-            return Date()
+            //TODO log error
+            return Date(timeIntervalSince1970: 0)
         }
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 
 public extension CodingUserInfoKey {
+    /// If set paths are encoded as relative to this path.
     static let relativePath = CodingUserInfoKey(rawValue: "dev.mxcl.Path.relative")!
 }
 

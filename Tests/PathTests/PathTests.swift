@@ -93,4 +93,20 @@ class PathTests: XCTestCase {
         decoder.userInfo[.relativePath] = root
         XCTAssertEqual(try decoder.decode([Path].self, from: data), input)
     }
+
+    func testJoin() {
+        let prefix = Path.root/"Users/mxcl"
+
+        XCTAssertEqual(prefix/"b", Path("/Users/mxcl/b"))
+        XCTAssertEqual(prefix/"b"/"c", Path("/Users/mxcl/b/c"))
+        XCTAssertEqual(prefix/"b/c", Path("/Users/mxcl/b/c"))
+        XCTAssertEqual(prefix/"/b", Path("/Users/mxcl/b"))
+        let b = "b"
+        let c = "c"
+        XCTAssertEqual(prefix/b/c, Path("/Users/mxcl/b/c"))
+        XCTAssertEqual(Path.root/"~b", Path("/~b"))
+        XCTAssertEqual(Path.root/"~/b", Path("/~/b"))
+        XCTAssertEqual(Path("~/foo"), Path.home/"foo")
+        XCTAssertNil(Path("~foo"))
+    }
 }

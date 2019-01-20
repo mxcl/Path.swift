@@ -41,6 +41,14 @@ public extension Path {
         return rv
     }
 
+    /**
+     Moves a file.
+     - Note: `throws` if `to` is a directory.
+     - Parameter to: Destination filename.
+     - Parameter overwrite: If true overwrites any file that already exists at `to`.
+     - Returns: `to` to allow chaining
+     - SeeAlso: move(into:overwrite:)
+     */
     @discardableResult
     public func move(to: Path, overwrite: Bool = false) throws -> Path {
         if overwrite, to.exists {
@@ -50,6 +58,17 @@ public extension Path {
         return to
     }
 
+    /**
+     Moves a file into a directory
+
+     If the destination does not exist, this function creates the directory first.
+
+     - Note: `throws` if `into` is a file.
+     - Parameter into: Destination directory
+     - Parameter overwrite: If true overwrites any file that already exists at `into`.
+     - Returns: The `Path` of destination filename.
+     - SeeAlso: move(into:overwrite:)
+     */
     @discardableResult
     public func move(into: Path) throws -> Path {
         if !into.exists {
@@ -62,17 +81,23 @@ public extension Path {
         return rv
     }
 
+    /// Deletes the path, recursively if a directory.
     @inlinable
     public func delete() throws {
         try FileManager.default.removeItem(at: url)
     }
 
+    /**
+     Creates an empty file at this path.
+     - Returns: `self` to allow chaining.
+     */
     @inlinable
     @discardableResult
     func touch() throws -> Path {
         return try "".write(to: self)
     }
 
+    /// Helper due to Linux Swift being incomplete.
     private func _foo(go: () throws -> Void) throws {
     #if !os(Linux)
         do {
@@ -92,6 +117,11 @@ public extension Path {
     #endif
     }
 
+    /**
+     Creates the directory at this path.
+     - Note: Does not create any intermediary directories.
+     - Returns: `self` to allow chaining.
+     */
     @discardableResult
     public func mkdir() throws -> Path {
         try _foo {
@@ -100,6 +130,11 @@ public extension Path {
         return self
     }
 
+    /**
+     Creates the directory at this path.
+     - Note: Creates any intermediary directories, if required.
+     - Returns: `self` to allow chaining.
+     */
     @discardableResult
     public func mkpath() throws -> Path {
         try _foo {
@@ -108,8 +143,15 @@ public extension Path {
         return self
     }
 
-    /// - Note: If file doesn’t exist, creates file
-    /// - Note: If file is not writable, makes writable first, resetting permissions after the write
+    /**
+     Replaces the contents of the file at this path with the provided string.
+     - Note: If file doesn’t exist, creates file
+     - Note: If file is not writable, makes writable first, resetting permissions after the write
+     - Parameter contents: The string that will become the contents of this file.
+     - Parameter atomically: If `true` the operation will be performed atomically.
+     - Parameter encoding: The string encoding to use.
+     - Returns: `self` to allow chaining.
+     */
     @discardableResult
     public func replaceContents(with contents: String, atomically: Bool = false, encoding: String.Encoding = .utf8) throws -> Path {
         let resetPerms: Int?
