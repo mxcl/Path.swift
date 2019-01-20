@@ -16,31 +16,6 @@ public struct Path: Equatable, Hashable, Comparable {
     /// The underlying filesystem path
     public let string: String
 
-    /// Returns a `Path` containing ``FileManager.default.currentDirectoryPath`.
-    public static var cwd: Path {
-        return Path(string: FileManager.default.currentDirectoryPath)
-    }
-
-    /// Returns a `Path` representing the root path.
-    public static var root: Path {
-        return Path(string: "/")
-    }
-
-    /// Returns a `Path` representing the user’s home directory
-    public static var home: Path {
-        let string: String
-      #if os(macOS)
-        if #available(OSX 10.12, *) {
-            string = FileManager.default.homeDirectoryForCurrentUser.path
-        } else {
-            string = NSHomeDirectory()
-        }
-      #else
-        string = NSHomeDirectory()
-      #endif
-        return Path(string: string)
-    }
-
     /**
      Returns the filename extension of this path.
      - Remark: Implemented via `NSString.pathExtension`.
