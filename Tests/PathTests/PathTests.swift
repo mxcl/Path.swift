@@ -17,6 +17,7 @@ class PathTests: XCTestCase {
         try tmpdir.join("a").mkdir().join("c").touch()
         try tmpdir.join("b").touch()
         try tmpdir.join("c").touch()
+        try tmpdir.join(".d").mkdir().join("e").touch()
 
         var paths = Set<String>()
         var dirs = 0
@@ -26,8 +27,30 @@ class PathTests: XCTestCase {
             }
             paths.insert(entry.path.basename())
         }
+        XCTAssertEqual(dirs, 2)
+        XCTAssertEqual(paths, ["a", "b", "c", ".d"])
+        
+    }
+    
+    func testEnumerationSkippingHiddenFiles() throws {
+        let tmpdir_ = try TemporaryDirectory()
+        let tmpdir = tmpdir_.path
+        try tmpdir.join("a").mkdir().join("c").touch()
+        try tmpdir.join("b").touch()
+        try tmpdir.join("c").touch()
+        try tmpdir.join(".d").mkdir().join("e").touch()
+        
+        var paths = Set<String>()
+        var dirs = 0
+        for entry in try tmpdir.ls(skipHiddenFiles: true) {
+            if entry.kind == .directory {
+                dirs += 1
+            }
+            paths.insert(entry.path.basename())
+        }
         XCTAssertEqual(dirs, 1)
         XCTAssertEqual(paths, ["a", "b", "c"])
+        
     }
 
     func testRelativeTo() {

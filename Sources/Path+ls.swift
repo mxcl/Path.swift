@@ -1,14 +1,18 @@
 import Foundation
 
 public extension Path {
-    /// same as the `ls` command ∴ is ”shallow”
-    func ls() throws -> [Entry] {
-        let relativePaths = try FileManager.default.contentsOfDirectory(atPath: string)
-        func convert(relativePath: String) -> Entry {
-            let path = self/relativePath
+    /// Same as the `ls` command ∴ is ”shallow”
+    /// - Parameter skipHiddenFiles: Same as the `ls -a` if false. Otherwise returns only the non hidden files. Default is false.
+    func ls(skipHiddenFiles: Bool = false) throws -> [Entry] {
+        let options: FileManager.DirectoryEnumerationOptions = skipHiddenFiles ? [.skipsHiddenFiles] : []
+        let paths = try FileManager.default.contentsOfDirectory(at: url,
+                                                                includingPropertiesForKeys: nil,
+                                                                options: options)
+        func convert(url: URL) -> Entry? {
+            guard let path = Path(url.path) else { return nil }
             return Entry(kind: path.isDirectory ? .directory : .file, path: path)
         }
-        return relativePaths.map(convert)
+        return paths.compactMap(convert)
     }
 }
 
