@@ -2,7 +2,7 @@ import Foundation
 
 public extension Path {
     /// Same as the `ls` command ∴ is ”shallow”
-    /// - Parameter skipHiddenFiles: Same as the `ls -a` if false otherwise returns only the non hidden files. Default is false.
+    /// - Parameter skipHiddenFiles: Same as the `ls -a` if false. Otherwise returns only the non hidden files. Default is false.
     func ls(skipHiddenFiles: Bool = false) throws -> [Entry] {
         let options: FileManager.DirectoryEnumerationOptions = skipHiddenFiles ? [.skipsHiddenFiles] : []
         let paths = try FileManager.default.contentsOfDirectory(at: url,
