@@ -183,13 +183,13 @@ Path("~foo")       // => nil
 SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.4.0"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.4.1"))
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'Path.swift' ~> 0.4.0
+pod 'Path.swift' ~> '0.4.1'
 ```
 
 Please note! We are pre 1.0, thus we can change the API as we like! We will tag

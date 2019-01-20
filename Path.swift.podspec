@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Path.swift'
-  s.version          = '0.4.0'
+  s.version          = '0.4.1'
   s.summary          = 'Delightful, robust file-pathing functions'
   s.homepage         = 'https://github.com/mxcl/Path.swift'
   s.license          = { :type => 'Unlicense', :file => 'LICENSE.md' }
