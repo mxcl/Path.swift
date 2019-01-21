@@ -1,5 +1,6 @@
 import Foundation
 
+/// Extensions on Foundation’s `Bundle` so you get `Path` rather than `String` or `URL`.
 public extension Bundle {
     /// Returns the path for requested resource in this bundle.
     func path(forResource: String, ofType: String?) -> Path? {
@@ -24,6 +25,7 @@ public extension Bundle {
     }
 }
 
+/// Extensions on `String` that work with `Path` rather than `String` or `URL`
 public extension String {
     /// Initializes this `String` with the contents of the provided path.
     @inlinable
@@ -40,6 +42,7 @@ public extension String {
     }
 }
 
+/// Extensions on `Data` that work with `Path` rather than `String` or `URL`
 public extension Data {
     /// Initializes this `Data` with the contents of the provided path.
     @inlinable

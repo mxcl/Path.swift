@@ -1,10 +1,12 @@
 import Foundation
 
+/// Provided for relative-path coding. See the instructions in our `README`.
 public extension CodingUserInfoKey {
     /// If set paths are encoded as relative to this path.
     static let relativePath = CodingUserInfoKey(rawValue: "dev.mxcl.Path.relative")!
 }
 
+/// Provided for relative-path coding. See the instructions in our `README`.
 extension Path: Codable {
     public init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer().decode(String.self)

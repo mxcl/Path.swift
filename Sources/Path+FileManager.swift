@@ -22,6 +22,9 @@ public extension Path {
      Copies a file into a directory
 
      If the destination does not exist, this function creates the directory first.
+    
+        // Create ~/.local/bin, copy `ls` there and make the new copy executable
+        try Path.root.join("bin/ls").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
 
      - Note: `throws` if `into` is a file.
      - Parameter into: Destination directory

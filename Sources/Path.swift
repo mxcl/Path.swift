@@ -10,7 +10,7 @@ import Foundation
      let p3 = Path.cwd/relativePathString
      let p4 = Path(userInput) ?? Path.cwd/userInput
 
- - Note: There may not be an actual filename at the path.
+ - Note: There may not be an actual filesystem entry at the path.
  */
 public struct Path: Equatable, Hashable, Comparable {
     /// The underlying filesystem path
@@ -113,7 +113,7 @@ public struct Path: Equatable, Hashable, Comparable {
 
      - Parameter pathComponent: The string to join with this path.
      - Returns: A new joined path.
-     - SeeAlso: /(:Path,:String)
+     - SeeAlso: `/(_:, _:)`
      */
     public func join<S>(_ pathComponent: S) -> Path where S: StringProtocol {
         //TODO standardizingPath does more than we want really (eg tilde expansion)
@@ -154,7 +154,7 @@ public struct Path: Equatable, Hashable, Comparable {
  - Parameter lhs: The base path to join with `rhs`.
  - Parameter rhs: The string to join with this `lhs`.
  - Returns: A new joined path.
- - SeeAlso: Path.join(_:)
+ - SeeAlso: `Path.join(_:)`
  */
 @inlinable
 public func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {

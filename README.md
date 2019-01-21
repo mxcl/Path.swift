@@ -15,21 +15,29 @@ let docs = Path.home/"Documents"
 // paths are *always* absolute thus avoiding common bugs
 let path = Path(userInput) ?? Path.cwd/userInput
 
-// chainable syntax so you have less boilerplate
+// elegant, chainable syntax
 try Path.home.join("foo").mkdir().join("bar").touch().chmod(0o555)
 
-// easy file-management
-try Path.root.join("foo").copy(to: Path.root/"bar")
+// sensible considerations
+try Path.home.join("bar").mkdir()
+try Path.home.join("bar").mkdir()  // doesn’t throw ∵ we already have the desired result
 
-// careful API to avoid common bugs
-try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
-// ^^ other libraries would make the above `to:` form handle both these cases
-// but that can easily lead to bugs where you accidentally write files that
-// were meant to be directory destinations
+// easy file-management
+let bar = try Path.root.join("foo").copy(to: Path.root/"bar")
+print(bar)         // => /bar
+print(bar.isFile)  // => true
+
+// careful API considerations so as to avoid common bugs
+let foo = try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
+print(foo)         // => /bar/foo
+print(foo.isFile)  // => true
+
+// A practical example: installing a helper executable
+try Bundle.resources.join("helper").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
 ```
 
-We emphasize safety and correctness, just like Swift, and also just
-like Swift, we provide a thoughtful and comprehensive (yet concise) API.
+We emphasize safety and correctness, just like Swift, and also (again like
+Swift), we provide a thoughtful and comprehensive (yet concise) API.
 
 # Support mxcl
 
