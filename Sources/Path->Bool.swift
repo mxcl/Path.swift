@@ -5,6 +5,16 @@ public extension Path {
     var isWritable: Bool {
         return FileManager.default.isWritableFile(atPath: string)
     }
+    
+    /// Returns true if the path represents an actual file that is also readable by the current user.
+    var isReadable: Bool {
+        return FileManager.default.isReadableFile(atPath: string)
+    }
+    
+    /// Returns true if the path represents an actual file that is also deletable by the current user.
+    var isDeletable: Bool {
+        return FileManager.default.isDeletableFile(atPath: string)
+    }
 
     /// Returns true if the path represents an actual directory.
     var isDirectory: Bool {
