@@ -132,5 +132,10 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root/"~/b", Path("/~/b"))
         XCTAssertEqual(Path("~/foo"), Path.home/"foo")
         XCTAssertNil(Path("~foo"))
+
+        XCTAssertEqual(Path.root/"a/foo"/"../bar", Path.root/"a/bar")
+        XCTAssertEqual(Path.root/"a/foo"/"/../bar", Path.root/"a/bar")
+        XCTAssertEqual(Path.root/"a/foo"/"../../bar", Path.root/"bar")
+        XCTAssertEqual(Path.root/"a/foo"/"../../../bar", Path.root/"bar")
     }
 }
