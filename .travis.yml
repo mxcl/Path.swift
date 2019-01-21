@@ -52,9 +52,9 @@ jobs:
     - stage: deploy
       name: Jazzy
       before_install: |
-        cat << EOF > .jazzy.yaml
+        cat <<\ \ EOF> .jazzy.yaml
         module: Path
-        module_version: $TRAVIS_TAG
+        module_version: TRAVIS_TAG
         custom_categories:
           - name: Path
             children:
@@ -65,12 +65,13 @@ jobs:
         output: output
         github_url: https://github.com/mxcl/Path.swift
         EOF
-      install: |
-        gem install jazzy
-        swift package generate-xcodeproj
-      script: |
-        jazzy
-        rm -rf output/docsets
+        sed -i '' "s/TRAVIS_TAG/$TRAVIS_TAG/" .jazzy.yaml
+      # ^^ this weirdness because Travis multiline YAML is broken and inserts two
+      # spaces in front of the output which means we need a prefixed delimiter which
+      # also weirdly stops bash from doing variable substitution
+      install: gem install jazzy
+      before_script: swift package generate-xcodeproj
+      script: jazzy
       deploy:
         provider: pages
         skip-cleanup: true
@@ -81,23 +82,25 @@ jobs:
 
     - name: CocoaPods
       before_install: |
-        cat << EOF > Path.swift.podspec
+        cat <<\ \ EOF> Path.swift.podspec
         Pod::Spec.new do |s|
-          s.name             = 'Path.swift'
-          s.version          = '$TRAVIS_TAG'
-          s.summary          = 'Delightful, robust file-pathing functions'
-          s.homepage         = 'https://github.com/mxcl/Path.swift'
-          s.license          = { :type => 'Unlicense', :file => 'LICENSE.md' }
-          s.author           = { 'mxcl' => 'mxcl@me.com' }
-          s.source           = { :git => 'https://github.com/mxcl/Path.swift.git', :tag => s.version.to_s }
+          s.name = 'Path.swift'
+          s.version = 'TRAVIS_TAG'
+          s.summary = 'Delightful, robust file-pathing functions'
+          s.homepage = 'https://github.com/mxcl/Path.swift'
+          s.license = { :type => 'Unlicense', :file => 'LICENSE.md' }
+          s.author = { 'mxcl' => 'mxcl@me.com' }
+          s.source = { :git => 'https://github.com/mxcl/Path.swift.git', :tag => s.version.to_s }
           s.social_media_url = 'https://twitter.com/mxcl'
           s.osx.deployment_target = '10.10'
           s.ios.deployment_target = '8.0'
           s.tvos.deployment_target = '10.0'
           s.watchos.deployment_target = '3.0'
           s.source_files = 'Sources/*'
-          s.swift_version = "4.2"
+          s.swift_version = '4.2'
         end
         EOF
+        sed -i '' "s/TRAVIS_TAG/$TRAVIS_TAG/" Path.swift.podspec
+      # ^^ see the Jazzy deployment for explanation
       install: gem install cocoapods --pre
-      script: pod trunk push --allow-warnings
+      script: pod trunk push
