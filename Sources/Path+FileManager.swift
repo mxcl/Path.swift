@@ -7,7 +7,7 @@ public extension Path {
      - Parameter to: Destination filename.
      - Parameter overwrite: If true overwrites any file that already exists at `to`.
      - Returns: `to` to allow chaining
-     - SeeAlso: copy(into:overwrite:)
+     - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
     public func copy(to: Path, overwrite: Bool = false) throws -> Path {
@@ -30,16 +30,26 @@ public extension Path {
      - Parameter into: Destination directory
      - Parameter overwrite: If true overwrites any file that already exists at `into`.
      - Returns: The `Path` of the newly copied file.
-     - SeeAlso: copy(into:overwrite:)
+     - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
     public func copy(into: Path, overwrite: Bool = false) throws -> Path {
         if !into.exists {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        } else if overwrite, !into.isDirectory {
-            try into.delete()
         }
         let rv = into/basename()
+        if overwrite, rv.isFile {
+            try rv.delete()
+        }
+    #if os(Linux)
+    #if swift(>=5)
+        // check if fixed
+    #else
+        if !overwrite, rv.isFile {
+            throw CocoaError.error(.fileWriteFileExists)
+        }
+    #endif
+    #endif
         try FileManager.default.copyItem(at: url, to: rv.url)
         return rv
     }

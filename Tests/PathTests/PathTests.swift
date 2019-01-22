@@ -138,4 +138,15 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root/"a/foo"/"../../bar", Path.root/"bar")
         XCTAssertEqual(Path.root/"a/foo"/"../../../bar", Path.root/"bar")
     }
+
+    func testCopyInto() throws {
+        try Path.mktemp { root in
+            let bar = try root.join("bar").touch()
+            try Path.mktemp { root in
+                try root.join("bar").touch()
+                XCTAssertThrowsError(try bar.copy(into: root))
+                try bar.copy(into: root, overwrite: true)
+            }
+        }
+    }
 }
