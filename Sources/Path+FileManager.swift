@@ -23,8 +23,8 @@ public extension Path {
 
      If the destination does not exist, this function creates the directory first.
     
-        // Create ~/.local/bin, copy `ls` there and make the new copy executable
-        try Path.root.join("bin/ls").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
+         // Create ~/.local/bin, copy `ls` there and make the new copy executable
+         try Path.root.join("bin/ls").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
 
      - Note: `throws` if `into` is a file.
      - Parameter into: Destination directory
@@ -153,35 +153,6 @@ public extension Path {
         try _foo {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
         }
-        return self
-    }
-
-    /**
-     Replaces the contents of the file at this path with the provided string.
-     - Note: If file doesn’t exist, creates file
-     - Note: If file is not writable, makes writable first, resetting permissions after the write
-     - Parameter contents: The string that will become the contents of this file.
-     - Parameter atomically: If `true` the operation will be performed atomically.
-     - Parameter encoding: The string encoding to use.
-     - Returns: `self` to allow chaining.
-     */
-    @discardableResult
-    public func replaceContents(with contents: String, atomically: Bool = false, encoding: String.Encoding = .utf8) throws -> Path {
-        let resetPerms: Int?
-        if exists, !isWritable {
-            resetPerms = try FileManager.default.attributesOfItem(atPath: string)[.posixPermissions] as? Int
-            let perms = resetPerms ?? 0o777
-            try chmod(perms | 0o200)
-        } else {
-            resetPerms = nil
-        }
-
-        defer {
-            _ = try? resetPerms.map(self.chmod)
-        }
-
-        try contents.write(to: self)
-
         return self
     }
 }
