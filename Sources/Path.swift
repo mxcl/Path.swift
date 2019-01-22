@@ -23,6 +23,8 @@ import Foundation
  - Note: There may not be an actual filesystem entry at the path. The underlying
    representation for `Path` is `String`.
  */
+
+@dynamicMemberLookup
 public struct Path: Equatable, Hashable, Comparable {
 
     init(string: String) {
@@ -43,6 +45,12 @@ public struct Path: Equatable, Hashable, Comparable {
     /// Returns a `URL` representing this file path.
     public var url: URL {
         return URL(fileURLWithPath: string)
+    }
+
+    /// Facilitates constructing paths for static strings
+    public subscript(dynamicMember pathComponent: String) -> Path {
+        let str = (string as NSString).appendingPathComponent(pathComponent)
+        return Path(string: str)
     }
 
     /**

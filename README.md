@@ -94,6 +94,18 @@ decoder.userInfo[.relativePath] = Path.home
 decoder.decode(from: data)
 ```
 
+## Dynamic members
+
+We support `@dynamicMemberLookup`:
+
+```swift
+let ls = Path.root.usr.bin.ls  // => /usr/bin/ls
+```
+
+This is less commonly useful than you would think, hence our documentation
+does not use it. Usually you are joining variables or other `String` arguments.
+However when you need it, it’s *lovely*.
+
 ## Initializing from user-input
 
 The `Path` initializer returns `nil` unless fed an absolute path; thus to

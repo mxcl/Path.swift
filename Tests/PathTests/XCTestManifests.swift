@@ -6,6 +6,7 @@ extension PathTests {
         ("testCodable", testCodable),
         ("testConcatenation", testConcatenation),
         ("testCopyInto", testCopyInto),
+        ("testDynamicMember", testDynamicMember),
         ("testEnumeration", testEnumeration),
         ("testEnumerationSkippingHiddenFiles", testEnumerationSkippingHiddenFiles),
         ("testExists", testExists),
