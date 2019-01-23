@@ -15,7 +15,7 @@ xcode_scheme: Path.swift-Package
   
 jobs:
   include:
-    - script: swift test
+    - script: swift test --parallel
       name: macOS
 
     - &xcodebuild
@@ -42,7 +42,7 @@ jobs:
       dist: trusty
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
-      script: swift test
+      script: swift test --parallel
       
     - stage: pretest
       name: Check if Linux tests are up-to-date
