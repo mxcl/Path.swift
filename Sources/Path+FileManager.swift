@@ -5,13 +5,14 @@ public extension Path {
      Copies a file.
      - Note: `throws` if `to` is a directory.
      - Parameter to: Destination filename.
-     - Parameter overwrite: If true overwrites any file that already exists at `to`.
+     - Parameter overwrite: If `true` and both `self` and `to` are files, overwrites `to`.
+     - Note: If either `self` or `to are directories, `overwrite` is ignored.
      - Returns: `to` to allow chaining
      - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
     public func copy(to: Path, overwrite: Bool = false) throws -> Path {
-        if overwrite, to.exists {
+        if overwrite, to.isFile, isFile {
             try FileManager.default.removeItem(at: to.url)
         }
         try FileManager.default.copyItem(atPath: string, toPath: to.string)
@@ -23,8 +24,8 @@ public extension Path {
 
      If the destination does not exist, this function creates the directory first.
     
-         // Create ~/.local/bin, copy `ls` there and make the new copy executable
-         try Path.root.join("bin/ls").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
+        // Create ~/.local/bin, copy `ls` there and make the new copy executable
+        try Path.root.join("bin/ls").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
 
      - Note: `throws` if `into` is a file.
      - Parameter into: Destination directory
