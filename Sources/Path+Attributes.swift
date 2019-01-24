@@ -51,7 +51,7 @@ public extension Path {
     public var mtime: Date {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
-            return attrs[.modificationDate] as? Date ?? attrs[.creationDate] as? Date ?? Date()
+            return attrs[.modificationDate] as? Date ?? attrs[.creationDate] as? Date ?? Date(timeIntervalSince1970: 0)
         } catch {
             //TODO log error
             return Date(timeIntervalSince1970: 0)
