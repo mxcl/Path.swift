@@ -4,7 +4,7 @@ public extension Path {
     /// - Note: If file is already locked, does nothing
     /// - Note: If file doesn’t exist, throws
     @discardableResult
-    public func lock() throws -> Path {
+    func lock() throws -> Path {
         var attrs = try FileManager.default.attributesOfItem(atPath: string)
         let b = attrs[.immutable] as? Bool ?? false
         if !b {
@@ -17,7 +17,7 @@ public extension Path {
     /// - Note: If file isn‘t locked, does nothing
     /// - Note: If file doesn’t exist, does nothing
     @discardableResult
-    public func unlock() throws -> Path {
+    func unlock() throws -> Path {
         var attrs: [FileAttributeKey: Any]
         do {
             attrs = try FileManager.default.attributesOfItem(atPath: string)
@@ -38,7 +38,7 @@ public extension Path {
          Path.home.join("foo").chmod(0o555)
      */
     @discardableResult
-    public func chmod(_ octal: Int) throws -> Path {
+    func chmod(_ octal: Int) throws -> Path {
         try FileManager.default.setAttributes([.posixPermissions: octal], ofItemAtPath: string)
         return self
     }
@@ -48,7 +48,7 @@ public extension Path {
      - Note: Returns the creation time if there is no modification time.
      - Note: Returns UNIX-time-zero if neither are available, though this *should* be impossible.
      */
-    public var mtime: Date {
+    var mtime: Date {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
             return attrs[.modificationDate] as? Date ?? attrs[.creationDate] as? Date ?? Date(timeIntervalSince1970: 0)

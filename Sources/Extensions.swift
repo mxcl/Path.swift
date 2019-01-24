@@ -10,17 +10,17 @@ public extension Bundle {
     }
 
     /// Returns the path for the shared-frameworks directory in this bundle.
-    public var sharedFrameworks: Path? {
+    var sharedFrameworks: Path? {
         return sharedFrameworksPath.flatMap(Path.init)
     }
 
     /// Returns the path for the resources directory in this bundle.
-    public var resources: Path? {
+    var resources: Path? {
         return resourcePath.flatMap(Path.init)
     }
 
     /// Returns the path for this bundle.
-    public var path: Path {
+    var path: Path {
         return Path(string: bundlePath)
     }
 }

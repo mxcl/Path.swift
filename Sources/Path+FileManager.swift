@@ -11,7 +11,7 @@ public extension Path {
      - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
-    public func copy(to: Path, overwrite: Bool = false) throws -> Path {
+    func copy(to: Path, overwrite: Bool = false) throws -> Path {
         if overwrite, to.isFile, isFile {
             try FileManager.default.removeItem(at: to.url)
         }
@@ -34,7 +34,7 @@ public extension Path {
      - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
-    public func copy(into: Path, overwrite: Bool = false) throws -> Path {
+    func copy(into: Path, overwrite: Bool = false) throws -> Path {
         if !into.exists {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         }
@@ -64,7 +64,7 @@ public extension Path {
      - SeeAlso: move(into:overwrite:)
      */
     @discardableResult
-    public func move(to: Path, overwrite: Bool = false) throws -> Path {
+    func move(to: Path, overwrite: Bool = false) throws -> Path {
         if overwrite, to.exists {
             try FileManager.default.removeItem(at: to.url)
         }
@@ -84,7 +84,7 @@ public extension Path {
      - SeeAlso: move(into:overwrite:)
      */
     @discardableResult
-    public func move(into: Path) throws -> Path {
+    func move(into: Path) throws -> Path {
         if !into.exists {
             try into.mkpath()
         } else if !into.isDirectory {
@@ -97,7 +97,7 @@ public extension Path {
 
     /// Deletes the path, recursively if a directory.
     @inlinable
-    public func delete() throws {
+    func delete() throws {
         try FileManager.default.removeItem(at: url)
     }
 
@@ -137,7 +137,7 @@ public extension Path {
      - Returns: `self` to allow chaining.
      */
     @discardableResult
-    public func mkdir() throws -> Path {
+    func mkdir() throws -> Path {
         try _foo {
             try FileManager.default.createDirectory(at: self.url, withIntermediateDirectories: false, attributes: nil)
         }
@@ -150,7 +150,7 @@ public extension Path {
      - Returns: `self` to allow chaining.
      */
     @discardableResult
-    public func mkpath() throws -> Path {
+    func mkpath() throws -> Path {
         try _foo {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
         }
