@@ -1,6 +1,8 @@
 import Foundation
 
 extension Path {
+    //MARK: Common Directories
+    
     /// Returns a `Path` containing ``FileManager.default.currentDirectoryPath`.
     public static var cwd: Path {
         return Path(string: FileManager.default.currentDirectoryPath)

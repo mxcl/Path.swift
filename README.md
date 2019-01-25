@@ -107,10 +107,8 @@ This is explicit, not hiding anything that code-review may miss and preventing
 common bugs like accidentally creating `Path` objects from strings you did not
 expect to be relative.
 
-Our initializer is nameless because we conform to `LosslessStringConvertible`,
-the same conformance as that `Int`, `Float` etc. conform. The protocol enforces
-a nameless initialization and since it is appropriate for us to conform to it,
-we do.
+Our initializer is nameless to be consistent with the equivalent operation for
+converting strings to `Int`, `Float` etc. in the standard library.
 
 ## Extensions
 

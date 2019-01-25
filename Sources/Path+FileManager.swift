@@ -1,6 +1,8 @@
 import Foundation
 
 public extension Path {
+    //MARK: File Management
+    
     /**
      Copies a file.
      - Note: `throws` if `to` is a directory.

@@ -1,8 +1,10 @@
 import Foundation
 
 public extension Path {
+    //MARK: Directory Listings
+    
     /**
-     Same as the `ls -a` command ∴ is ”shallow”
+     Same as the `ls -a` command ∴ output is ”shallow” and unsorted.
      - Parameter includeHiddenFiles: If `true`, hidden files are included in the results. Defaults to `true`.
      - Important: `includeHiddenFiles` does not work on Linux
      */
@@ -22,6 +24,7 @@ public extension Path {
     }
 }
 
+/// Convenience functions for the array return value of `Path.ls()`
 public extension Array where Element == Path.Entry {
     /// Filters the list of entries to be a list of Paths that are directories.
     var directories: [Path] {

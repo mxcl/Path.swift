@@ -1,13 +1,31 @@
 import Foundation
 
-/// Provided for relative-path coding. See the instructions in our `README`.
+/**
+ Provided for relative-path coding. See the instructions in our
+ [README](https://github.com/mxcl/Path.swift/#codable).
+*/
 public extension CodingUserInfoKey {
-    /// If set paths are encoded as relative to this path.
+    /**
+     If set on an `Encoder`’s `userInfo` all paths are encoded relative to this path.
+
+     For example:
+
+         let encoder = JSONEncoder()
+         encoder.userInfo[.relativePath] = Path.home
+         encoder.encode([Path.home, Path.home/"foo"])
+
+     - Remark: See the [README](https://github.com/mxcl/Path.swift/#codable) for more information.
+    */
     static let relativePath = CodingUserInfoKey(rawValue: "dev.mxcl.Path.relative")!
 }
 
-/// Provided for relative-path coding. See the instructions in our `README`.
-extension Path: Codable {
+/**
+ Provided for relative-path coding. See the instructions in our
+ [README](https://github.com/mxcl/Path.swift/#codable).
+*/
+extension Path: Codable {    
+    /// - SeeAlso: `CodingUserInfoKey.relativePath`
+    // :nodoc:
     public init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer().decode(String.self)
         if value.hasPrefix("/") {
@@ -20,6 +38,8 @@ extension Path: Codable {
         }
     }
 
+    /// - SeeAlso: `CodingUserInfoKey.relativePath`
+    // :nodoc:
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         if let root = encoder.userInfo[.relativePath] as? Path {
