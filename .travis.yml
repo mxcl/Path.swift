@@ -16,17 +16,17 @@ xcode_scheme: Path.swift-Package
 jobs:
   include:
     - script: swift test --parallel
-      name: macOS
+      name: macOS / Swift 4.2.1
 
     - &xcodebuild
       before_install: swift package generate-xcodeproj
       xcode_destination: platform=iOS Simulator,OS=latest,name=iPhone XS
-      name: iOS
+      name: iOS / Swift 4.2.1
     - <<: *xcodebuild
       xcode_destination: platform=tvOS Simulator,OS=latest,name=Apple TV
-      name: tvOS
+      name: tvOS / Swift 4.2.1
     - <<: *xcodebuild
-      name: watchOS
+      name: watchOS / Swift 4.2.1
       script: |
         set -o pipefail
         xcodebuild \
@@ -50,7 +50,7 @@ jobs:
       name: Linux / Swift 5.0.0-dev (2019-01-22)
       
     - stage: pretest
-      name: Check if Linux tests are up-to-date
+      name: Check Linux tests are sync’d
       install: swift test --generate-linuxmain
       script: git diff --exit-code
 
@@ -71,9 +71,9 @@ jobs:
         github_url: https://github.com/mxcl/Path.swift
         EOF
         sed -i '' "s/TRAVIS_TAG/$TRAVIS_TAG/" .jazzy.yaml
-      # ^^ this weirdness because Travis multiline YAML is broken and inserts two
-      # spaces in front of the output which means we need a prefixed delimiter which
-      # also weirdly stops bash from doing variable substitution
+      # ^^ this weirdness because Travis multiline YAML is broken and inserts
+      # two spaces in front of the output which means we need a prefixed
+      # delimiter which also weirdly stops bash from doing variable substitution
       install: gem install jazzy
       before_script: swift package generate-xcodeproj
       script: jazzy

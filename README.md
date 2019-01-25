@@ -191,17 +191,23 @@ Path("~foo")       // => nil
 SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.4.1"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.5.0"))
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'Path.swift' ~> '0.4.1'
+pod 'Path.swift' ~> '0.5.0'
 ```
 
-Please note! We are pre 1.0, thus we can change the API as we like! We will tag
-1.0 as soon as possible.
+Carthage:
+
+> Waiting on: [@Carthage#1945](https://github.com/Carthage/Carthage/pull/1945).
+
+## Please note
+
+We are pre 1.0, thus we can change the API as we like, and we will (to the
+pursuit of getting it *right*)! We will tag 1.0 as soon as possible.
 
 ### Get push notifications for new releases
 
