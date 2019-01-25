@@ -5,13 +5,14 @@ public extension Path {
      Copies a file.
      - Note: `throws` if `to` is a directory.
      - Parameter to: Destination filename.
-     - Parameter overwrite: If true overwrites any file that already exists at `to`.
+     - Parameter overwrite: If `true` and both `self` and `to` are files, overwrites `to`.
+     - Note: If either `self` or `to are directories, `overwrite` is ignored.
      - Returns: `to` to allow chaining
      - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
-    public func copy(to: Path, overwrite: Bool = false) throws -> Path {
-        if overwrite, to.exists {
+    func copy(to: Path, overwrite: Bool = false) throws -> Path {
+        if overwrite, to.isFile, isFile {
             try FileManager.default.removeItem(at: to.url)
         }
         try FileManager.default.copyItem(atPath: string, toPath: to.string)
@@ -33,7 +34,7 @@ public extension Path {
      - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
-    public func copy(into: Path, overwrite: Bool = false) throws -> Path {
+    func copy(into: Path, overwrite: Bool = false) throws -> Path {
         if !into.exists {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
         }
@@ -42,7 +43,7 @@ public extension Path {
             try rv.delete()
         }
     #if os(Linux)
-    #if swift(>=5)
+    #if swift(>=5.1)
         // check if fixed
     #else
         if !overwrite, rv.isFile {
@@ -63,7 +64,7 @@ public extension Path {
      - SeeAlso: move(into:overwrite:)
      */
     @discardableResult
-    public func move(to: Path, overwrite: Bool = false) throws -> Path {
+    func move(to: Path, overwrite: Bool = false) throws -> Path {
         if overwrite, to.exists {
             try FileManager.default.removeItem(at: to.url)
         }
@@ -83,7 +84,7 @@ public extension Path {
      - SeeAlso: move(into:overwrite:)
      */
     @discardableResult
-    public func move(into: Path) throws -> Path {
+    func move(into: Path) throws -> Path {
         if !into.exists {
             try into.mkpath()
         } else if !into.isDirectory {
@@ -96,7 +97,7 @@ public extension Path {
 
     /// Deletes the path, recursively if a directory.
     @inlinable
-    public func delete() throws {
+    func delete() throws {
         try FileManager.default.removeItem(at: url)
     }
 
@@ -136,7 +137,7 @@ public extension Path {
      - Returns: `self` to allow chaining.
      */
     @discardableResult
-    public func mkdir() throws -> Path {
+    func mkdir() throws -> Path {
         try _foo {
             try FileManager.default.createDirectory(at: self.url, withIntermediateDirectories: false, attributes: nil)
         }
@@ -149,39 +150,10 @@ public extension Path {
      - Returns: `self` to allow chaining.
      */
     @discardableResult
-    public func mkpath() throws -> Path {
+    func mkpath() throws -> Path {
         try _foo {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
         }
-        return self
-    }
-
-    /**
-     Replaces the contents of the file at this path with the provided string.
-     - Note: If file doesn’t exist, creates file
-     - Note: If file is not writable, makes writable first, resetting permissions after the write
-     - Parameter contents: The string that will become the contents of this file.
-     - Parameter atomically: If `true` the operation will be performed atomically.
-     - Parameter encoding: The string encoding to use.
-     - Returns: `self` to allow chaining.
-     */
-    @discardableResult
-    public func replaceContents(with contents: String, atomically: Bool = false, encoding: String.Encoding = .utf8) throws -> Path {
-        let resetPerms: Int?
-        if exists, !isWritable {
-            resetPerms = try FileManager.default.attributesOfItem(atPath: string)[.posixPermissions] as? Int
-            let perms = resetPerms ?? 0o777
-            try chmod(perms | 0o200)
-        } else {
-            resetPerms = nil
-        }
-
-        defer {
-            _ = try? resetPerms.map(self.chmod)
-        }
-
-        try contents.write(to: self)
-
         return self
     }
 }
