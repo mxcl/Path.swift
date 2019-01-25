@@ -43,7 +43,7 @@ public extension Path {
             try rv.delete()
         }
     #if os(Linux)
-    #if swift(>=5)
+    #if swift(>=5.1)
         // check if fixed
     #else
         if !overwrite, rv.isFile {
