@@ -35,14 +35,19 @@ jobs:
           -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch Series 4 - 40mm' \
           build | xcpretty
 
-    - env: SWIFT_VERSION=4.2.1
+    - &linux
+      env: SWIFT_VERSION=4.2.1
       os: linux
-      name: Linux
+      name: Linux / Swift 4.2.1
       language: generic
       dist: trusty
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test --parallel
+      
+    - <<: *linux
+      env: SWIFT_VERSION='5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a'
+      name: Linux / Swift 5.0.0-dev (2019-01-22)
       
     - stage: pretest
       name: Check if Linux tests are up-to-date
