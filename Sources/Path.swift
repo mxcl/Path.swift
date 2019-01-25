@@ -121,6 +121,24 @@ public struct Path: Equatable, Hashable, Comparable {
         return Path(string: (str as NSString).standardizingPath)
     }
 
+    /**
+     Joins a path and a string to produce a new path.
+
+         Path.root/"a"       // => /a
+         Path.root/"a/b"     // => /a/b
+         Path.root/"a"/"b"   // => /a/b
+         Path.root/"a"/"/b"  // => /a/b
+
+     - Parameter lhs: The base path to join with `rhs`.
+     - Parameter rhs: The string to join with this `lhs`.
+     - Returns: A new joined path.
+     - SeeAlso: `Path.join(_:)`
+     */
+    @inlinable
+    public static func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
+        return lhs.join(rhs)
+    }
+
     /// Returns the locale-aware sort order for the two paths.
     @inlinable
     public static func <(lhs: Path, rhs: Path) -> Bool {
@@ -141,22 +159,4 @@ public struct Path: Equatable, Hashable, Comparable {
         /// The path of this entry.
         public let path: Path
     }
-}
-
-/**
- Joins a path and a string to produce a new path.
-
-     Path.root/"a"       // => /a
-     Path.root/"a/b"     // => /a/b
-     Path.root/"a"/"b"   // => /a/b
-     Path.root/"a"/"/b"  // => /a/b
-
- - Parameter lhs: The base path to join with `rhs`.
- - Parameter rhs: The string to join with this `lhs`.
- - Returns: A new joined path.
- - SeeAlso: `Path.join(_:)`
- */
-@inlinable
-public func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
-    return lhs.join(rhs)
 }
