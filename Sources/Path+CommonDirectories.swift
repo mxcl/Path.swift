@@ -3,7 +3,7 @@ import Foundation
 extension Path {
     //MARK: Common Directories
     
-    /// Returns a `Path` containing ``FileManager.default.currentDirectoryPath`.
+    /// Returns a `Path` containing `FileManager.default.currentDirectoryPath`.
     public static var cwd: Path {
         return Path(string: FileManager.default.currentDirectoryPath)
     }
@@ -74,7 +74,7 @@ extension Path {
 
     /**
      The root for cache files.
-     - Note: On Linux this is 'XDG_CACHE_HOME'.
+     - Note: On Linux this is `XDG_CACHE_HOME`.
      - Note: You should create a subdirectory before creating any files.
      */
     public static var caches: Path {

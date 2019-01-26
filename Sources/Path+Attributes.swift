@@ -4,14 +4,28 @@ public extension Path {
     //MARK: Filesystem Attributes
 
     /**
-     Returns the modification-time.
+     Returns the creation-time of the file.
+     - Note: Returns UNIX-time-zero if there is no creation-time, this should only happen if the file doesn’t exist.
+     */
+    var ctime: Date {
+        do {
+            let attrs = try FileManager.default.attributesOfItem(atPath: string)
+            return attrs[.creationDate] as? Date ?? Date(timeIntervalSince1970: 0)
+        } catch {
+            //TODO log error
+            return Date(timeIntervalSince1970: 0)
+        }
+    }
+
+    /**
+     Returns the modification-time of the file.
      - Note: Returns the creation time if there is no modification time.
-     - Note: Returns UNIX-time-zero if neither are available, though this *should* be impossible.
+     - Note: Returns UNIX-time-zero if neither are available, this should only happen if the file doesn’t exist.
      */
     var mtime: Date {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
-            return attrs[.modificationDate] as? Date ?? attrs[.creationDate] as? Date ?? Date(timeIntervalSince1970: 0)
+            return attrs[.modificationDate] as? Date ?? ctime
         } catch {
             //TODO log error
             return Date(timeIntervalSince1970: 0)

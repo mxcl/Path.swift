@@ -147,7 +147,6 @@ public extension Path {
 
     /**
      Creates the directory at this path.
-     - Note: Does not create any intermediary directories.
      - Parameter options: Specify `mkdir(.p)` to create intermediary directories.
      - Note: We do not error if the directory already exists (even without `.p`)
        because *Path.swift* noops if the desired end result preexists.
@@ -174,8 +173,8 @@ public extension Path {
     }
 }
 
-/// Options for `Path.mkdir`
+/// Options for `Path.mkdir(_:)`
 public enum MakeDirectoryOptions {
-    /// Creates intermediary directories. Works the same as mkdir -p.
+    /// Creates intermediary directories; works the same as `mkdir -p`.
     case p
 }

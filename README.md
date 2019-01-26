@@ -28,7 +28,7 @@ print(bar)         // => /bar
 print(bar.isFile)  // => true
 
 // careful API considerations so as to avoid common bugs
-let foo = try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
+let foo = try Path.root.join("foo").copy(into: Path.root.join("bar").mkdir())
 print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
 
@@ -93,6 +93,18 @@ let decoder = JSONDecoder()
 decoder.userInfo[.relativePath] = Path.home
 decoder.decode(from: data)
 ```
+
+## Dynamic members
+
+We support `@dynamicMemberLookup`:
+
+```swift
+let ls = Path.root.usr.bin.ls  // => /usr/bin/ls
+```
+
+This is less commonly useful than you would think, hence our documentation
+does not use it. Usually you are joining variables or other `String` arguments.
+However when you need it, it’s *lovely*.
 
 ## Initializing from user-input
 

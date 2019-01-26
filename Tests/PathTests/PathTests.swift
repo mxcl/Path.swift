@@ -14,10 +14,10 @@ class PathTests: XCTestCase {
     func testEnumeration() throws {
         let tmpdir_ = try TemporaryDirectory()
         let tmpdir = tmpdir_.path
-        try tmpdir.join("a").mkdir().join("c").touch()
-        try tmpdir.join("b").touch()
-        try tmpdir.join("c").touch()
-        try tmpdir.join(".d").mkdir().join("e").touch()
+        try tmpdir.a.mkdir().c.touch()
+        try tmpdir.b.touch()
+        try tmpdir.c.touch()
+        try tmpdir.join(".d").mkdir().e.touch()
 
         var paths = Set<String>()
         var dirs = 0
@@ -137,6 +137,13 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root/"a/foo"/"/../bar", Path.root/"a/bar")
         XCTAssertEqual(Path.root/"a/foo"/"../../bar", Path.root/"bar")
         XCTAssertEqual(Path.root/"a/foo"/"../../../bar", Path.root/"bar")
+    }
+
+    func testDynamicMember() {
+        XCTAssertEqual(Path.root.Documents, Path.root/"Documents")
+
+        let a = Path.home.foo
+        XCTAssertEqual(a.Documents, Path.home/"foo/Documents")
     }
 
     func testCopyInto() throws {
