@@ -25,7 +25,7 @@ public extension CodingUserInfoKey {
 */
 extension Path: Codable {    
     /// - SeeAlso: `CodingUserInfoKey.relativePath`
-    // :nodoc:
+    /// :nodoc:
     public init(from decoder: Decoder) throws {
         let value = try decoder.singleValueContainer().decode(String.self)
         if value.hasPrefix("/") {
@@ -39,7 +39,7 @@ extension Path: Codable {
     }
 
     /// - SeeAlso: `CodingUserInfoKey.relativePath`
-    // :nodoc:
+    /// :nodoc:
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         if let root = encoder.userInfo[.relativePath] as? Path {
