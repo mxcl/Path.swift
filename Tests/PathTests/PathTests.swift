@@ -83,7 +83,7 @@ class PathTests: XCTestCase {
         try Path.mktemp {
             for _ in 0...1 {
                 try $0.join("a").mkdir()
-                try $0.join("b/c").mkpath()
+                try $0.join("b/c").mkdir(.p)
             }
         }
     }
