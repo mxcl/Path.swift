@@ -10,13 +10,31 @@ public extension Bundle {
     }
 
     /// Returns the path for the shared-frameworks directory in this bundle.
-    var sharedFrameworks: Path? {
-        return sharedFrameworksPath.flatMap(Path.init)
+    var sharedFrameworks: Path {
+        var `default`: Path {
+          #if os(macOS)
+            return path.join("Contents/Frameworks")
+          #elseif os(Linux)
+            return path.join("lib")
+          #else
+            return path.join("Frameworks")
+          #endif
+        }
+        return sharedFrameworksPath.flatMap(Path.init) ?? `default`
     }
 
     /// Returns the path for the resources directory in this bundle.
-    var resources: Path? {
-        return resourcePath.flatMap(Path.init)
+    var resources: Path {
+        var `default`: Path {
+          #if os(macOS)
+            return path.join("Contents/Resources")
+          #elseif os(Linux)
+            return path.join("share")
+          #else
+            return path
+          #endif
+        }
+        return resourcePath.flatMap(Path.init) ?? `default`
     }
 
     /// Returns the path for this bundle.
