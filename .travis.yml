@@ -89,18 +89,28 @@ jobs:
 
     - name: CocoaPods
       before_install: |
-        DESCRIPTION=$(swift - <<EOF
+        export DESCRIPTION=$(swift - <<\ \ EOF
           import Foundation
           struct Response: Decodable { let description: String }
+          let token = ProcessInfo.processInfo.environment["GITHUB_TOKEN"]!
           let url = URL(string: "https://api.github.com/repos/mxcl/Path.swift")!
-          let data = try Data(contentsOf: url)
-          print(try JSONDecoder().decode(Response.self, from: data).description)
+          var rq = URLRequest(url: url)
+          rq.setValue("token \(token)", forHTTPHeaderField: "Authorization")
+          let semaphore = DispatchSemaphore(value: 0)
+          var data: Data!
+          URLSession.shared.dataTask(with: rq) { d, _, _ in
+              data = d
+              semaphore.signal()
+          }.resume()
+          semaphore.wait()
+          let rsp = try JSONDecoder().decode(Response.self, from: data)
+          print(rsp.description, terminator: "")
         EOF)
         cat <<\ \ EOF> Path.swift.podspec
         Pod::Spec.new do |s|
           s.name = 'Path.swift'
-          s.version = 'TRAVIS_TAG'
-          s.summary = 'DESCRIPTION'
+          s.version = ENV['TRAVIS_TAG']
+          s.summary = ENV['DESCRIPTION']
           s.homepage = 'https://github.com/mxcl/Path.swift'
           s.license = { :type => 'Unlicense', :file => 'LICENSE.md' }
           s.author = { 'mxcl' => 'mxcl@me.com' }
@@ -114,8 +124,5 @@ jobs:
           s.swift_version = '4.2'
         end
         EOF
-        sed -i '' "s/TRAVIS_TAG/$TRAVIS_TAG/" Path.swift.podspec
-        sed -i '' "s/DESCRIPTION/$DESCRIPTION/" Path.swift.podspec
-      # ^^ see the Jazzy deployment for explanation
       install: gem install cocoapods --pre
       script: pod trunk push
