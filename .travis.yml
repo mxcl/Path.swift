@@ -69,6 +69,8 @@ jobs:
           - UseModernBuildSystem=NO
         output: output
         github_url: https://github.com/mxcl/Path.swift
+        exclude:
+          - Sources/Path+StringConvertibles.swift
         EOF
         sed -i '' "s/TRAVIS_TAG/$TRAVIS_TAG/" .jazzy.yaml
       # ^^ this weirdness because Travis multiline YAML is broken and inserts

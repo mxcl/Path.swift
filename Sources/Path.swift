@@ -3,26 +3,44 @@ import Foundation
 /**
  Represents a platform filesystem absolute path.
 
- The recommended conversions from string are:
+ `Path` supports `Codable`, and can be configured to
+ [encode paths *relatively*](https://github.com/mxcl/Path.swift/#codable).
+
+ Sorting a `Sequence` of `Path`s will return the locale-aware sort order, which
+ will give you the same order as Finder, (though folders will not be sorted
+ first).
+
+ Converting from a `String` is a common first step, here are the recommended
+ ways to do that:
 
      let p1 = Path.root/pathString
      let p2 = Path.root/url.path
      let p3 = Path.cwd/relativePathString
      let p4 = Path(userInput) ?? Path.cwd/userInput
 
- - Note: There may not be an actual filesystem entry at the path.
+ - Note: There may not be an actual filesystem entry at the path. The underlying
+   representation for `Path` is `String`.
  */
 public struct Path: Equatable, Hashable, Comparable {
+
+    init(string: String) {
+        self.string = string
+    }
+
+    /// Returns `nil` unless fed an absolute path
+    public init?(_ description: String) {
+        guard description.starts(with: "/") || description.starts(with: "~/") else { return nil }
+        self.init(string: (description as NSString).standardizingPath)
+    }
+
+//MARK: Properties
+
     /// The underlying filesystem path
     public let string: String
 
-    /**
-     Returns the filename extension of this path.
-     - Remark: Implemented via `NSString.pathExtension`.
-     */
-    @inlinable
-    public var `extension`: String {
-        return (string as NSString).pathExtension
+    /// Returns a `URL` representing this file path.
+    public var url: URL {
+        return URL(fileURLWithPath: string)
     }
 
     /**
@@ -37,33 +55,51 @@ public struct Path: Equatable, Hashable, Comparable {
         return Path(string: (string as NSString).deletingLastPathComponent)
     }
 
-    /// Returns a `URL` representing this file path.
+    /**
+     Returns the filename extension of this path.
+     - Remark: Implemented via `NSString.pathExtension`.
+     */
     @inlinable
-    public var url: URL {
-        return URL(fileURLWithPath: string)
+    public var `extension`: String {
+        return (string as NSString).pathExtension
+    }
+
+//MARK: Pathing
+
+    /**
+     Joins a path and a string to produce a new path.
+
+         Path.root.join("a")             // => /a
+         Path.root.join("a/b")           // => /a/b
+         Path.root.join("a").join("b")   // => /a/b
+         Path.root.join("a").join("/b")  // => /a/b
+
+     - Parameter pathComponent: The string to join with this path.
+     - Returns: A new joined path.
+     - SeeAlso: `Path./(_:, _:)`
+     */
+    public func join<S>(_ pathComponent: S) -> Path where S: StringProtocol {
+        //TODO standardizingPath does more than we want really (eg tilde expansion)
+        let str = (string as NSString).appendingPathComponent(String(pathComponent))
+        return Path(string: (str as NSString).standardizingPath)
     }
 
     /**
-     The basename for the provided file, optionally dropping the file extension.
+     Joins a path and a string to produce a new path.
 
-         Path.root.join("foo.swift").basename()  // => "foo.swift"
-         Path.root.join("foo.swift").basename(dropExtension: true)  // => "foo"
+         Path.root/"a"       // => /a
+         Path.root/"a/b"     // => /a/b
+         Path.root/"a"/"b"   // => /a/b
+         Path.root/"a"/"/b"  // => /a/b
 
-     - Returns: A string that is the filename’s basename.
-     - Parameter dropExtension: If `true` returns the basename without its file extension.
+     - Parameter lhs: The base path to join with `rhs`.
+     - Parameter rhs: The string to join with this `lhs`.
+     - Returns: A new joined path.
+     - SeeAlso: `join(_:)`
      */
-    public func basename(dropExtension: Bool = false) -> String {
-        let str = string as NSString
-        if !dropExtension {
-            return str.lastPathComponent
-        } else {
-            let ext = str.pathExtension
-            if !ext.isEmpty {
-                return String(str.lastPathComponent.dropLast(ext.count + 1))
-            } else {
-                return str.lastPathComponent
-            }
-        }
+    @inlinable
+    public static func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
+        return lhs.join(rhs)
     }
 
     /**
@@ -104,48 +140,41 @@ public struct Path: Equatable, Hashable, Comparable {
     }
 
     /**
-     Joins a path and a string to produce a new path.
+     The basename for the provided file, optionally dropping the file extension.
 
-         Path.root.join("a")             // => /a
-         Path.root.join("a/b")           // => /a/b
-         Path.root.join("a").join("b")   // => /a/b
-         Path.root.join("a").join("/b")  // => /a/b
+         Path.root.join("foo.swift").basename()  // => "foo.swift"
+         Path.root.join("foo.swift").basename(dropExtension: true)  // => "foo"
 
-     - Parameter pathComponent: The string to join with this path.
-     - Returns: A new joined path.
-     - SeeAlso: `/(_:, _:)`
+     - Returns: A string that is the filename’s basename.
+     - Parameter dropExtension: If `true` returns the basename without its file extension.
      */
-    public func join<S>(_ pathComponent: S) -> Path where S: StringProtocol {
-        //TODO standardizingPath does more than we want really (eg tilde expansion)
-        let str = (string as NSString).appendingPathComponent(String(pathComponent))
-        return Path(string: (str as NSString).standardizingPath)
-    }
-
-    /**
-     Joins a path and a string to produce a new path.
-
-         Path.root/"a"       // => /a
-         Path.root/"a/b"     // => /a/b
-         Path.root/"a"/"b"   // => /a/b
-         Path.root/"a"/"/b"  // => /a/b
-
-     - Parameter lhs: The base path to join with `rhs`.
-     - Parameter rhs: The string to join with this `lhs`.
-     - Returns: A new joined path.
-     - SeeAlso: `Path.join(_:)`
-     */
-    @inlinable
-    public static func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
-        return lhs.join(rhs)
+    public func basename(dropExtension: Bool = false) -> String {
+        let str = string as NSString
+        if !dropExtension {
+            return str.lastPathComponent
+        } else {
+            let ext = str.pathExtension
+            if !ext.isEmpty {
+                return String(str.lastPathComponent.dropLast(ext.count + 1))
+            } else {
+                return str.lastPathComponent
+            }
+        }
     }
 
     /// Returns the locale-aware sort order for the two paths.
+    /// :nodoc:
     @inlinable
     public static func <(lhs: Path, rhs: Path) -> Bool {
         return lhs.string.compare(rhs.string, locale: .current) == .orderedAscending
     }
 
-    /// A file entry from a directory listing.
+//MARK: Entry
+
+    /**
+     A file entry from a directory listing.
+     - SeeAlso: `ls()`
+    */
     public struct Entry {
         /// The kind of this directory entry.
         public enum Kind {
