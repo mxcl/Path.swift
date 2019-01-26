@@ -1,16 +1,16 @@
 import Foundation
 
 /**
- Represents a filesystem absolute path.
+ A `Path` represents an absolute path on a filesystem.
+
+ All functions on `Path` are chainable and short to facilitate doing sequences
+ of file operations in a concise manner.
 
  `Path` supports `Codable`, and can be configured to
  [encode paths *relatively*](https://github.com/mxcl/Path.swift/#codable).
 
  Sorting a `Sequence` of `Path`s will return the locale-aware sort order, which
  will give you the same order as Finder.
-
- All functions on `Path` are chainable and short to facilitate doing sequences
- of file operations in a concise manner.
 
  Converting from a `String` is a common first step, here are the recommended
  ways to do that:
@@ -19,6 +19,11 @@ import Foundation
      let p2 = Path.root/url.path
      let p3 = Path.cwd/relativePathString
      let p4 = Path(userInput) ?? Path.cwd/userInput
+
+ If you are constructing Paths from static-strings we provide support for
+ dynamic members:
+
+     let p1 = Path.root.usr.bin.ls  // => /usr/bin/ls
 
  - Note: There may not be an actual filesystem entry at the path. The underlying
    representation for `Path` is `String`.
@@ -37,6 +42,12 @@ public struct Path: Equatable, Hashable, Comparable {
         self.init(string: (description as NSString).standardizingPath)
     }
 
+    /// :nodoc:
+    public subscript(dynamicMember pathComponent: String) -> Path {
+        let str = (string as NSString).appendingPathComponent(pathComponent)
+        return Path(string: str)
+    }
+
 //MARK: Properties
 
     /// The underlying filesystem path
@@ -45,12 +56,6 @@ public struct Path: Equatable, Hashable, Comparable {
     /// Returns a `URL` representing this file path.
     public var url: URL {
         return URL(fileURLWithPath: string)
-    }
-
-    /// Facilitates constructing paths for static strings
-    public subscript(dynamicMember pathComponent: String) -> Path {
-        let str = (string as NSString).appendingPathComponent(pathComponent)
-        return Path(string: str)
     }
 
     /**

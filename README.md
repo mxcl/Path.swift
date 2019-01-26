@@ -1,7 +1,7 @@
-# Path.swift ![badge-platforms] ![badge-languages] [![Build Status](https://travis-ci.com/mxcl/Path.swift.svg)](https://travis-ci.com/mxcl/Path.swift)
+# Path.swift ![badge-platforms] ![badge-languages][] [![Build Status](https://travis-ci.com/mxcl/Path.swift.svg)](https://travis-ci.com/mxcl/Path.swift)
 
-A file-system pathing library focused on developer experience and robust
-end‐results.
+A file-system pathing library focused on developer experience and robust end
+results.
 
 ```swift
 import Path
@@ -32,7 +32,10 @@ let foo = try Path.root.join("foo").copy(into: Path.root.join("bar").mkdir())
 print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
 
-// A practical example: installing a helper executable
+// we support dynamic members (_use_sparingly_):
+let prefs = Path.home.Library.Preferences
+
+// a practical example: installing a helper executable
 try Bundle.resources.join("helper").copy(into: Path.home.join(".local/bin").mkdir(.p)).chmod(0o500)
 ```
 
@@ -42,8 +45,9 @@ Swift), we provide a thoughtful and comprehensive (yet concise) API.
 # Support mxcl
 
 Hi, I’m Max Howell and I have written a lot of open source software, and
-probably you already use some of it (Homebrew anyone?). Please help me so I
-can continue to make tools and software you need and love. I appreciate it x.
+probably you already use some of it (Homebrew anyone?). I work full-time on
+open source and it’s hard; currently I earn *less* than minimum wage. Please
+help me continue my work, I appreciate it x
 
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
@@ -134,8 +138,7 @@ bashProfile += "\n\nfoo"
 
 try bashProfile.write(to: Path.home/".bash_profile")
 
-try Bundle.main.resources!.join("foo").copy(to: .home)
-// ^^ `-> Path?` because the underlying `Bundle` function is `-> String?`
+try Bundle.main.resources.join("foo").copy(to: .home)
 ```
 
 ## Directory listings
