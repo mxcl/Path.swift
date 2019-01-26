@@ -1,14 +1,16 @@
 import Foundation
 
 /**
- Represents a platform filesystem absolute path.
+ Represents a filesystem absolute path.
 
  `Path` supports `Codable`, and can be configured to
  [encode paths *relatively*](https://github.com/mxcl/Path.swift/#codable).
 
  Sorting a `Sequence` of `Path`s will return the locale-aware sort order, which
- will give you the same order as Finder, (though folders will not be sorted
- first).
+ will give you the same order as Finder.
+
+ All functions on `Path` are chainable and short to facilitate doing sequences
+ of file operations in a concise manner.
 
  Converting from a `String` is a common first step, here are the recommended
  ways to do that:
@@ -167,25 +169,5 @@ public struct Path: Equatable, Hashable, Comparable {
     @inlinable
     public static func <(lhs: Path, rhs: Path) -> Bool {
         return lhs.string.compare(rhs.string, locale: .current) == .orderedAscending
-    }
-
-//MARK: Entry
-
-    /**
-     A file entry from a directory listing.
-     - SeeAlso: `ls()`
-    */
-    public struct Entry {
-        /// The kind of this directory entry.
-        public enum Kind {
-            /// The path is a file.
-            case file
-            /// The path is a directory.
-            case directory
-        }
-        /// The kind of this entry.
-        public let kind: Kind
-        /// The path of this entry.
-        public let path: Path
     }
 }

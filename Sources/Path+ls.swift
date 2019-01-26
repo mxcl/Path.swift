@@ -1,8 +1,26 @@
 import Foundation
 
-public extension Path {
+/**
+ A file entry from a directory listing.
+ - SeeAlso: `ls()`
+*/
+public struct Entry {
+    /// The kind of this directory entry.
+    public enum Kind {
+        /// The path is a file.
+        case file
+        /// The path is a directory.
+        case directory
+    }
+    /// The kind of this entry.
+    public let kind: Kind
+    /// The path of this entry.
+    public let path: Path
+}
+
+public extension Path {    
     //MARK: Directory Listings
-    
+
     /**
      Same as the `ls -a` command ∴ output is ”shallow” and unsorted.
      - Parameter includeHiddenFiles: If `true`, hidden files are included in the results. Defaults to `true`.
@@ -25,7 +43,7 @@ public extension Path {
 }
 
 /// Convenience functions for the array return value of `Path.ls()`
-public extension Array where Element == Path.Entry {
+public extension Array where Element == Entry {
     /// Filters the list of entries to be a list of Paths that are directories.
     var directories: [Path] {
         return compactMap {

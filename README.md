@@ -28,7 +28,7 @@ print(bar)         // => /bar
 print(bar.isFile)  // => true
 
 // careful API considerations so as to avoid common bugs
-let foo = try Path.root.join("foo").copy(into: Path.root.mkdir("bar"))
+let foo = try Path.root.join("foo").copy(into: Path.root.join("bar").mkdir())
 print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
 
