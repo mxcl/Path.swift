@@ -123,10 +123,16 @@ public extension Path {
         return rv
     }
 
-    /// Deletes the path, recursively if a directory.
+    /**
+     Deletes the path, recursively if a directory.
+     - Note: noop: if the path doesn’t exist
+     ∵ *Path.swift* doesn’t error if desired end result preexists.
+    */
     @inlinable
     func delete() throws {
-        try FileManager.default.removeItem(at: url)
+        if exists {
+            try FileManager.default.removeItem(at: url)
+        }
     }
 
     /**
