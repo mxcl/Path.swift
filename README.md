@@ -244,5 +244,5 @@ https://codebasesaga.com/canopy/
 
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
-[badge-languages]: https://img.shields.io/badge/swift-4.2-orange.svg
+[badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.0-orange.svg
 [online API documentation]: https://mxcl.github.io/Path.swift/Structs/Path.html
