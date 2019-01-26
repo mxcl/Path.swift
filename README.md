@@ -33,7 +33,7 @@ print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
 
 // A practical example: installing a helper executable
-try Bundle.resources.join("helper").copy(into: Path.home.join(".local/bin").mkpath()).chmod(0o500)
+try Bundle.resources.join("helper").copy(into: Path.home.join(".local/bin").mkdir(.p)).chmod(0o500)
 ```
 
 We emphasize safety and correctness, just like Swift, and also (again like
@@ -183,6 +183,16 @@ Path("~/foo")!     // => /Users/mxcl/foo
 // this does not work though
 Path("~foo")       // => nil
 ```
+
+*Path.swift* has the general policty that if the desired end result preexists,
+then it’s a noop:
+
+* If you try to delete a file, but the file doesn't exist, we do nothing.
+* If you try to make a directory and it already exists, we do nothing.
+
+However notably if you try to copy or move a file with specifying `overwrite`
+and the file already exists at the destination and is identical, we don’t check
+for that as the check was deemed too expensive to be worthwhile.
 
 # Installation
 
