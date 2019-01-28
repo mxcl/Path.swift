@@ -36,7 +36,7 @@ public struct Path: Equatable, Hashable, Comparable {
         self.string = string
     }
 
-    /// Returns `nil` unless fed an absolute path
+    /// Returns `nil` unless fed an absolute path.
     public init?(_ description: String) {
         guard description.starts(with: "/") || description.starts(with: "~/") else { return nil }
         self.init(string: (description as NSString).standardizingPath)
@@ -91,7 +91,7 @@ public struct Path: Equatable, Hashable, Comparable {
 
      - Parameter pathComponent: The string to join with this path.
      - Returns: A new joined path.
-     - SeeAlso: `Path./(_:, _:)`
+     - SeeAlso: `Path./(_:_:)`
      */
     public func join<S>(_ pathComponent: S) -> Path where S: StringProtocol {
         //TODO standardizingPath does more than we want really (eg tilde expansion)

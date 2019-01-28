@@ -220,7 +220,7 @@ package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.5.0"
 CocoaPods:
 
 ```ruby
-pod 'Path.swift' ~> '0.5.0'
+pod 'Path.swift', '~> 0.5'
 ```
 
 Carthage:
