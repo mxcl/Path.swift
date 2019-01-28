@@ -73,10 +73,15 @@ public struct Path: Equatable, Hashable, Comparable {
     /**
      Returns the filename extension of this path.
      - Remark: Implemented via `NSString.pathExtension`.
+     - Note: We special case eg. `foo.tar.gz`.
      */
     @inlinable
     public var `extension`: String {
-        return (string as NSString).pathExtension
+        if string.hasSuffix(".tar.gz") {
+            return "tar.gz"
+        } else {
+            return (string as NSString).pathExtension
+        }
     }
 
 //MARK: Pathing

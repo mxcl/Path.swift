@@ -33,7 +33,7 @@ print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
 
 // we support dynamic members (_use_sparingly_):
-let prefs = Path.home.Library.Preferences
+let prefs = Path.home.Library.Preferences  // => /Users/mxcl/Library/Preferences
 
 // a practical example: installing a helper executable
 try Bundle.resources.join("helper").copy(into: Path.home.join(".local/bin").mkdir(.p)).chmod(0o500)
@@ -107,8 +107,9 @@ let ls = Path.root.usr.bin.ls  // => /usr/bin/ls
 ```
 
 This is less commonly useful than you would think, hence our documentation
-does not use it. Usually you are joining variables or other `String` arguments.
-However when you need it, it’s *lovely*.
+does not use it. Usually you are joining variables or other `String` arguments 
+or trying to describe files (and files usually have extensions). However when
+you need it, it’s *lovely*.
 
 ## Initializing from user-input
 
@@ -160,9 +161,9 @@ for entry in Path.home.ls() where entry.path.mtime > yesterday {
     //…
 }
 
-let dirs = Path.home.ls().directories().filter {
-    //…
-}
+let dirs = Path.home.ls().directories
+
+let files = Path.home.ls().files
 
 let swiftFiles = Path.home.ls().files(withExtension: "swift")
 ```

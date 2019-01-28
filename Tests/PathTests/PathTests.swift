@@ -15,20 +15,26 @@ class PathTests: XCTestCase {
         let tmpdir_ = try TemporaryDirectory()
         let tmpdir = tmpdir_.path
         try tmpdir.a.mkdir().c.touch()
-        try tmpdir.b.touch()
+        try tmpdir.join("b.swift").touch()
         try tmpdir.c.touch()
         try tmpdir.join(".d").mkdir().e.touch()
 
         var paths = Set<String>()
+        let lsrv = try tmpdir.ls()
         var dirs = 0
-        for entry in try tmpdir.ls() {
+        for entry in lsrv {
             if entry.kind == .directory {
                 dirs += 1
             }
             paths.insert(entry.path.basename())
         }
         XCTAssertEqual(dirs, 2)
-        XCTAssertEqual(paths, ["a", "b", "c", ".d"])
+        XCTAssertEqual(dirs, lsrv.directories.count)
+        XCTAssertEqual(["a", ".d"], Set(lsrv.directories.map{ $0.relative(to: tmpdir) }))
+        XCTAssertEqual(["b.swift", "c"], Set(lsrv.files.map{ $0.relative(to: tmpdir) }))
+        XCTAssertEqual(["b.swift"], Set(lsrv.files(withExtension: "swift").map{ $0.relative(to: tmpdir) }))
+        XCTAssertEqual(["c"], Set(lsrv.files(withExtension: "").map{ $0.relative(to: tmpdir) }))
+        XCTAssertEqual(paths, ["a", "b.swift", "c", ".d"])
         
     }
 
@@ -67,6 +73,18 @@ class PathTests: XCTestCase {
     func testIsDirectory() {
         XCTAssert(Path.root.isDirectory)
         XCTAssert((Path.root/"bin").isDirectory)
+    }
+
+    func testExtension() {
+        XCTAssertEqual(Path.root.join("a.swift").extension, "swift")
+        XCTAssertEqual(Path.root.join("a").extension, "")
+        XCTAssertEqual(Path.root.join("a.").extension, "")
+        XCTAssertEqual(Path.root.join("a..").extension, "")
+        XCTAssertEqual(Path.root.join("a..swift").extension, "swift")
+        XCTAssertEqual(Path.root.join("a..swift.").extension, "")
+        XCTAssertEqual(Path.root.join("a.tar.gz").extension, "tar.gz")
+        XCTAssertEqual(Path.root.join("a..tar.gz").extension, "tar.gz")
+        XCTAssertEqual(Path.root.join("a..tar..gz").extension, "gz")
     }
 
     func testMktemp() throws {
