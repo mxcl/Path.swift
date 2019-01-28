@@ -10,6 +10,7 @@ extension PathTests {
         ("testEnumeration", testEnumeration),
         ("testEnumerationSkippingHiddenFiles", testEnumerationSkippingHiddenFiles),
         ("testExists", testExists),
+        ("testExtension", testExtension),
         ("testIsDirectory", testIsDirectory),
         ("testJoin", testJoin),
         ("testMkpathIfExists", testMkpathIfExists),
