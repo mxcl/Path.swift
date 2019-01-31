@@ -169,6 +169,8 @@ class PathTests: XCTestCase {
             try root.foo.touch().copy(to: root.bar)
             XCTAssert(root.foo.isFile)
             XCTAssert(root.bar.isFile)
+            XCTAssertThrowsError(try root.foo.copy(to: root.bar))
+            try root.foo.copy(to: root.bar, overwrite: true)
         }
     }
 
@@ -182,14 +184,25 @@ class PathTests: XCTestCase {
                 XCTAssertTrue(bar1.exists)
                 XCTAssertTrue(bar2.exists)
             }
+
+            // test creates intermediary directories
+            try bar1.copy(into: root1.create.directories)
+
+            // test doesn’t replace file if “copy into” a file
+            let d = try root1.fuz.touch()
+            XCTAssertThrowsError(try root1.baz.touch().copy(into: d))
+            XCTAssert(d.isFile)
+            XCTAssert(root1.baz.isFile)
         }
     }
 
     func testMoveTo() throws {
-        try Path.mktemp { root in
-            try root.foo.touch().move(to: root.bar)
-            XCTAssertFalse(root.foo.exists)
-            XCTAssert(root.bar.isFile)
+        try Path.mktemp { tmpdir in
+            try tmpdir.foo.touch().move(to: tmpdir.bar)
+            XCTAssertFalse(tmpdir.foo.exists)
+            XCTAssert(tmpdir.bar.isFile)
+            XCTAssertThrowsError(try tmpdir.foo.touch().move(to: tmpdir.bar))
+            try tmpdir.foo.move(to: tmpdir.bar, overwrite: true)
         }
     }
 
@@ -203,6 +216,17 @@ class PathTests: XCTestCase {
                 XCTAssertFalse(bar1.exists)
                 XCTAssertTrue(bar2.exists)
             }
+
+            // test creates intermediary directories
+            try root1.baz.touch().move(into: root1.create.directories)
+            XCTAssertFalse(root1.baz.exists)
+            XCTAssert(root1.create.directories.baz.isFile)
+
+            // test doesn’t replace file if “move into” a file
+            let d = try root1.fuz.touch()
+            XCTAssertThrowsError(try root1.baz.touch().move(into: d))
+            XCTAssert(d.isFile)
+            XCTAssert(root1.baz.isFile)
         }
     }
 
@@ -225,7 +249,7 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root.string, "/")
         XCTAssertEqual(Path.home.string, NSHomeDirectory())
         XCTAssertEqual(Path.documents.string, NSHomeDirectory() + "/Documents")
-    #if os(macOS)
+    #if !os(Linux)
         XCTAssertEqual(Path.caches.string, NSHomeDirectory() + "/Library/Caches")
         XCTAssertEqual(Path.cwd.string, FileManager.default.currentDirectoryPath)
         XCTAssertEqual(Path.applicationSupport.string, NSHomeDirectory() + "/Library/Application Support")
@@ -298,6 +322,9 @@ class PathTests: XCTestCase {
             let now2 = Date().timeIntervalSince1970.rounded(.down)
             XCTAssertNotEqual(now1, now2)
             XCTAssertEqual(foo.mtime?.timeIntervalSince1970.rounded(.down), now2)  //FIXME flakey
+
+            XCTAssertNil(tmpdir.void.mtime)
+            XCTAssertNil(tmpdir.void.ctime)
         }
     }
 
@@ -334,14 +361,15 @@ class PathTests: XCTestCase {
         _ = Bundle.main.sharedFrameworks
     }
 
-    func testDataExentsions() throws {
+    func testDataExtensions() throws {
         let data = try Data(contentsOf: Path(#file)!)
         try Path.mktemp { tmpdir in
             _ = try data.write(to: tmpdir.foo)
+            _ = try data.write(to: tmpdir.foo, atomically: true)
         }
     }
 
-    func testStringExentsions() throws {
+    func testStringExtensions() throws {
         let string = try String(contentsOf: Path(#file)!)
         try Path.mktemp { tmpdir in
             _ = try string.write(to: tmpdir.foo)
@@ -352,5 +380,21 @@ class PathTests: XCTestCase {
         _ = try FileHandle(forReadingAt: Path(#file)!)
         _ = try FileHandle(forWritingAt: Path(#file)!)
         _ = try FileHandle(forUpdatingAt: Path(#file)!)
+    }
+
+    func testSort() {
+        XCTAssertEqual([Path.root.a, Path.root.c, Path.root.b].sorted(), [Path.root.a, Path.root.b, Path.root.c])
+    }
+
+    func testLock() throws {
+    #if !os(Linux)
+        try Path.mktemp { tmpdir in
+            let bar = try tmpdir.bar.touch()
+            try bar.lock()
+            XCTAssertThrowsError(try bar.touch())
+            try bar.unlock()
+            try bar.touch()
+        }
+    #endif
     }
 }
