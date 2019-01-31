@@ -9,7 +9,7 @@ import Foundation
  `Path` supports `Codable`, and can be configured to
  [encode paths *relatively*](https://github.com/mxcl/Path.swift/#codable).
 
- Sorting a `Sequence` of `Path`s will return the locale-aware sort order, which
+ Sorting a `Sequence` of paths will return the locale-aware sort order, which
  will give you the same order as Finder.
 
  Converting from a `String` is a common first step, here are the recommended
@@ -20,13 +20,12 @@ import Foundation
      let p3 = Path.cwd/relativePathString
      let p4 = Path(userInput) ?? Path.cwd/userInput
 
- If you are constructing Paths from static-strings we provide support for
+ If you are constructing paths from static-strings we provide support for
  dynamic members:
 
      let p1 = Path.root.usr.bin.ls  // => /usr/bin/ls
 
- - Note: There may not be an actual filesystem entry at the path. The underlying
-   representation for `Path` is `String`.
+ - Note: A `Path` does not necessarily represent an actual filesystem entry.
  */
 
 @dynamicMemberLookup

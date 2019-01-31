@@ -194,13 +194,13 @@ class PathTests: XCTestCase {
         try Path.mktemp { root in
             do {
                 let file = try root.bar.touch()
-                let foo = try file.rename("foo")
+                let foo = try file.rename(to: "foo")
                 XCTAssertFalse(file.exists)
                 XCTAssertTrue(foo.isFile)
             }
             do {
                 let file = try root.bar.touch()
-                XCTAssertThrowsError(try file.rename("foo"))
+                XCTAssertThrowsError(try file.rename(to: "foo"))
             }
         }
     }
