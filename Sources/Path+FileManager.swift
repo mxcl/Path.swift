@@ -130,6 +130,9 @@ public extension Path {
      Deletes the path, recursively if a directory.
      - Note: noop: if the path doesn’t exist
      ∵ *Path.swift* doesn’t error if desired end result preexists.
+     - Note: On UNIX will this function will succeed if the parent directory is writable and the current user has permission.
+     - Note: This function will fail if the file or directory is “locked”
+     - SeeAlso: `lock()`
     */
     @inlinable
     func delete() throws {

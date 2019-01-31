@@ -204,4 +204,121 @@ class PathTests: XCTestCase {
             }
         }
     }
+
+    func testCommonDirectories() {
+        XCTAssertEqual(Path.root.string, "/")
+        XCTAssertEqual(Path.home.string, NSHomeDirectory())
+        XCTAssertEqual(Path.documents.string, NSHomeDirectory() + "/Documents")
+    #if os(macOS)
+        XCTAssertEqual(Path.caches.string, NSHomeDirectory() + "/Library/Caches")
+        XCTAssertEqual(Path.cwd.string, FileManager.default.currentDirectoryPath)
+        XCTAssertEqual(Path.applicationSupport.string, NSHomeDirectory() + "/Library/Application Support")
+    #endif
+    }
+
+    func testStringConvertibles() {
+        XCTAssertEqual(Path.root.description, "/")
+        XCTAssertEqual(Path.root.debugDescription, "Path(/)")
+    }
+
+    func testFilesystemAttributes() throws {
+        XCTAssert(Path(#file)!.isFile)
+        XCTAssert(Path(#file)!.isReadable)
+        XCTAssert(Path(#file)!.isWritable)
+        XCTAssert(Path(#file)!.isDeletable)
+        XCTAssert(Path(#file)!.parent.isDirectory)
+
+        try Path.mktemp { tmpdir in
+            XCTAssertTrue(tmpdir.isDirectory)
+            XCTAssertFalse(tmpdir.isFile)
+
+            let bar = try tmpdir.bar.touch().chmod(0o000)
+            XCTAssertFalse(bar.isReadable)
+            XCTAssertFalse(bar.isWritable)
+            XCTAssertFalse(bar.isDirectory)
+            XCTAssertFalse(bar.isExecutable)
+            XCTAssertTrue(bar.isFile)
+            XCTAssertTrue(bar.isDeletable)  // can delete even if no read permissions
+
+            try bar.chmod(0o777)
+            XCTAssertTrue(bar.isReadable)
+            XCTAssertTrue(bar.isWritable)
+            XCTAssertTrue(bar.isDeletable)
+            XCTAssertTrue(bar.isExecutable)
+
+            try bar.delete()
+            XCTAssertFalse(bar.exists)
+            XCTAssertFalse(bar.isReadable)
+            XCTAssertFalse(bar.isWritable)
+            XCTAssertFalse(bar.isExecutable)
+            XCTAssertFalse(bar.isDeletable)
+
+            let nonExistantFile = tmpdir.baz
+            XCTAssertFalse(nonExistantFile.exists)
+            XCTAssertFalse(nonExistantFile.isExecutable)
+            XCTAssertFalse(nonExistantFile.isReadable)
+            XCTAssertFalse(nonExistantFile.isWritable)
+            XCTAssertFalse(nonExistantFile.isDeletable)
+            XCTAssertFalse(nonExistantFile.isDirectory)
+            XCTAssertFalse(nonExistantFile.isFile)
+
+            let baz = try tmpdir.baz.touch()
+            XCTAssertTrue(baz.isDeletable)
+            try tmpdir.chmod(0o500)  // remove write permission on directory
+            XCTAssertFalse(baz.isDeletable)  // this is how deletion is prevented on UNIX
+        }
+    }
+
+    func testTimes() throws {
+        try Path.mktemp { tmpdir in
+            let foo = try tmpdir.foo.touch()
+            let now1 = Date().timeIntervalSince1970.rounded(.down)
+        #if !os(Linux)
+            XCTAssertEqual(foo.ctime?.timeIntervalSince1970.rounded(.down), now1)  //FIXME flakey
+        #endif
+            XCTAssertEqual(foo.mtime?.timeIntervalSince1970.rounded(.down), now1)  //FIXME flakey
+            sleep(1)
+            try foo.touch()
+            let now2 = Date().timeIntervalSince1970.rounded(.down)
+            XCTAssertNotEqual(now1, now2)
+            XCTAssertEqual(foo.mtime?.timeIntervalSince1970.rounded(.down), now2)  //FIXME flakey
+        }
+    }
+
+    func testDelete() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.bar1.delete()
+            try tmpdir.bar2.touch().delete()
+            try tmpdir.bar3.touch().chmod(0o000).delete()
+        #if !os(Linux)
+            XCTAssertThrowsError(try tmpdir.bar3.touch().lock().delete())
+        #endif
+        }
+    }
+
+    func testRelativeCodable() throws {
+        let path = Path.home.foo
+        let encoder = JSONEncoder()
+        encoder.userInfo[.relativePath] = Path.home
+        let data = try encoder.encode([path])
+        let decoder = JSONDecoder()
+        decoder.userInfo[.relativePath] = Path.home
+        XCTAssertEqual(try decoder.decode([Path].self, from: data), [path])
+        decoder.userInfo[.relativePath] = Path.documents
+        XCTAssertEqual(try decoder.decode([Path].self, from: data), [Path.documents.foo])
+        XCTAssertThrowsError(try JSONDecoder().decode([Path].self, from: data))
+    }
+
+    func testBundleExtensions() {
+        XCTAssertTrue(Bundle.main.path.isDirectory)
+        XCTAssertTrue(Bundle.main.resources.isDirectory)
+
+        // doesn’t exist in tests
+        _ = Bundle.main.sharedFrameworks
+    }
+
+    func testFileHandleExtensions() throws {
+        _ = try FileHandle(forReadingAt: Path(#file)!)
+        _ = try FileHandle(forWritingAt: Path(#file)!)
+    }
 }

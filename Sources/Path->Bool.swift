@@ -1,4 +1,9 @@
 import Foundation
+#if os(Linux)
+import func Glibc.access
+#else
+import func Darwin.access
+#endif
 
 public extension Path {
     //MARK: Filesystem Properties
@@ -32,11 +37,22 @@ public extension Path {
         
     /// Returns true if the path represents an actual file that is also deletable by the current user.
     var isDeletable: Bool {
-        return FileManager.default.isDeletableFile(atPath: string)
+    #if os(Linux) && !swift(>=5.1)
+        return exists && access(parent.string, W_OK) == 0
+    #else
+        // FileManager.isDeletableFile returns true if there is *not* a file there
+        return exists && FileManager.default.isDeletableFile(atPath: string)
+    #endif
     }
 
     /// Returns true if the path represents an actual file that is also executable by the current user.
     var isExecutable: Bool {
-        return FileManager.default.isExecutableFile(atPath: string)
+        if access(string, X_OK) == 0 {
+            // FileManager.isExxecutableFile returns true even if there is *not*
+            // a file there *but* if there was it could be *made* executable
+            return FileManager.default.isExecutableFile(atPath: string)
+        } else {
+            return false
+        }
     }
 }

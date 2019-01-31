@@ -10,6 +10,6 @@ extension Path: CustomStringConvertible {
 extension Path: CustomDebugStringConvertible {
     /// Returns eg. `Path(string: "/foo")`
     public var debugDescription: String {
-        return "Path(string: \(string))"
+        return "Path(\(string))"
     }
 }
