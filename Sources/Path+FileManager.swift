@@ -175,8 +175,16 @@ public extension Path {
         return self
     }
 
+    /**
+     Renames the file at path.
+
+         Path.root.foo.bar.rename(to: "baz")  // => /foo/baz
+
+     - Parameter to: the new basename for the file
+     - Returns: The renamed path.
+     */
     @discardableResult
-    func rename(_ newname: String) throws -> Path {
+    func rename(to newname: String) throws -> Path {
         let newpath = parent/newname
         try FileManager.default.moveItem(atPath: string, toPath: newpath.string)
         return newpath
