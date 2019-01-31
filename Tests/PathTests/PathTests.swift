@@ -352,13 +352,13 @@ class PathTests: XCTestCase {
         XCTAssertThrowsError(try JSONDecoder().decode([Path].self, from: data))
     }
 
-    func testBundleExtensions() {
-        XCTAssertTrue(Bundle.main.path.isDirectory)
-        XCTAssertTrue(Bundle.main.resources.isDirectory)
-
-        // don’t exist in tests
-        _ = Bundle.main.path(forResource: "foo", ofType: "bar")
-        _ = Bundle.main.sharedFrameworks
+    func testBundleExtensions() throws {
+        try Path.mktemp { tmpdir in
+            let bndl = Bundle(path: tmpdir.string)!
+            XCTAssertEqual(bndl.path, tmpdir)
+            XCTAssertEqual(bndl.sharedFrameworks, tmpdir.SharedFrameworks)
+            XCTAssertEqual(bndl.resources, tmpdir)
+        }
     }
 
     func testDataExtensions() throws {
@@ -394,7 +394,17 @@ class PathTests: XCTestCase {
             XCTAssertThrowsError(try bar.touch())
             try bar.unlock()
             try bar.touch()
+
+            // a non existant file is already “unlocked”
+            try tmpdir.nonExit.unlock()
         }
     #endif
+    }
+
+    func testTouchThrowsIfCannotWrite() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.chmod(0o000)
+            XCTAssertThrowsError(try tmpdir.bar.touch())
+        }
     }
 }
