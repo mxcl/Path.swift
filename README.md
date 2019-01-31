@@ -1,4 +1,4 @@
-# Path.swift ![badge-platforms] ![badge-languages][] [![Build Status](https://travis-ci.com/mxcl/Path.swift.svg)](https://travis-ci.com/mxcl/Path.swift)
+# Path.swift ![badge-platforms][] ![badge-languages][] [![badge-ci][]][travis] [![badge-jazzy][]][docs] [![badge-codecov][]][codecov] ![badge-version][]
 
 A file-system pathing library focused on developer experience and robust end
 results.
@@ -57,7 +57,7 @@ help me continue my work, I appreciate it x
 
 # Handbook
 
-Our [online API documentation] is automatically updated for new releases.
+Our [online API documentation][docs] is automatically updated for new releases.
 
 ## Codable
 
@@ -168,6 +168,20 @@ let files = Path.home.ls().files
 let swiftFiles = Path.home.ls().files(withExtension: "swift")
 ```
 
+# `Path.swift` is robust
+
+Some parts of `FileManager` are not exactly idiomatic. For example 
+`isExecutableFile` returns `true` even if there is no file there, it is instead
+telling you that *if* you made a file there it *could* be executable. Thus we
+check the POSIX permissions of the file first, before returning the result of
+`isExecutableFile`. `Path.swift` has done the leg-work for you so you can get on
+with your work without worries.
+
+# `Path.swift` is properly cross-platform
+
+`FileManager` on Linux is full of holes. We have found the holes and worked
+round them where necessary.
+
 # Rules & Caveats
 
 Paths are just string representations, there *might not* be a real file there.
@@ -200,7 +214,7 @@ Path("~/foo")!     // => /Users/mxcl/foo
 Path("~foo")       // => nil
 ```
 
-*Path.swift* has the general policty that if the desired end result preexists,
+*Path.swift* has the general policy that if the desired end result preexists,
 then it’s a noop:
 
 * If you try to delete a file, but the file doesn't exist, we do nothing.
@@ -246,4 +260,10 @@ https://codebasesaga.com/canopy/
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
 [badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.0-orange.svg
-[online API documentation]: https://mxcl.github.io/Path.swift/Structs/Path.html
+[docs]: https://mxcl.github.io/Path.swift/Structs/Path.html
+[badge-jazzy]: https://raw.githubusercontent.com/mxcl/Path.swift/gh-pages/badge.svg?sanitize=true
+[badge-codecov]: https://codecov.io/gh/mxcl/Path.swift/branch/master/graph/badge.svg
+[badge-ci]: https://travis-ci.com/mxcl/Path.swift.svg
+[travis]: https://travis-ci.com/mxcl/Path.swift
+[codecov]: https://codecov.io/gh/mxcl/Path.swift
+[badge-version]: https://img.shields.io/cocoapods/v/Path.swift.svg?label=version
