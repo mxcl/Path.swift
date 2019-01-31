@@ -90,7 +90,7 @@ public extension Path {
      */
     @discardableResult
     func move(to: Path, overwrite: Bool = false) throws -> Path {
-        if overwrite, to.exists {
+        if overwrite, to.isFile {
             try FileManager.default.removeItem(at: to.url)
         }
         try FileManager.default.moveItem(at: url, to: to.url)
@@ -112,13 +112,16 @@ public extension Path {
      - SeeAlso: move(into:overwrite:)
      */
     @discardableResult
-    func move(into: Path) throws -> Path {
+    func move(into: Path, overwrite: Bool = false) throws -> Path {
         if !into.exists {
             try into.mkdir(.p)
         } else if !into.isDirectory {
             throw CocoaError.error(.fileWriteFileExists)
         }
         let rv = into/basename()
+        if overwrite, rv.isFile {
+            try FileManager.default.removeItem(at: rv.url)
+        }
         try FileManager.default.moveItem(at: url, to: rv.url)
         return rv
     }
@@ -170,6 +173,13 @@ public extension Path {
         #endif
         }
         return self
+    }
+
+    @discardableResult
+    func rename(_ newname: String) throws -> Path {
+        let newpath = parent/newname
+        try FileManager.default.moveItem(atPath: string, toPath: newpath.string)
+        return newpath
     }
 }
 

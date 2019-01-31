@@ -19,9 +19,10 @@ jobs:
       name: macOS / Swift 4.2.1
 
     - &xcodebuild
-      before_install: swift package generate-xcodeproj
+      before_install: swift package generate-xcodeproj --enable-code-coverage
       xcode_destination: platform=iOS Simulator,OS=latest,name=iPhone XS
       name: iOS / Swift 4.2.1
+      after_success: bash <(curl -s https://codecov.io/bash)
     - <<: *xcodebuild
       xcode_destination: platform=tvOS Simulator,OS=latest,name=Apple TV
       name: tvOS / Swift 4.2.1
@@ -34,6 +35,7 @@ jobs:
           -scheme Path.swift-Package \
           -destination 'platform=watchOS Simulator,OS=latest,name=Apple Watch Series 4 - 40mm' \
           build | xcpretty
+      after_success: false
 
     - &linux
       env: SWIFT_VERSION=4.2.1
