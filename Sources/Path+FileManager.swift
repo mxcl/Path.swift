@@ -174,6 +174,13 @@ public extension Path {
         }
         return self
     }
+
+    @discardableResult
+    func rename(_ newname: String) throws -> Path {
+        let newpath = parent/newname
+        try FileManager.default.moveItem(atPath: string, toPath: newpath.string)
+        return newpath
+    }
 }
 
 /// Options for `Path.mkdir(_:)`

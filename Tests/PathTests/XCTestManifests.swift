@@ -15,8 +15,10 @@ extension PathTests {
         ("testJoin", testJoin),
         ("testMkpathIfExists", testMkpathIfExists),
         ("testMktemp", testMktemp),
+        ("testMoveInto", testMoveInto),
         ("testRelativePathCodable", testRelativePathCodable),
         ("testRelativeTo", testRelativeTo),
+        ("testRename", testRename),
     ]
 }
 

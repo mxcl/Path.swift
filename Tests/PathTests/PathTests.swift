@@ -165,12 +165,42 @@ class PathTests: XCTestCase {
     }
 
     func testCopyInto() throws {
+        try Path.mktemp { root1 in
+            let bar1 = try root1.join("bar").touch()
+            try Path.mktemp { root2 in
+                let bar2 = try root2.join("bar").touch()
+                XCTAssertThrowsError(try bar1.copy(into: root2))
+                try bar1.copy(into: root2, overwrite: true)
+                XCTAssertTrue(bar1.exists)
+                XCTAssertTrue(bar2.exists)
+            }
+        }
+    }
+
+    func testMoveInto() throws {
+        try Path.mktemp { root1 in
+            let bar1 = try root1.join("bar").touch()
+            try Path.mktemp { root2 in
+                let bar2 = try root2.join("bar").touch()
+                XCTAssertThrowsError(try bar1.move(into: root2))
+                try bar1.move(into: root2, overwrite: true)
+                XCTAssertFalse(bar1.exists)
+                XCTAssertTrue(bar2.exists)
+            }
+        }
+    }
+
+    func testRename() throws {
         try Path.mktemp { root in
-            let bar = try root.join("bar").touch()
-            try Path.mktemp { root in
-                try root.join("bar").touch()
-                XCTAssertThrowsError(try bar.copy(into: root))
-                try bar.copy(into: root, overwrite: true)
+            do {
+                let file = try root.bar.touch()
+                let foo = try file.rename("foo")
+                XCTAssertFalse(file.exists)
+                XCTAssertTrue(foo.isFile)
+            }
+            do {
+                let file = try root.bar.touch()
+                XCTAssertThrowsError(try file.rename("foo"))
             }
         }
     }
