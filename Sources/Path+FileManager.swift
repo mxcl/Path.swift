@@ -1,4 +1,7 @@
 import Foundation
+#if os(Linux)
+import Glibc
+#endif
 
 public extension Path {
     //MARK: File Management
@@ -25,6 +28,11 @@ public extension Path {
         if overwrite, to.isFile, isFile {
             try FileManager.default.removeItem(at: to.url)
         }
+    #if os(Linux) && !swift(>=5.1) // check if fixed
+        if !overwrite, to.isFile {
+            throw CocoaError.error(.fileWriteFileExists)
+        }
+    #endif
         try FileManager.default.copyItem(atPath: string, toPath: to.string)
         return to
     }
@@ -53,20 +61,16 @@ public extension Path {
     @discardableResult
     func copy(into: Path, overwrite: Bool = false) throws -> Path {
         if !into.exists {
-            try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+            try FileManager.default.createDirectory(at: into.url, withIntermediateDirectories: true)
         }
         let rv = into/basename()
         if overwrite, rv.isFile {
             try rv.delete()
         }
-    #if os(Linux)
-    #if swift(>=5.1)
-        // check if fixed
-    #else
+    #if os(Linux) && !swift(>=5.1) // check if fixed
         if !overwrite, rv.isFile {
             throw CocoaError.error(.fileWriteFileExists)
         }
-    #endif
     #endif
         try FileManager.default.copyItem(at: url, to: rv.url)
         return rv
@@ -142,13 +146,26 @@ public extension Path {
     }
 
     /**
-     Creates an empty file at this path.
+     Creates an empty file at this path or if the file exists, updates its modification time.
      - Returns: `self` to allow chaining.
      */
     @inlinable
     @discardableResult
     func touch() throws -> Path {
-        return try "".write(to: self)
+        if !exists {
+            guard FileManager.default.createFile(atPath: string, contents: nil) else {
+                throw CocoaError.error(.fileWriteUnknown)
+            }
+        } else {
+        #if os(Linux)
+            let fd = open(string, O_WRONLY)
+            defer { close(fd) }
+            futimens(fd, nil)
+        #else
+            try FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: string)
+        #endif
+        }
+        return self
     }
 
     /**
