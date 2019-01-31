@@ -8,6 +8,8 @@ extension PathTests {
         ("testCommonDirectories", testCommonDirectories),
         ("testConcatenation", testConcatenation),
         ("testCopyInto", testCopyInto),
+        ("testCopyTo", testCopyTo),
+        ("testDataExentsions", testDataExentsions),
         ("testDelete", testDelete),
         ("testDynamicMember", testDynamicMember),
         ("testEnumeration", testEnumeration),
@@ -21,11 +23,13 @@ extension PathTests {
         ("testMkpathIfExists", testMkpathIfExists),
         ("testMktemp", testMktemp),
         ("testMoveInto", testMoveInto),
+        ("testMoveTo", testMoveTo),
         ("testRelativeCodable", testRelativeCodable),
         ("testRelativePathCodable", testRelativePathCodable),
         ("testRelativeTo", testRelativeTo),
         ("testRename", testRename),
         ("testStringConvertibles", testStringConvertibles),
+        ("testStringExentsions", testStringExentsions),
         ("testTimes", testTimes),
     ]
 }

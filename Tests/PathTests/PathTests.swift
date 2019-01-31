@@ -164,6 +164,14 @@ class PathTests: XCTestCase {
         XCTAssertEqual(a.Documents, Path.home/"foo/Documents")
     }
 
+    func testCopyTo() throws {
+        try Path.mktemp { root in
+            try root.foo.touch().copy(to: root.bar)
+            XCTAssert(root.foo.isFile)
+            XCTAssert(root.bar.isFile)
+        }
+    }
+
     func testCopyInto() throws {
         try Path.mktemp { root1 in
             let bar1 = try root1.join("bar").touch()
@@ -174,6 +182,14 @@ class PathTests: XCTestCase {
                 XCTAssertTrue(bar1.exists)
                 XCTAssertTrue(bar2.exists)
             }
+        }
+    }
+
+    func testMoveTo() throws {
+        try Path.mktemp { root in
+            try root.foo.touch().move(to: root.bar)
+            XCTAssertFalse(root.foo.exists)
+            XCTAssert(root.bar.isFile)
         }
     }
 
@@ -313,12 +329,28 @@ class PathTests: XCTestCase {
         XCTAssertTrue(Bundle.main.path.isDirectory)
         XCTAssertTrue(Bundle.main.resources.isDirectory)
 
-        // doesn’t exist in tests
+        // don’t exist in tests
+        _ = Bundle.main.path(forResource: "foo", ofType: "bar")
         _ = Bundle.main.sharedFrameworks
+    }
+
+    func testDataExentsions() throws {
+        let data = try Data(contentsOf: Path(#file)!)
+        try Path.mktemp { tmpdir in
+            _ = try data.write(to: tmpdir.foo)
+        }
+    }
+
+    func testStringExentsions() throws {
+        let string = try String(contentsOf: Path(#file)!)
+        try Path.mktemp { tmpdir in
+            _ = try string.write(to: tmpdir.foo)
+        }
     }
 
     func testFileHandleExtensions() throws {
         _ = try FileHandle(forReadingAt: Path(#file)!)
         _ = try FileHandle(forWritingAt: Path(#file)!)
+        _ = try FileHandle(forUpdatingAt: Path(#file)!)
     }
 }
