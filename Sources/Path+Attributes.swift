@@ -1,34 +1,35 @@
 import Foundation
+//#if os(Linux)
+//import func Glibc.chmod
+//#endif
 
 public extension Path {
     //MARK: Filesystem Attributes
 
     /**
      Returns the creation-time of the file.
-     - Note: Returns UNIX-time-zero if there is no creation-time, this should only happen if the file doesn’t exist.
+     - Note: Returns `nil` if there is no creation-time, this should only happen if the file doesn’t exist.
+     - Important: On Linux this is filesystem dependendent and may not exist.
      */
-    var ctime: Date {
+    var ctime: Date? {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
-            return attrs[.creationDate] as? Date ?? Date(timeIntervalSince1970: 0)
+            return attrs[.creationDate] as? Date
         } catch {
-            //TODO log error
-            return Date(timeIntervalSince1970: 0)
+            return nil
         }
     }
 
     /**
      Returns the modification-time of the file.
-     - Note: Returns the creation time if there is no modification time.
-     - Note: Returns UNIX-time-zero if neither are available, this should only happen if the file doesn’t exist.
+     - Note: If this returns `nil` and the file exists, something is very wrong.
      */
-    var mtime: Date {
+    var mtime: Date? {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
-            return attrs[.modificationDate] as? Date ?? ctime
+            return attrs[.modificationDate] as? Date
         } catch {
-            //TODO log error
-            return Date(timeIntervalSince1970: 0)
+            return nil
         }
     }
 
@@ -39,27 +40,40 @@ public extension Path {
      */
     @discardableResult
     func chmod(_ octal: Int) throws -> Path {
+//    #if os(Linux)
+//        Glibc.chmod(string, __mode_t(octal))
+//    #else
         try FileManager.default.setAttributes([.posixPermissions: octal], ofItemAtPath: string)
+//    #endif
         return self
     }
     
-    /// - Note: If file is already locked, does nothing
-    /// - Note: If file doesn’t exist, throws
+    /**
+     - Note: If file is already locked, does nothing.
+     - Note: If file doesn’t exist, throws.
+     - Important: On Linux does nothing.
+     */
     @discardableResult
     func lock() throws -> Path {
+    #if !os(Linux)
         var attrs = try FileManager.default.attributesOfItem(atPath: string)
         let b = attrs[.immutable] as? Bool ?? false
         if !b {
             attrs[.immutable] = true
             try FileManager.default.setAttributes(attrs, ofItemAtPath: string)
         }
+    #endif
         return self
     }
 
-    /// - Note: If file isn‘t locked, does nothing
-    /// - Note: If file doesn’t exist, does nothing
+    /**
+     - Note: If file isn‘t locked, does nothing.
+     - Note: If file doesn’t exist, does nothing.
+     - Important: On Linux does nothing.
+     */
     @discardableResult
     func unlock() throws -> Path {
+    #if !os(Linux)
         var attrs: [FileAttributeKey: Any]
         do {
             attrs = try FileManager.default.attributesOfItem(atPath: string)
@@ -71,6 +85,7 @@ public extension Path {
             attrs[.immutable] = false
             try FileManager.default.setAttributes(attrs, ofItemAtPath: string)
         }
+    #endif
         return self
     }
 }

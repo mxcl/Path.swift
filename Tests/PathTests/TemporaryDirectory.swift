@@ -42,7 +42,11 @@ class TemporaryDirectory {
     }
 
     deinit {
-        _ = try? FileManager.default.removeItem(at: url)
+        do {
+            try path.chmod(0o777).delete()
+        } catch {
+            //TODO log
+        }
     }
 }
 
