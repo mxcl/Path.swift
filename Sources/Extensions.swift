@@ -11,30 +11,12 @@ public extension Bundle {
 
     /// Returns the path for the shared-frameworks directory in this bundle.
     var sharedFrameworks: Path {
-        var `default`: Path {
-          #if os(macOS)
-            return path.join("Contents/Frameworks")
-          #elseif os(Linux)
-            return path.join("lib")
-          #else
-            return path.join("Frameworks")
-          #endif
-        }
-        return sharedFrameworksPath.flatMap(Path.init) ?? `default`
+        return sharedFrameworksPath.flatMap(Path.init) ?? defaultSharedFrameworksPath
     }
 
     /// Returns the path for the resources directory in this bundle.
     var resources: Path {
-        var `default`: Path {
-          #if os(macOS)
-            return path.join("Contents/Resources")
-          #elseif os(Linux)
-            return path.join("share")
-          #else
-            return path
-          #endif
-        }
-        return resourcePath.flatMap(Path.init) ?? `default`
+        return resourcePath.flatMap(Path.init) ?? defaultResourcesPath
     }
 
     /// Returns the path for this bundle.
@@ -105,5 +87,27 @@ public extension FileHandle {
     @inlinable
     convenience init(forUpdatingAt path: Path) throws {
         try self.init(forUpdating: path.url)
+    }
+}
+
+internal extension Bundle {
+    var defaultSharedFrameworksPath: Path {
+      #if os(macOS)
+        return path.join("Contents/Frameworks")
+      #elseif os(Linux)
+        return path.join("lib")
+      #else
+        return path.join("Frameworks")
+      #endif
+    }
+
+    var defaultResourcesPath: Path {
+      #if os(macOS)
+        return path.join("Contents/Resources")
+      #elseif os(Linux)
+        return path.join("share")
+      #else
+        return path
+      #endif
     }
 }
