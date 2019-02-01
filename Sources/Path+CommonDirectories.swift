@@ -47,18 +47,7 @@ extension Path {
             fatalError()
         }
     #else    
-        guard let pathString = FileManager.default.urls(for: searchPath, in: .userDomainMask).first?.path else {
-            switch searchPath {
-            case .documentDirectory:
-                return Path.home/"Documents"
-            case .applicationSupportDirectory:
-                return Path.home/"Library/Application Support"
-            case .cachesDirectory:
-                return Path.home/"Library/Caches"
-            default:
-                fatalError()
-            }
-        }
+        guard let pathString = FileManager.default.urls(for: searchPath, in: .userDomainMask).first?.path else { return defaultUrl(for: searchPath) }
         return Path(string: pathString)
     #endif
     }
@@ -90,3 +79,19 @@ extension Path {
         return path(for: .applicationSupportDirectory)
     }
 }
+
+#if !os(Linux)
+func defaultUrl(for searchPath: FileManager.SearchPathDirectory) -> Path {
+    switch searchPath {
+    case .documentDirectory:
+        return Path.home/"Documents"
+    case .applicationSupportDirectory:
+        return Path.home/"Library/Application Support"
+    case .cachesDirectory:
+        return Path.home/"Library/Caches"
+    default:
+        fatalError()
+    }
+}
+#endif
+

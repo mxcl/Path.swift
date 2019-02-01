@@ -1,5 +1,5 @@
+@testable import Path
 import XCTest
-import Path
 
 class PathTests: XCTestCase {
     func testConcatenation() {
@@ -253,6 +253,10 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.caches.string, NSHomeDirectory() + "/Library/Caches")
         XCTAssertEqual(Path.cwd.string, FileManager.default.currentDirectoryPath)
         XCTAssertEqual(Path.applicationSupport.string, NSHomeDirectory() + "/Library/Application Support")
+
+        _ = defaultUrl(for: .documentDirectory)
+        _ = defaultUrl(for: .cachesDirectory)
+        _ = defaultUrl(for: .applicationSupportDirectory)
     #endif
     }
 
@@ -359,6 +363,17 @@ class PathTests: XCTestCase {
             XCTAssertEqual(bndl.sharedFrameworks, tmpdir.SharedFrameworks)
             XCTAssertEqual(bndl.resources, tmpdir)
             XCTAssertNil(bndl.path(forResource: "foo", ofType: "bar"))
+
+        #if os(macOS)
+            XCTAssertEqual(bndl.defaultSharedFrameworksPath, tmpdir.Contents.Frameworks)
+            XCTAssertEqual(bndl.defaultResourcesPath, tmpdir.Contents.Resources)
+        #elseif os(tvOS) || os(iOS)
+            XCTAssertEqual(bndl.defaultSharedFrameworksPath, tmpdir.Frameworks)
+            XCTAssertEqual(bndl.defaultResourcesPath, tmpdir)
+        #else
+            XCTAssertEqual(bndl.defaultSharedFrameworksPath, tmpdir.lib)
+            XCTAssertEqual(bndl.defaultResourcesPath, tmpdir.share)
+        #endif
         }
     }
 
