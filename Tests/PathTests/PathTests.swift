@@ -358,6 +358,7 @@ class PathTests: XCTestCase {
             XCTAssertEqual(bndl.path, tmpdir)
             XCTAssertEqual(bndl.sharedFrameworks, tmpdir.SharedFrameworks)
             XCTAssertEqual(bndl.resources, tmpdir)
+            XCTAssertNil(bndl.path(forResource: "foo", ofType: "bar"))
         }
     }
 
