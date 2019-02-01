@@ -33,6 +33,7 @@ extension PathTests {
         ("testStringConvertibles", testStringConvertibles),
         ("testStringExtensions", testStringExtensions),
         ("testTimes", testTimes),
+        ("testTouchThrowsIfCannotWrite", testTouchThrowsIfCannotWrite),
     ]
 }
 
