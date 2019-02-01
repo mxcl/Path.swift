@@ -46,7 +46,8 @@ public extension Path {
          // Create ~/.local/bin, copy `ls` there and make the new copy executable
          try Path.root.join("bin/ls").copy(into: Path.home.join(".local/bin").mkdir(.p)).chmod(0o500)
 
-     If the destination does not exist, this function creates the directory first.
+     If the destination does not exist, this function creates the directory
+     (including intermediary directories if necessary) first.
 
      - Parameter into: Destination directory
      - Parameter overwrite: If true overwrites any file that already exists at `into`.
@@ -61,7 +62,7 @@ public extension Path {
     @discardableResult
     func copy(into: Path, overwrite: Bool = false) throws -> Path {
         if !into.exists {
-            try FileManager.default.createDirectory(at: into.url, withIntermediateDirectories: true)
+            try into.mkdir(.p)
         }
         let rv = into/basename()
         if overwrite, rv.isFile {
@@ -107,7 +108,8 @@ public extension Path {
          try Path.root.join("bar").move(into: .home)
          // => "/Users/mxcl/bar"
 
-     If the destination does not exist, this function creates the directory first.
+     If the destination does not exist, this function creates the directory
+     (including intermediary directories if necessary) first.
 
      - Parameter into: Destination directory
      - Parameter overwrite: If true *overwrites* any file that already exists at `into`.

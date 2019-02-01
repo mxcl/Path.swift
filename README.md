@@ -1,4 +1,4 @@
-# Path.swift ![badge-platforms][] ![badge-languages][] [![badge-ci][]][travis] [![badge-jazzy][]][docs] [![badge-codecov][]][codecov] ![badge-version][]
+# Path.swift ![badge-platforms][] ![badge-languages][] [![badge-ci][]][travis] [![badge-jazzy][]][docs] [![badge-codecov][]][codecov] [![badge-version][]][cocoapods]
 
 A file-system pathing library focused on developer experience and robust end
 results.
@@ -36,7 +36,7 @@ print(foo.isFile)  // => true
 let prefs = Path.home.Library.Preferences  // => /Users/mxcl/Library/Preferences
 
 // a practical example: installing a helper executable
-try Bundle.resources.join("helper").copy(into: Path.home.join(".local/bin").mkdir(.p)).chmod(0o500)
+try Bundle.resources.helper.copy(into: Path.root.usr.local.bin).chmod(0o500)
 ```
 
 We emphasize safety and correctness, just like Swift, and also (again like
@@ -57,7 +57,8 @@ help me continue my work, I appreciate it x
 
 # Handbook
 
-Our [online API documentation][docs] is automatically updated for new releases.
+Our [online API documentation][docs] covers 100% of our public API and is
+automatically updated for new releases.
 
 ## Codable
 
@@ -229,7 +230,7 @@ for that as the check was deemed too expensive to be worthwhile.
 SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift", from: "0.5.0"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift.git", from: "0.5.0"))
 ```
 
 CocoaPods:
@@ -267,3 +268,4 @@ https://codebasesaga.com/canopy/
 [travis]: https://travis-ci.com/mxcl/Path.swift
 [codecov]: https://codecov.io/gh/mxcl/Path.swift
 [badge-version]: https://img.shields.io/cocoapods/v/Path.swift.svg?label=version
+[cocoapods]: https://cocoapods.org/pods/Path.swift
