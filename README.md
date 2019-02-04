@@ -254,6 +254,7 @@ https://codebasesaga.com/canopy/
 
 # Alternatives
 
+* [Pathos](https://github.com/dduan/Pathos) by Daniel Duan
 * [PathKit](https://github.com/kylef/PathKit) by Kyle Fuller
 * [Files](https://github.com/JohnSundell/Files) by John Sundell
 * [Utility](https://github.com/apple/swift-package-manager) by Apple
