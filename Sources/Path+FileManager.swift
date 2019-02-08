@@ -57,7 +57,7 @@ public extension Path {
       `self` because even though *Path.swift’s* policy is to noop if the desired
        end result preexists, checking for this condition is too expensive a
        trade-off.
-     - SeeAlso: `copy(into:overwrite:)`
+     - SeeAlso: `copy(to:overwrite:)`
      */
     @discardableResult
     func copy(into: Path, overwrite: Bool = false) throws -> Path {
@@ -91,7 +91,7 @@ public extension Path {
        `self` because even though *Path.swift’s* policy is to noop if the desired
        end result preexists, checking for this condition is too expensive a
        trade-off.
-     - SeeAlso: move(into:overwrite:)
+     - SeeAlso: `move(into:overwrite:)`
      */
     @discardableResult
     func move(to: Path, overwrite: Bool = false) throws -> Path {
@@ -115,7 +115,7 @@ public extension Path {
      - Parameter overwrite: If true *overwrites* any file that already exists at `into`.
      - Note: `throws` if `into` is a file.
      - Returns: The `Path` of destination filename.
-     - SeeAlso: move(into:overwrite:)
+     - SeeAlso: `move(to:overwrite:)`
      */
     @discardableResult
     func move(into: Path, overwrite: Bool = false) throws -> Path {

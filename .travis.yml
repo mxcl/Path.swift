@@ -91,7 +91,7 @@ jobs:
 
     - name: CocoaPods
       before_install: export TRAVIS_REPO_NAME=${TRAVIS_REPO_SLUG#*/}
-      install: gem install cocoapods --pre
+      install: gem install cocoapods
       before_script: |
         export DESCRIPTION=$(swift - <<\ \ EOF
           import Foundation

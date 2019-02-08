@@ -1,7 +1,4 @@
 import Foundation
-//#if os(Linux)
-//import func Glibc.chmod
-//#endif
 
 public extension Path {
     //MARK: Filesystem Attributes
@@ -40,15 +37,12 @@ public extension Path {
      */
     @discardableResult
     func chmod(_ octal: Int) throws -> Path {
-//    #if os(Linux)
-//        Glibc.chmod(string, __mode_t(octal))
-//    #else
         try FileManager.default.setAttributes([.posixPermissions: octal], ofItemAtPath: string)
-//    #endif
         return self
     }
     
     /**
+     Applies the macOS filesystem “lock” attribute.
      - Note: If file is already locked, does nothing.
      - Note: If file doesn’t exist, throws.
      - Important: On Linux does nothing.
@@ -70,6 +64,7 @@ public extension Path {
      - Note: If file isn‘t locked, does nothing.
      - Note: If file doesn’t exist, does nothing.
      - Important: On Linux does nothing.
+     - SeeAlso: `lock()`
      */
     @discardableResult
     func unlock() throws -> Path {
