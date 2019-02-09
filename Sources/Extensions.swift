@@ -9,9 +9,20 @@ public extension Bundle {
         return str.flatMap(Path.init)
     }
 
-    /// Returns the path for the shared-frameworks directory in this bundle.
+    /**
+     Returns the path for the shared-frameworks directory in this bundle.
+     - Note: This is typically `ShareFrameworks`
+    */
     var sharedFrameworks: Path {
         return sharedFrameworksPath.flatMap(Path.init) ?? defaultSharedFrameworksPath
+    }
+
+    /**
+     Returns the path for the private-frameworks directory in this bundle.
+     - Note: This is typically `Frameworks`
+    */
+    var privateFrameworks: Path {
+        return privateFrameworksPath.flatMap(Path.init) ?? defaultSharedFrameworksPath
     }
 
     /// Returns the path for the resources directory in this bundle.

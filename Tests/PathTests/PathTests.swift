@@ -361,6 +361,7 @@ class PathTests: XCTestCase {
             let bndl = Bundle(path: tmpdir.string)!
             XCTAssertEqual(bndl.path, tmpdir)
             XCTAssertEqual(bndl.sharedFrameworks, tmpdir.SharedFrameworks)
+            XCTAssertEqual(bndl.privateFrameworks, tmpdir.Frameworks)
             XCTAssertEqual(bndl.resources, tmpdir)
             XCTAssertNil(bndl.path(forResource: "foo", ofType: "bar"))
 
