@@ -78,11 +78,7 @@ public struct Path: Equatable, Hashable, Comparable {
                     tilded = dir
                 }
             #else
-                if username != NSUserName() {
-                    return nil
-                } else {
-                    tilded = NSHomeDirectory()
-                }
+                return nil  // there are no usernames on iOS, etc.
             #endif
             }
             pathComponents.remove(at: 0)
