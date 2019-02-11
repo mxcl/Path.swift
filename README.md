@@ -181,7 +181,7 @@ with your work without worries.
 There is also some magic going on in Foundation’s filesystem APIs, which we look
 for and ensure our API is deterministic, eg. [this test].
 
-[this test]: TODO
+[this test]: https://github.com/mxcl/Path.swift/blob/master/Tests/PathTests/PathTests.swift#L539-L554
 
 # `Path.swift` is properly cross-platform
 
