@@ -493,6 +493,8 @@ class PathTests: XCTestCase {
     }
 
     func testReadlinkOnRelativeSymlink() throws {
+        //TODO how to test on iOS etc.?
+    #if os(macOS) || os(Linux)
         try Path.mktemp { tmpdir in
             let foo = try tmpdir.foo.mkdir()
             let bar = try tmpdir.bar.touch()
@@ -511,6 +513,7 @@ class PathTests: XCTestCase {
 
             XCTAssertEqual(try tmpdir.foo.baz.readlink(), bar)
         }
+    #endif
     }
 
     func testReadlinkOnFileReturnsSelf() throws {

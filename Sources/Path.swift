@@ -68,7 +68,7 @@ public struct Path: Equatable, Hashable, Comparable {
                 tilded = Path.home.string
             } else {
                 let username = String(pathComponents[0].dropFirst())
-
+            #if os(macOS) || os(Linux)
                 if #available(OSX 10.12, *) {
                     guard let url = FileManager.default.homeDirectory(forUser: username) else { return nil }
                     assert(url.scheme == "file")
@@ -77,6 +77,13 @@ public struct Path: Equatable, Hashable, Comparable {
                     guard let dir = NSHomeDirectoryForUser(username) else { return nil }
                     tilded = dir
                 }
+            #else
+                if username != NSUserName() {
+                    return nil
+                } else {
+                    tilded = NSHomeDirectory()
+                }
+            #endif
             }
             pathComponents.remove(at: 0)
             pathComponents.insert(contentsOf: tilded.split(separator: "/"), at: 0)
