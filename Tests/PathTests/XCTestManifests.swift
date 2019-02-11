@@ -17,7 +17,9 @@ extension PathTests {
         ("testExists", testExists),
         ("testExtension", testExtension),
         ("testFileHandleExtensions", testFileHandleExtensions),
+        ("testFileReference", testFileReference),
         ("testFilesystemAttributes", testFilesystemAttributes),
+        ("testInitializerForRelativePath", testInitializerForRelativePath),
         ("testIsDirectory", testIsDirectory),
         ("testJoin", testJoin),
         ("testLock", testLock),
@@ -25,6 +27,12 @@ extension PathTests {
         ("testMktemp", testMktemp),
         ("testMoveInto", testMoveInto),
         ("testMoveTo", testMoveTo),
+        ("testNoUndesiredSymlinkResolution", testNoUndesiredSymlinkResolution),
+        ("testReadlinkOnFileReturnsSelf", testReadlinkOnFileReturnsSelf),
+        ("testReadlinkOnNonExistantFileThrows", testReadlinkOnNonExistantFileThrows),
+        ("testReadlinkOnRelativeSymlink", testReadlinkOnRelativeSymlink),
+        ("testReadlinkWhereLinkDestinationDoesNotExist", testReadlinkWhereLinkDestinationDoesNotExist),
+        ("testRealpath", testRealpath),
         ("testRelativeCodable", testRelativeCodable),
         ("testRelativePathCodable", testRelativePathCodable),
         ("testRelativeTo", testRelativeTo),
@@ -32,8 +40,10 @@ extension PathTests {
         ("testSort", testSort),
         ("testStringConvertibles", testStringConvertibles),
         ("testStringExtensions", testStringExtensions),
+        ("testSymlinkFunctions", testSymlinkFunctions),
         ("testTimes", testTimes),
         ("testTouchThrowsIfCannotWrite", testTouchThrowsIfCannotWrite),
+        ("testURLInitializer", testURLInitializer),
     ]
 }
 
