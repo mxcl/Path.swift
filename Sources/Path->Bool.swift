@@ -2,7 +2,7 @@ import Foundation
 #if os(Linux)
 import func Glibc.access
 #else
-import func Darwin.access
+import Darwin
 #endif
 
 public extension Path {
@@ -54,5 +54,12 @@ public extension Path {
         } else {
             return false
         }
+    }
+
+    /// Returns `true` if the file is a symbolic-link (symlink).
+    var isSymlink: Bool {
+        var sbuf = stat()
+        lstat(string, &sbuf)
+        return (sbuf.st_mode & S_IFMT) == S_IFLNK 
     }
 }

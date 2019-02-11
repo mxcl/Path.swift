@@ -1,5 +1,3 @@
-import class Foundation.NSString
-
 extension Path: CustomStringConvertible {    
     /// Returns `Path.string`
     public var description: String {

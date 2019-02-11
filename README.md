@@ -108,7 +108,7 @@ let ls = Path.root.usr.bin.ls  // => /usr/bin/ls
 ```
 
 This is less commonly useful than you would think, hence our documentation
-does not use it. Usually you are joining variables or other `String` arguments 
+does not use it. Usually you are joining variables or other `String` arguments
 or trying to describe files (and files usually have extensions). However when
 you need it, it’s *lovely*.
 
@@ -171,12 +171,17 @@ let swiftFiles = Path.home.ls().files(withExtension: "swift")
 
 # `Path.swift` is robust
 
-Some parts of `FileManager` are not exactly idiomatic. For example 
+Some parts of `FileManager` are not exactly idiomatic. For example
 `isExecutableFile` returns `true` even if there is no file there, it is instead
 telling you that *if* you made a file there it *could* be executable. Thus we
 check the POSIX permissions of the file first, before returning the result of
 `isExecutableFile`. `Path.swift` has done the leg-work for you so you can get on
 with your work without worries.
+
+There is also some magic going on in Foundation’s filesystem APIs, which we look
+for and ensure our API is deterministic, eg. [this test].
+
+[this test]: TODO
 
 # `Path.swift` is properly cross-platform
 
@@ -199,6 +204,10 @@ Path.home/"b/c"    // => /Users/mxcl/b/c
 // joining with absolute paths omits prefixed slash
 Path.home/"/b"     // => /Users/mxcl/b
 
+// joining with .. or . works as expected
+Path.home.foo.bar.join("..")  // => /Users/mxcl/foo
+Path.home.foo.bar.join(".")   // => /Users/mxcl/foo/bar
+
 // of course, feel free to join variables:
 let b = "b"
 let c = "c"
@@ -211,8 +220,24 @@ Path.root/"~/b"    // => /~/b
 // but is here
 Path("~/foo")!     // => /Users/mxcl/foo
 
-// this does not work though
+// this works provided the user `Guest` exists
+Path("~Guest")     // => /Users/Guest
+
+// but if the user does not exist
 Path("~foo")       // => nil
+
+// paths with .. or . are resolved
+Path("/foo/bar/../baz")  // => /foo/baz
+
+// symlinks are not resolved
+Path.root.bar.symlink(as: "foo")
+Path("foo")        // => /foo
+Path.foo           // => /foo
+
+// unless you do it explicitly
+try Path.foo.readlink()  // => /bar
+                         // `readlink` only resolves the *final* path component,
+                         // thus use `realpath` if there are multiple symlinks
 ```
 
 *Path.swift* has the general policy that if the desired end result preexists,
@@ -220,30 +245,71 @@ then it’s a noop:
 
 * If you try to delete a file, but the file doesn't exist, we do nothing.
 * If you try to make a directory and it already exists, we do nothing.
+* If you call `readlink` on a non-symlink, we return `self`
 
 However notably if you try to copy or move a file with specifying `overwrite`
 and the file already exists at the destination and is identical, we don’t check
 for that as the check was deemed too expensive to be worthwhile.
+
+## Symbolic links
+
+* Two paths may represent the same *resolved* path yet not be equal due to
+    symlinks in such cases you should use `realpath` on both first if an
+    equality check is required.
+* There are several symlink paths on Mac that are typically automatically
+    resolved by Foundation, eg. `/private`, we attempt to do the same for
+    functions that you would expect it (notably `realpath`), but we do *not* for
+    `Path.init`, *nor* if you are joining a path that ends up being one of these
+    paths, (eg. `Path.root.join("var/private')`).
+
+## We do not provide change directory functionality
+
+Changing directory is dangerous, you should *always* try to avoid it and thus
+we don’t even provide the method. If you are executing a sub-process then
+use `Process.currentDirectoryURL`.
+
+If you must then use `FileManager.changeCurrentDirectory`.
+
+# I thought I should only use `URL`s?
+
+Apple recommend this because they provide a magic translation for
+[file-references embodied by URLs][file-refs], which gives you URLs like so:
+
+    file:///.file/id=6571367.15106761
+
+Therefore, if you are not using this feature you are fine. If you have URLs the correct
+way to get a `Path` is:
+
+```swift
+if let path = Path(url) {
+    /*…*/
+}
+```
+
+Our initializer calls `path` on the URL which resolves any reference to an
+actual filesystem path, however we also check the URL has a `file` scheme first.
+
+[file-refs]: https://developer.apple.com/documentation/foundation/nsurl/1408631-filereferenceurl
 
 # Installation
 
 SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift.git", from: "0.5.0"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift.git", from: "0.13.0"))
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'Path.swift', '~> 0.5'
+pod 'Path.swift', '~> 0.13'
 ```
 
 Carthage:
 
 > Waiting on: [@Carthage#1945](https://github.com/Carthage/Carthage/pull/1945).
 
-## Please note
+## Pre‐1.0 status
 
 We are pre 1.0, thus we can change the API as we like, and we will (to the
 pursuit of getting it *right*)! We will tag 1.0 as soon as possible.

@@ -9,6 +9,10 @@ class PathTests: XCTestCase {
         XCTAssertEqual((Path.root/"///bar").string, "/bar")
         XCTAssertEqual((Path.root/"foo///bar////").string, "/foo/bar")
         XCTAssertEqual((Path.root/"foo"/"/bar").string, "/foo/bar")
+
+        XCTAssertEqual(Path.root.foo.bar.join(".."), Path.root.foo)
+        XCTAssertEqual(Path.root.foo.bar.join("."), Path.root.foo.bar)
+        XCTAssertEqual(Path.root.foo.bar.join("../baz"), Path.root.foo.baz)
     }
 
     func testEnumeration() throws {
@@ -76,15 +80,19 @@ class PathTests: XCTestCase {
     }
 
     func testExtension() {
-        XCTAssertEqual(Path.root.join("a.swift").extension, "swift")
-        XCTAssertEqual(Path.root.join("a").extension, "")
-        XCTAssertEqual(Path.root.join("a.").extension, "")
-        XCTAssertEqual(Path.root.join("a..").extension, "")
-        XCTAssertEqual(Path.root.join("a..swift").extension, "swift")
-        XCTAssertEqual(Path.root.join("a..swift.").extension, "")
-        XCTAssertEqual(Path.root.join("a.tar.gz").extension, "tar.gz")
-        XCTAssertEqual(Path.root.join("a..tar.gz").extension, "tar.gz")
-        XCTAssertEqual(Path.root.join("a..tar..gz").extension, "gz")
+        for prefix in [Path.root, Path.root.foo, Path.root.foo.bar] {
+            XCTAssertEqual(prefix.join("a.swift").extension, "swift")
+            XCTAssertEqual(prefix.join("a").extension, "")
+            XCTAssertEqual(prefix.join("a.").extension, "")
+            XCTAssertEqual(prefix.join("a..").extension, "")
+            XCTAssertEqual(prefix.join("a..swift").extension, "swift")
+            XCTAssertEqual(prefix.join("a..swift.").extension, "")
+            XCTAssertEqual(prefix.join("a.tar.gz").extension, "tar.gz")
+            XCTAssertEqual(prefix.join("a.tar.bz2").extension, "tar.bz2")
+            XCTAssertEqual(prefix.join("a.tar.xz").extension, "tar.xz")
+            XCTAssertEqual(prefix.join("a..tar.bz").extension, "tar.bz")
+            XCTAssertEqual(prefix.join("a..tar..xz").extension, "xz")
+        }
     }
 
     func testMktemp() throws {
@@ -107,28 +115,32 @@ class PathTests: XCTestCase {
     }
 
     func testBasename() {
-        XCTAssertEqual(Path.root.join("foo.bar").basename(dropExtension: true), "foo")
-        XCTAssertEqual(Path.root.join("foo").basename(dropExtension: true), "foo")
-        XCTAssertEqual(Path.root.join("foo.").basename(dropExtension: true), "foo.")
-        XCTAssertEqual(Path.root.join("foo.bar.baz").basename(dropExtension: true), "foo.bar")
+        for prefix in [Path.root, Path.root.foo, Path.root.foo.bar] {
+            XCTAssertEqual(prefix.join("foo.bar").basename(dropExtension: true), "foo")
+            XCTAssertEqual(prefix.join("foo").basename(dropExtension: true), "foo")
+            XCTAssertEqual(prefix.join("foo.").basename(dropExtension: true), "foo.")
+            XCTAssertEqual(prefix.join("foo.bar.baz").basename(dropExtension: true), "foo.bar")
+        }
     }
 
     func testCodable() throws {
-        let input = [Path.root/"bar"]
+        let input = [Path.root.foo, Path.root.foo.bar, Path.root]
         XCTAssertEqual(try JSONDecoder().decode([Path].self, from: try JSONEncoder().encode(input)), input)
     }
 
     func testRelativePathCodable() throws {
-        let root = Path.root/"bar"
+        let root = Path.root.foo
         let input = [
-            root/"foo"
+            Path.root,
+            root,
+            root.bar
         ]
 
         let encoder = JSONEncoder()
         encoder.userInfo[.relativePath] = root
         let data = try encoder.encode(input)
 
-        XCTAssertEqual(try JSONSerialization.jsonObject(with: data) as? [String], ["foo"])
+        XCTAssertEqual(try JSONSerialization.jsonObject(with: data) as? [String], ["..", "", "bar"])
 
         let decoder = JSONDecoder()
         XCTAssertThrowsError(try decoder.decode([Path].self, from: data))
@@ -148,8 +160,16 @@ class PathTests: XCTestCase {
         XCTAssertEqual(prefix/b/c, Path("/Users/mxcl/b/c"))
         XCTAssertEqual(Path.root/"~b", Path("/~b"))
         XCTAssertEqual(Path.root/"~/b", Path("/~/b"))
+
         XCTAssertEqual(Path("~/foo"), Path.home/"foo")
+        XCTAssertEqual(Path("~"), Path.home)
+        XCTAssertEqual(Path("~/"), Path.home)
+        XCTAssertEqual(Path("~///"), Path.home)
+        XCTAssertEqual(Path("/~///"), Path.root/"~")
         XCTAssertNil(Path("~foo"))
+        XCTAssertNil(Path("~foo/bar"))
+
+        XCTAssertEqual(Path("~\(NSUserName())"), Path.home)
 
         XCTAssertEqual(Path.root/"a/foo"/"../bar", Path.root/"a/bar")
         XCTAssertEqual(Path.root/"a/foo"/"/../bar", Path.root/"a/bar")
@@ -162,6 +182,9 @@ class PathTests: XCTestCase {
 
         let a = Path.home.foo
         XCTAssertEqual(a.Documents, Path.home/"foo/Documents")
+
+        // verify use of the dynamic-member-subscript works according to our rules
+        XCTAssertEqual(Path.home[dynamicMember: "../~foo"].string, "\(Path.home.parent.string)/~foo")
     }
 
     func testCopyTo() throws {
@@ -171,6 +194,14 @@ class PathTests: XCTestCase {
             XCTAssert(root.bar.isFile)
             XCTAssertThrowsError(try root.foo.copy(to: root.bar))
             try root.foo.copy(to: root.bar, overwrite: true)
+        }
+
+        // test copy errors if directory exists at destination, even with overwrite
+        try Path.mktemp { root in
+            try root.foo.touch()
+            XCTAssert(root.foo.isFile)
+            XCTAssertThrowsError(try root.foo.copy(to: root.bar.mkdir()))
+            XCTAssertThrowsError(try root.foo.copy(to: root.bar, overwrite: true))
         }
     }
 
@@ -203,6 +234,14 @@ class PathTests: XCTestCase {
             XCTAssert(tmpdir.bar.isFile)
             XCTAssertThrowsError(try tmpdir.foo.touch().move(to: tmpdir.bar))
             try tmpdir.foo.move(to: tmpdir.bar, overwrite: true)
+        }
+
+        // test move errors if directory exists at destination, even with overwrite
+        try Path.mktemp { root in
+            try root.foo.touch()
+            XCTAssert(root.foo.isFile)
+            XCTAssertThrowsError(try root.foo.move(to: root.bar.mkdir()))
+            XCTAssertThrowsError(try root.foo.move(to: root.bar, overwrite: true))
         }
     }
 
@@ -423,5 +462,130 @@ class PathTests: XCTestCase {
             try tmpdir.chmod(0o000)
             XCTAssertThrowsError(try tmpdir.bar.touch())
         }
+    }
+
+    func testSymlinkFunctions() throws {
+        try Path.mktemp { tmpdir in
+            let foo = try tmpdir.foo.touch()
+            let bar = try foo.symlink(as: tmpdir.bar)
+            XCTAssert(bar.isSymlink)
+            XCTAssertEqual(try bar.readlink(), foo)
+        }
+
+        try Path.mktemp { tmpdir in
+            let foo1 = try tmpdir.foo.touch()
+            let foo2 = try foo1.symlink(into: tmpdir.bar)
+            XCTAssert(foo2.isSymlink)
+            XCTAssert(tmpdir.bar.isDirectory)
+            XCTAssertEqual(try foo2.readlink(), foo1)
+
+            // cannot symlink into when `into` is an existing entry that is not a directory
+            let baz = try tmpdir.baz.touch()
+            XCTAssertThrowsError(try foo1.symlink(into: baz))
+        }
+
+        try Path.mktemp { tmpdir in
+            let foo = try tmpdir.foo.touch()
+            let bar = try tmpdir.bar.mkdir()
+            XCTAssertThrowsError(try foo.symlink(as: bar))
+            XCTAssert(try foo.symlink(as: bar.foo).isSymlink)
+        }
+    }
+
+    func testReadlinkOnRelativeSymlink() throws {
+        //TODO how to test on iOS etc.?
+    #if os(macOS) || os(Linux)
+        try Path.mktemp { tmpdir in
+            let foo = try tmpdir.foo.mkdir()
+            let bar = try tmpdir.bar.touch()
+
+            let task = Process()
+            task.currentDirectoryPath = foo.string
+            task.launchPath = "/bin/ln"
+            task.arguments = ["-s", "../bar", "baz"]
+            task.launch()
+            task.waitUntilExit()
+            XCTAssertEqual(task.terminationStatus, 0)
+
+            XCTAssert(tmpdir.foo.baz.isSymlink)
+
+            XCTAssertEqual(try FileManager.default.destinationOfSymbolicLink(atPath: tmpdir.foo.baz.string), "../bar")
+
+            XCTAssertEqual(try tmpdir.foo.baz.readlink(), bar)
+        }
+    #endif
+    }
+
+    func testReadlinkOnFileReturnsSelf() throws {
+        try Path.mktemp { tmpdir in
+            XCTAssertEqual(try tmpdir.foo.touch(), tmpdir.foo)
+            XCTAssertEqual(try tmpdir.foo.readlink(), tmpdir.foo)
+        }
+    }
+
+    func testReadlinkOnNonExistantFileThrows() throws {
+        try Path.mktemp { tmpdir in
+            XCTAssertThrowsError(try tmpdir.bar.readlink())
+        }
+    }
+
+    func testReadlinkWhereLinkDestinationDoesNotExist() throws {
+        try Path.mktemp { tmpdir in
+            let bar = try tmpdir.foo.symlink(as: tmpdir.bar)
+            XCTAssertEqual(try bar.readlink(), tmpdir.foo)
+        }
+    }
+
+    func testNoUndesiredSymlinkResolution() throws {
+
+        // this test because NSString.standardizingPath will resolve symlinks
+        // if the path you give it contains .. and the result is an actual entry
+
+        try Path.mktemp { tmpdir in
+            let foo = try tmpdir.foo.mkdir()
+            try foo.bar.mkdir().fuz.touch()
+            let baz = try foo.symlink(as: tmpdir.baz)
+            XCTAssert(baz.isSymlink)
+            XCTAssert(baz.bar.isDirectory)
+            XCTAssertEqual(baz.bar.join("..").string, "\(tmpdir)/baz")
+
+            XCTAssertEqual(Path("\(tmpdir)/baz/bar/..")?.string, "\(tmpdir)/baz")
+        }
+    }
+
+    func testRealpath() throws {
+        try Path.mktemp { tmpdir in
+            let b = try tmpdir.a.b.mkdir(.p)
+            let c = try tmpdir.a.c.touch()
+            let e = try c.symlink(as: b.e)
+            let f = try e.symlink(as: tmpdir.f)
+            XCTAssertEqual(try f.readlink(), e)
+            XCTAssertEqual(try f.realpath(), c)
+        }
+
+        try Path.mktemp { tmpdir in
+            XCTAssertThrowsError(try tmpdir.foo.realpath())
+        }
+    }
+
+    func testFileReference() throws {
+        let ref = Path.home.fileReferenceURL
+    #if !os(Linux)
+        XCTAssertTrue(ref?.isFileReferenceURL() ?? false)
+    #endif
+        XCTAssertEqual(ref?.path, Path.home.string)
+    }
+
+    func testURLInitializer() throws {
+        XCTAssertEqual(Path(Path.home.url), Path.home)
+        XCTAssertEqual(Path.home.fileReferenceURL.flatMap(Path.init), Path.home)
+        XCTAssertNil(Path(URL(string: "https://foo.com")!))
+        XCTAssertNil(Path(NSURL(string: "https://foo.com")!))
+    }
+
+    func testInitializerForRelativePath() throws {
+        XCTAssertNil(Path("foo"))
+        XCTAssertNil(Path("../foo"))
+        XCTAssertNil(Path("./foo"))
     }
 }

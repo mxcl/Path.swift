@@ -211,6 +211,32 @@ public extension Path {
         try FileManager.default.moveItem(atPath: string, toPath: newpath.string)
         return newpath
     }
+
+    /**
+     Creates a symlink of this file at `as`.
+     - Note: If `self` does not exist, is **not** an error.
+     */
+    @discardableResult
+    func symlink(as: Path) throws -> Path {
+        try FileManager.default.createSymbolicLink(atPath: `as`.string, withDestinationPath: string)
+        return `as`
+    }
+
+    /**
+     Creates a symlink of this file with the same filename in the `into` directory.
+     - Note: If into does not exist, creates the directory with intermediate directories if necessary.
+     */
+    @discardableResult
+    func symlink(into dir: Path) throws -> Path {
+        if !dir.exists {
+            try dir.mkdir(.p)
+        } else if !dir.isDirectory {
+            throw CocoaError.error(.fileWriteFileExists)
+        }
+        let dst = dir/basename()
+        try FileManager.default.createSymbolicLink(atPath: dst.string, withDestinationPath: string)
+        return dst
+    }
 }
 
 /// Options for `Path.mkdir(_:)`
