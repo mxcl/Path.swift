@@ -577,10 +577,10 @@ class PathTests: XCTestCase {
     }
 
     func testURLInitializer() throws {
-        XCTAssertEqual(Path(Path.home.url), Path.home)
+        XCTAssertEqual(Path(url: Path.home.url), Path.home)
         XCTAssertEqual(Path.home.fileReferenceURL.flatMap(Path.init), Path.home)
-        XCTAssertNil(Path(URL(string: "https://foo.com")!))
-        XCTAssertNil(Path(NSURL(string: "https://foo.com")!))
+        XCTAssertNil(Path(url: URL(string: "https://foo.com")!))
+        XCTAssertNil(Path(url: NSURL(string: "https://foo.com")!))
     }
 
     func testInitializerForRelativePath() throws {

@@ -104,13 +104,22 @@ public struct Path: Equatable, Hashable, Comparable {
         self.string = join_(prefix: "/", pathComponents: pathComponents)
     }
 
-    public init?(_ url: URL) {
+    /**
+     Creates a new absolute, standardized path from the provided file-scheme URL.
+     - Note: If the URL is not a file URL, returns `nil`.
+    */
+    public init?(url: URL) {
         guard url.scheme == "file" else { return nil }
-        self.init(string: url.path)
+        self.init(url.path)
         //NOTE: URL cannot be a file-reference url, unlike NSURL, so this always works
     }
 
-    public init?(_ url: NSURL) {
+    /**
+     Creates a new absolute, standardized path from the provided file-scheme URL.
+     - Note: If the URL is not a file URL, returns `nil`.
+     - Note: If the URL is a file reference URL, converts it to a POSIX path first.
+    */
+    public init?(url: NSURL) {
         guard url.scheme == "file", let path = url.path else { return nil }
         self.init(string: path)
         // ^^ works even if the url is a file-reference url

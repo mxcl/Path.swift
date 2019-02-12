@@ -281,7 +281,7 @@ Therefore, if you are not using this feature you are fine. If you have URLs the 
 way to get a `Path` is:
 
 ```swift
-if let path = Path(url) {
+if let path = Path(url: url) {
     /*…*/
 }
 ```
