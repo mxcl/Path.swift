@@ -15,8 +15,11 @@ xcode_scheme: Path.swift-Package
   
 jobs:
   include:
-    - script: swift test --parallel
-      name: macOS / Swift 4.2.1
+    - name: macOS / Swift 4.2.1
+      script: swift test --parallel
+    - name: macOS / Swift 5.0
+      osx_image: xcode10.2
+      script: swift test --parallel
 
     - &xcodebuild
       before_install: swift package generate-xcodeproj --enable-code-coverage
