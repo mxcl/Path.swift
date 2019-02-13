@@ -12,9 +12,6 @@ let pkg = Package(
     ]
 )
 
-pkg.platforms = [
-   .macOS(.v10_10), .iOS(.v8), .tvOS(.v10), .watchOS(.v3)
-]
 pkg.swiftLanguageVersions = [
     .v4_2, .v5
 ]
