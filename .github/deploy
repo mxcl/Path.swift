@@ -114,8 +114,10 @@ var defaultSwiftVersion: String {
 
 func podspec(repo: Repo, user: User, pkg: Package) -> (Substring, String) {
     let (owner, name) = { ($0[0], $0[1]) }(slug.split(separator: "/"))
-    let swiftVersion = pkg.swiftLanguageVersions.max() ?? defaultSwiftVersion
-    let sources = pkg.targets.filter{ $0.type == .regular }.compactMap{ $0.path }.first!
+    let swiftVersion = pkg.swiftLanguageVersions.min() ?? defaultSwiftVersion
+    let targets = pkg.targets.filter{ $0.type == .regular }
+    guard targets.count == 1 else { fatal(message: "Too many targets for this script!") }
+    guard let sources = targets[0].path else { fatal(message: "Target has no path!") }
     return (name, """
     Pod::Spec.new do |s|
       s.name = '\(name)'
