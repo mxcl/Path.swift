@@ -9,11 +9,6 @@ let pkg = Package(
     targets: [
         .target(name: "Path", path: "Sources"),
         .testTarget(name: "PathTests", dependencies: ["Path"]),
-    ]
+    ],
+    swiftLanguageVersions: [.v4, .v4_2]
 )
-
-pkg.swiftLanguageVersions = [.v4_2]
-
-#if swift(>=5)
-pkg.swiftLanguageVersions.append(.v5)
-#endif
