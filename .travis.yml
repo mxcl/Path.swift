@@ -80,4 +80,4 @@ jobs:
       install: brew install mxcl/made/swift-sh
       before_script: .github/deploy generate-podspec
       script: pod trunk push
-      after_success: .github/deploy post-release
+      after_success: .github/deploy publish-release
