@@ -12,7 +12,7 @@ language: swift
 osx_image: xcode10.1
 xcode_project: Path.swift.xcodeproj
 xcode_scheme: Path.swift-Package
-  
+
 jobs:
   include:
     - name: macOS / Swift 4.2.1
@@ -49,11 +49,11 @@ jobs:
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test --parallel
-      
+
     - <<: *linux
       env: SWIFT_VERSION='5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a'
-      name: Linux / Swift 5.0.0-dev (2019-01-22)
-      
+      name: Linux / Swift 5.0.0-dev+2019-01-22
+
     - stage: pretest
       name: Check Linux tests are sync’d
       install: swift test --generate-linuxmain
@@ -61,29 +61,12 @@ jobs:
 
     - stage: deploy
       name: Jazzy
-      before_install: |
-        cat <<\ \ EOF> .jazzy.yaml
-        module: Path
-        module_version: TRAVIS_TAG
-        custom_categories:
-          - name: Path
-            children:
-              - Path
-              - /(_:_:)
-        xcodebuild_arguments:
-          - UseModernBuildSystem=NO
-        output: output
-        github_url: https://github.com/mxcl/Path.swift
-        exclude:
-          - Sources/Path+StringConvertibles.swift
-        EOF
-        sed -i '' "s/TRAVIS_TAG/$TRAVIS_TAG/" .jazzy.yaml
-      # ^^ this weirdness because Travis multiline YAML is broken and inserts
-      # two spaces in front of the output which means we need a prefixed
-      # delimiter which also weirdly stops bash from doing variable substitution
       install: gem install jazzy
       before_script: swift package generate-xcodeproj
-      script: jazzy
+      script: |
+        jazzy --config .github/jazzy.yml \
+              --module-version $TRAVIS_TAG \
+              --github_url "https://github.com/$TRAVIS_REPO_SLUG"
       deploy:
         provider: pages
         skip-cleanup: true
@@ -93,43 +76,8 @@ jobs:
           tags: true
 
     - name: CocoaPods
-      before_install: export TRAVIS_REPO_NAME=${TRAVIS_REPO_SLUG#*/}
-      install: gem install cocoapods
-      before_script: |
-        export DESCRIPTION=$(swift - <<\ \ EOF
-          import Foundation
-          struct Response: Decodable { let description: String }
-          let token = ProcessInfo.processInfo.environment["GITHUB_TOKEN"]!
-          let slug = ProcessInfo.processInfo.environment["TRAVIS_REPO_SLUG"]!
-          let url = URL(string: "https://api.github.com/repos/\(slug)")!
-          var rq = URLRequest(url: url)
-          rq.setValue("token \(token)", forHTTPHeaderField: "Authorization")
-          let semaphore = DispatchSemaphore(value: 0)
-          var data: Data!
-          URLSession.shared.dataTask(with: rq) { d, _, _ in
-              data = d
-              semaphore.signal()
-          }.resume()
-          semaphore.wait()
-          let rsp = try JSONDecoder().decode(Response.self, from: data)
-          print(rsp.description, terminator: "")
-        EOF)
-        cat <<\ \ EOF> $TRAVIS_REPO_NAME.podspec
-        Pod::Spec.new do |s|
-          s.name = ENV['TRAVIS_REPO_NAME']
-          s.version = ENV['TRAVIS_TAG']
-          s.summary = ENV['DESCRIPTION']
-          s.homepage = "https://github.com/#{ENV['TRAVIS_REPO_SLUG']}"
-          s.license = { type: 'Unlicense', file: 'LICENSE.md' }
-          s.author = { mxcl: 'mxcl@me.com' }
-          s.source = { git: "https://github.com/#{ENV['TRAVIS_REPO_SLUG']}.git", tag: s.version }
-          s.social_media_url = 'https://twitter.com/mxcl'
-          s.osx.deployment_target = '10.10'
-          s.ios.deployment_target = '8.0'
-          s.tvos.deployment_target = '10.0'
-          s.watchos.deployment_target = '3.0'
-          s.source_files = 'Sources/*'
-          s.swift_version = '4.2'
-        end
-        EOF
+      before_install: gem install cocoapods
+      install: brew install mxcl/made/swift-sh
+      before_script: .github/deploy generate-podspec
       script: pod trunk push
+      after_success: .github/deploy post-release
