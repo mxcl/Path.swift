@@ -76,7 +76,7 @@ jobs:
           tags: true
 
     - name: CocoaPods
-      before_install: gem install cocoapods
+      osx_image: xcode10.2
       install: brew install mxcl/made/swift-sh
       before_script: .github/deploy generate-podspec
       script: pod trunk push
