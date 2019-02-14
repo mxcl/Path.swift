@@ -5,7 +5,7 @@ import PMKFoundation  // PromiseKit/Foundation ~> 3.3
 import LegibleError   // @mxcl ~> 1.0
 import Foundation
 import PromiseKit     // @mxcl ~> 6.8
-import Path           // mxcl/Path.swift == master
+import Path           // mxcl/Path.swift ~> 0.15
 
 let env = ProcessInfo.processInfo.environment
 let token = env["GITHUB_TOKEN"] ?? env["GITHUB_ACCESS_TOKEN"]!
@@ -18,12 +18,6 @@ func fatal(message: String) -> Never {
 }
 func fatal(error: Error) -> Never {
     fatal(message: "\(error.legibleLocalizedDescription)\n\n\(error.legibleDescription)")
-}
-
-guard let licenseFile = try Path.cwd.ls().files.first(where: {
-    $0.basename().hasPrefix("LICENSE")
-})?.basename() else {
-    fatal(message: "no LICENSE file found")
 }
 
 struct Repo: Decodable {
@@ -124,7 +118,7 @@ func podspec(repo: Repo, user: User, pkg: Package) -> (Substring, String) {
       s.version = '\(tag)'
       s.summary = '\(repo.description)'
       s.homepage = "https://github.com/\(slug)"
-      s.license = { type: '\(repo.license.spdx_id)', file: '\(licenseFile)' }
+      s.license = '\(repo.license.spdx_id)'
       s.author = { '\(user.name)': '\(user.email)' }
       s.source = { git: "https://github.com/\(slug).git", tag: '\(tag)' }
       s.social_media_url = 'https://twitter.com/\(owner)'

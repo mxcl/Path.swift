@@ -15,8 +15,12 @@ xcode_scheme: Path.swift-Package
 
 jobs:
   include:
+    - name: macOS / Swift 4.0.3
+      script: swift test --parallel -Xswiftc -swift-version -Xswiftc 4
+
     - name: macOS / Swift 4.2.1
       script: swift test --parallel
+
     - name: macOS / Swift 5.0
       osx_image: xcode10.2
       script: swift test --parallel
@@ -26,9 +30,11 @@ jobs:
       xcode_destination: platform=iOS Simulator,OS=latest,name=iPhone XS
       name: iOS / Swift 4.2.1
       after_success: bash <(curl -s https://codecov.io/bash)
+
     - <<: *xcodebuild
       xcode_destination: platform=tvOS Simulator,OS=latest,name=Apple TV
       name: tvOS / Swift 4.2.1
+
     - <<: *xcodebuild
       name: watchOS / Swift 4.2.1
       script: |
@@ -52,7 +58,7 @@ jobs:
 
     - <<: *linux
       env: SWIFT_VERSION='5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a'
-      name: Linux / Swift 5.0.0-dev+2019-01-22
+      name: Linux / Swift 5.0.0-dev+2019.01.22
 
     - stage: pretest
       name: Check Linux tests are sync’d
