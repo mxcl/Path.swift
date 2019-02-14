@@ -10,5 +10,5 @@ let pkg = Package(
         .target(name: "Path", path: "Sources"),
         .testTarget(name: "PathTests", dependencies: ["Path"]),
     ],
-    swiftLanguageVersions: [.v4, .v4_2]
+    swiftLanguageVersions: [.v4, .v4_2, .version("5")]
 )
