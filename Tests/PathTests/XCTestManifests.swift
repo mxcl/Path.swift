@@ -28,6 +28,7 @@ extension PathTests {
         ("testMoveInto", testMoveInto),
         ("testMoveTo", testMoveTo),
         ("testNoUndesiredSymlinkResolution", testNoUndesiredSymlinkResolution),
+        ("testPathComponents", testPathComponents),
         ("testReadlinkOnFileReturnsSelf", testReadlinkOnFileReturnsSelf),
         ("testReadlinkOnNonExistantFileThrows", testReadlinkOnNonExistantFileThrows),
         ("testReadlinkOnRelativeSymlink", testReadlinkOnRelativeSymlink),
