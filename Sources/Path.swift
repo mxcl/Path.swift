@@ -200,6 +200,15 @@ public struct Path: Equatable, Hashable, Comparable {
         }
     }
 
+    /**
+     Splits the string representation on the directory separator.
+     - Important: The first element is always "/" to be consistent with `NSString.pathComponents`.
+    */
+    @inlinable
+    public var components: [String] {
+        return ["/"] + string.split(separator: "/").map(String.init)
+    }
+
 //MARK: Pathing
 
     /**

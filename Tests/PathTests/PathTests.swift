@@ -588,4 +588,9 @@ class PathTests: XCTestCase {
         XCTAssertNil(Path("../foo"))
         XCTAssertNil(Path("./foo"))
     }
+
+    func testPathComponents() throws {
+        XCTAssertEqual(Path.root.foo.bar.components, ["/", "foo", "bar"])
+        XCTAssertEqual(Path.root.components, ["/"])
+    }
 }
