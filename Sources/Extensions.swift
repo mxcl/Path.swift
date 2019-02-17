@@ -34,6 +34,11 @@ public extension Bundle {
     var path: Path {
         return Path(string: bundlePath)
     }
+    
+    /// Returns the executable for this bundle, if there is one, not all bundles have one hence `Optional`.
+    var executable: Path? {
+        return executablePath.flatMap(Path.init)
+    }
 }
 
 /// Extensions on `String` that work with `Path` rather than `String` or `URL`
