@@ -403,6 +403,7 @@ class PathTests: XCTestCase {
             XCTAssertEqual(bndl.privateFrameworks, tmpdir.Frameworks)
             XCTAssertEqual(bndl.resources, tmpdir)
             XCTAssertNil(bndl.path(forResource: "foo", ofType: "bar"))
+            XCTAssertNil(bndl.executable)
 
         #if os(macOS)
             XCTAssertEqual(bndl.defaultSharedFrameworksPath, tmpdir.Contents.Frameworks)
