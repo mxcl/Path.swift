@@ -53,7 +53,7 @@ help me continue my work, I appreciate it x
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
-[Other donation/tipping options](http://mxcl.github.io/donate/)
+[Other donation/tipping options](http://mxcl.dev/#donate)
 
 # Handbook
 
@@ -316,7 +316,7 @@ pursuit of getting it *right*)! We will tag 1.0 as soon as possible.
 
 ### Get push notifications for new releases
 
-https://codebasesaga.com/canopy/
+https://mxcl.dev/canopy/
 
 # Alternatives
 
@@ -328,7 +328,7 @@ https://codebasesaga.com/canopy/
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
 [badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.0-orange.svg
-[docs]: https://mxcl.github.io/Path.swift/Structs/Path.html
+[docs]: https://mxcl.dev/Path.swift/Structs/Path.html
 [badge-jazzy]: https://raw.githubusercontent.com/mxcl/Path.swift/gh-pages/badge.svg?sanitize=true
 [badge-codecov]: https://codecov.io/gh/mxcl/Path.swift/branch/master/graph/badge.svg
 [badge-ci]: https://travis-ci.com/mxcl/Path.swift.svg
