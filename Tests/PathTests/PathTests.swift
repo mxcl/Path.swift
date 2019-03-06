@@ -594,4 +594,14 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root.foo.bar.components, ["/", "foo", "bar"])
         XCTAssertEqual(Path.root.components, ["/"])
     }
+
+    func testFlatMap() throws {
+        // testing compile works
+        let foo: String? = "/a"
+        _ = foo.flatMap(Path.init)
+        let bar: Substring? = "/a"
+        _ = bar.flatMap(Path.init)
+        let baz: String.SubSequence? = "/a/b:1".split(separator: ":").first
+        _ = baz.flatMap(Path.init)
+    }
 }

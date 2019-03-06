@@ -53,11 +53,25 @@ public struct Path: Equatable, Hashable, Comparable {
      - Note: On macOS, removes an initial component of “/private/var/automount”, “/var/automount”, or “/private” from the path, if the result still indicates an existing file or directory (checked by consulting the file system).
      - Returns: The path or `nil` if fed a relative path or a `~foo` string where there is no user `foo`.
      */
-    public init?(_ description: String) {
+    public init?<S: StringProtocol>(_ description: S) {
         var pathComponents = description.split(separator: "/")
         switch description.first {
         case "/":
-            break
+        #if os(macOS)
+            func ifExists(withPrefix prefix: String, removeFirst n: Int) {
+                assert(prefix.split(separator: "/").count == n)
+
+                if description.hasPrefix(prefix), FileManager.default.fileExists(atPath: String(description)) {
+                    pathComponents.removeFirst(n)
+                }
+            }
+
+            ifExists(withPrefix: "/private/var/automount", removeFirst: 3)
+            ifExists(withPrefix: "/var/automount", removeFirst: 2)
+            ifExists(withPrefix: "/private", removeFirst: 1)
+        #endif
+            self.string = join_(prefix: "/", pathComponents: pathComponents)
+
         case "~":
             if description == "~" {
                 self = Path.home
@@ -82,26 +96,11 @@ public struct Path: Equatable, Hashable, Comparable {
             #endif
             }
             pathComponents.remove(at: 0)
-            pathComponents.insert(contentsOf: tilded.split(separator: "/"), at: 0)
+            self.string = join_(prefix: tilded, pathComponents: pathComponents)
+
         default:
             return nil
         }
-
-    #if os(macOS)
-        func ifExists(withPrefix prefix: String, removeFirst n: Int) {
-            assert(prefix.split(separator: "/").count == n)
-
-            if description.hasPrefix(prefix), FileManager.default.fileExists(atPath: description) {
-                pathComponents.removeFirst(n)
-            }
-        }
-
-        ifExists(withPrefix: "/private/var/automount", removeFirst: 3)
-        ifExists(withPrefix: "/var/automount", removeFirst: 2)
-        ifExists(withPrefix: "/private", removeFirst: 1)
-    #endif
-
-        self.string = join_(prefix: "/", pathComponents: pathComponents)
     }
 
     /**
