@@ -38,11 +38,11 @@ let _realpath = Glibc.realpath
 @dynamicMemberLookup
 public struct Path: Equatable, Hashable, Comparable {
 
-    init(string: String) {
+    init<S: StringProtocol>(string: S) {
         assert(string.first == "/")
         assert(string.last != "/" || string == "/")
         assert(string.split(separator: "/").contains("..") == false)
-        self.string = string
+        self.string = String(string)
     }
 
     /**
