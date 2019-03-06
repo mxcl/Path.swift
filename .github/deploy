@@ -115,12 +115,12 @@ func podspec(repo: Repo, user: User, pkg: Package) -> (Substring, String) {
     return (name, """
     Pod::Spec.new do |s|
       s.name = '\(name)'
-      s.version = '\(tag)'
-      s.summary = '\(repo.description)'
-      s.homepage = "https://github.com/\(slug)"
-      s.license = '\(repo.license.spdx_id)'
       s.author = { '\(user.name)': '\(user.email)' }
       s.source = { git: "https://github.com/\(slug).git", tag: '\(tag)' }
+      s.version = '\(tag)'
+      s.summary = '\(repo.description)'
+      s.license = '\(repo.license.spdx_id)'
+      s.homepage = "https://github.com/\(slug)"
       s.social_media_url = 'https://twitter.com/\(owner)'
       s.osx.deployment_target = '10.10'
       s.ios.deployment_target = '8.0'
