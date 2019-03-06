@@ -64,6 +64,7 @@ jobs:
       name: Check Linux tests are sync’d
       install: swift test --generate-linuxmain
       script: git diff --exit-code
+      osx_image: xcode10.2
 
     - stage: deploy
       name: Jazzy
