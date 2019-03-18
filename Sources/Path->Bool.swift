@@ -8,7 +8,10 @@ import Darwin
 public extension Path {
     //MARK: Filesystem Properties
 
-    /// Returns true if the path represents an actual filesystem entry.
+    /**
+     - Returns: `true` if the path represents an actual filesystem entry.
+     - Note: If `self` is a symlink the return value represents the destination.
+     */
     var exists: Bool {
         return FileManager.default.fileExists(atPath: string)
     }

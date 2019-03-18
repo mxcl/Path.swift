@@ -25,11 +25,11 @@ public extension Path {
      */
     @discardableResult
     func copy(to: Path, overwrite: Bool = false) throws -> Path {
-        if overwrite, to.isFile, isFile {
+        if overwrite, let tokind = to.kind, tokind != .directory, kind != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
     #if os(Linux) && !swift(>=5.1) // check if fixed
-        if !overwrite, to.isFile {
+        if !overwrite, to.kind != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
     #endif
@@ -61,15 +61,15 @@ public extension Path {
      */
     @discardableResult
     func copy(into: Path, overwrite: Bool = false) throws -> Path {
-        if !into.exists {
+        if into.kind == nil {
             try into.mkdir(.p)
         }
         let rv = into/basename()
-        if overwrite, rv.isFile {
-            try rv.delete()
+        if overwrite, let kind = rv.kind, kind != .directory {
+            try FileManager.default.removeItem(at: rv.url)
         }
     #if os(Linux) && !swift(>=5.1) // check if fixed
-        if !overwrite, rv.isFile {
+        if !overwrite, rv.kind != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
     #endif
@@ -95,7 +95,7 @@ public extension Path {
      */
     @discardableResult
     func move(to: Path, overwrite: Bool = false) throws -> Path {
-        if overwrite, to.isFile {
+        if overwrite, let kind = to.kind, kind != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
         try FileManager.default.moveItem(at: url, to: to.url)
@@ -119,17 +119,21 @@ public extension Path {
      */
     @discardableResult
     func move(into: Path, overwrite: Bool = false) throws -> Path {
-        if !into.exists {
+        switch into.kind {
+        case nil:
             try into.mkdir(.p)
-        } else if !into.isDirectory {
+            fallthrough
+        case .directory?:
+            let rv = into/basename()
+            if overwrite, let rvkind = rv.kind, rvkind != .directory {
+                try FileManager.default.removeItem(at: rv.url)
+            }
+            try FileManager.default.moveItem(at: url, to: rv.url)
+            return rv
+        case .file?, .symlink?:
             throw CocoaError.error(.fileWriteFileExists)
         }
-        let rv = into/basename()
-        if overwrite, rv.isFile {
-            try FileManager.default.removeItem(at: rv.url)
-        }
-        try FileManager.default.moveItem(at: url, to: rv.url)
-        return rv
+
     }
 
     /**
@@ -138,11 +142,12 @@ public extension Path {
      ∵ *Path.swift* doesn’t error if desired end result preexists.
      - Note: On UNIX will this function will succeed if the parent directory is writable and the current user has permission.
      - Note: This function will fail if the file or directory is “locked”
+     - Note: If entry is a symlink, deletes the symlink.
      - SeeAlso: `lock()`
     */
     @inlinable
     func delete() throws {
-        if exists {
+        if kind != nil {
             try FileManager.default.removeItem(at: url)
         }
     }
@@ -154,7 +159,7 @@ public extension Path {
     @inlinable
     @discardableResult
     func touch() throws -> Path {
-        if !exists {
+        if kind == nil {
             guard FileManager.default.createFile(atPath: string, contents: nil) else {
                 throw CocoaError.error(.fileWriteUnknown)
             }
@@ -228,14 +233,17 @@ public extension Path {
      */
     @discardableResult
     func symlink(into dir: Path) throws -> Path {
-        if !dir.exists {
+        switch dir.kind {
+        case nil, .symlink?:
             try dir.mkdir(.p)
-        } else if !dir.isDirectory {
+            fallthrough
+        case .directory?:
+            let dst = dir/basename()
+            try FileManager.default.createSymbolicLink(atPath: dst.string, withDestinationPath: string)
+            return dst
+        case .file?:
             throw CocoaError.error(.fileWriteFileExists)
         }
-        let dst = dir/basename()
-        try FileManager.default.createSymbolicLink(atPath: dst.string, withDestinationPath: string)
-        return dst
     }
 }
 

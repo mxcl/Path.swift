@@ -83,4 +83,22 @@ public extension Path {
     #endif
         return self
     }
+
+    enum Kind {
+        case file, symlink, directory
+    }
+
+    var kind: Kind? {
+        var buf = stat()
+        guard lstat(string, &buf) == 0 else {
+            return nil
+        }
+        if buf.st_mode & S_IFMT == S_IFLNK {
+            return .symlink
+        } else if buf.st_mode & S_IFMT == S_IFDIR {
+            return .directory
+        } else {
+            return .file
+        }
+    }
 }
