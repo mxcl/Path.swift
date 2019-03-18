@@ -69,9 +69,18 @@ class PathTests: XCTestCase {
         XCTAssertEqual((Path.root/"tmp/foo/bar").relative(to: .root/"tmp/baz"), "../foo/bar")
     }
 
-    func testExists() {
+    func testExists() throws {
         XCTAssert(Path.root.exists)
         XCTAssert((Path.root/"bin").exists)
+
+        try Path.mktemp { tmpdir in
+            XCTAssertTrue(tmpdir.exists)
+            XCTAssertFalse(try tmpdir.bar.symlink(as: tmpdir.foo).exists)
+            XCTAssertTrue(tmpdir.foo.kind == .symlink)
+            XCTAssertTrue(try tmpdir.bar.touch().symlink(as: tmpdir.baz).exists)
+            XCTAssertTrue(tmpdir.bar.kind == .file)
+            XCTAssertTrue(tmpdir.kind == .directory)
+        }
     }
 
     func testIsDirectory() {
@@ -379,6 +388,21 @@ class PathTests: XCTestCase {
         #if !os(Linux)
             XCTAssertThrowsError(try tmpdir.bar3.touch().lock().delete())
         #endif
+
+            // regression test: can delete a symlink that points to a non-existent file
+            let bar5 = try tmpdir.bar4.symlink(as: tmpdir.bar5)
+            XCTAssertEqual(bar5.kind, .symlink)
+            XCTAssertFalse(bar5.exists)
+            XCTAssertNoThrow(try bar5.delete())
+            XCTAssertEqual(bar5.kind, nil)
+
+            // test that deleting a symlink *only* deletes the symlink
+            let bar7 = try tmpdir.bar6.touch().symlink(as: tmpdir.bar7)
+            XCTAssertEqual(bar7.kind, .symlink)
+            XCTAssertTrue(bar7.exists)
+            XCTAssertNoThrow(try bar7.delete())
+            XCTAssertEqual(bar7.kind, nil)
+            XCTAssertEqual(tmpdir.bar6.kind, .file)
         }
     }
 
@@ -603,5 +627,15 @@ class PathTests: XCTestCase {
         _ = bar.flatMap(Path.init)
         let baz: String.SubSequence? = "/a/b:1".split(separator: ":").first
         _ = baz.flatMap(Path.init)
+    }
+
+    func testKind() throws {
+        try Path.mktemp { tmpdir in
+            let foo = try tmpdir.foo.touch()
+            let bar = try foo.symlink(as: tmpdir.bar)
+            XCTAssertEqual(tmpdir.kind, .directory)
+            XCTAssertEqual(foo.kind, .file)
+            XCTAssertEqual(bar.kind, .symlink)
+        }
     }
 }

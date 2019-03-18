@@ -258,9 +258,15 @@ for that as the check was deemed too expensive to be worthwhile.
     equality check is required.
 * There are several symlink paths on Mac that are typically automatically
     resolved by Foundation, eg. `/private`, we attempt to do the same for
-    functions that you would expect it (notably `realpath`), but we do *not* for
-    `Path.init`, *nor* if you are joining a path that ends up being one of these
-    paths, (eg. `Path.root.join("var/private')`).
+    functions that you would expect it (notably `realpath`), we *do* the same for
+    `Path.init`, but *do not* if you are joining a path that ends up being one of
+    these paths, (eg. `Path.root.join("var/private')`).
+
+If a `Path` is a symlink but the destination of the link does not exist `exists`
+returns `false`. This seems to be the correct thing to do since symlinks are
+meant to be an abstraction for filesystems. To instead verify that there is
+no filesystem entry there at all check if `kind` is `nil`.
+
 
 ## We do not provide change directory functionality
 

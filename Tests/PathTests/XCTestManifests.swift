@@ -27,6 +27,7 @@ extension PathTests {
         ("testInitializerForRelativePath", testInitializerForRelativePath),
         ("testIsDirectory", testIsDirectory),
         ("testJoin", testJoin),
+        ("testKind", testKind),
         ("testLock", testLock),
         ("testMkpathIfExists", testMkpathIfExists),
         ("testMktemp", testMktemp),
