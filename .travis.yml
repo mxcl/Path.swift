@@ -57,8 +57,8 @@ jobs:
       script: swift test --parallel
 
     - <<: *linux
-      env: SWIFT_VERSION='5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a'
-      name: Linux / Swift 5.0.0-dev+2019.01.22
+      env: SWIFT_VERSION='5.0'
+      name: Linux / Swift 5.0.0
 
     - stage: pretest
       name: Check Linux tests are sync’d
