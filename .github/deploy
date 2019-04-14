@@ -142,7 +142,11 @@ func publishRelease() throws -> Promise<Void> {
     var rq = URLRequest(github: "/repos/\(slug)/releases")
     rq.httpMethod = "POST"
     rq.httpBody = try JSONEncoder().encode(Input())
-    return URLSession.shared.dataTask(.promise, with: rq).validate().asVoid()
+    return URLSession.shared.dataTask(.promise, with: rq).validate().asVoid().recover { err in
+        guard case PMKHTTPError.badStatusCode(422, _, _) = err else {
+            throw err
+        }
+    }
 }
 
 switch CommandLine.arguments[1] {
