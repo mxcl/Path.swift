@@ -1,7 +1,7 @@
 // swift-tools-version:4.2
 import PackageDescription
 
-let pkg = Package(
+let package = Package(
     name: "Path.swift",
     products: [
         .library(name: "Path", targets: ["Path"]),
