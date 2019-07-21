@@ -5,7 +5,7 @@ stages:
   - name: pretest
   - name: test
   - name: deploy
-    if: branch =~ ^\d+\.\d+\.\d+$
+    if: branch =~ /^\d+\.\d+\.\d+(-.*)?$/
 
 os: osx
 language: swift
@@ -23,6 +23,10 @@ jobs:
 
     - name: macOS / Swift 5.0
       osx_image: xcode10.2
+      script: swift test --parallel
+
+    - name: macOS / Swift 5.1
+      osx_image: xcode11
       script: swift test --parallel
 
     - &xcodebuild
@@ -47,18 +51,21 @@ jobs:
       after_success: false
 
     - &linux
-      env: SWIFT_VERSION=4.2.1
+      env: SWIFT_VERSION=4.2.4
       os: linux
-      name: Linux / Swift 4.2.1
+      name: Linux / Swift 4.2.4
       language: generic
-      dist: trusty
       sudo: false
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test --parallel
 
     - <<: *linux
-      env: SWIFT_VERSION='5.0'
-      name: Linux / Swift 5.0.0
+      env: SWIFT_VERSION='5.0.2'
+      name: Linux / Swift 5.0.2
+
+    - <<: *linux
+      env: SWIFT_VERSION=5.1-DEVELOPMENT-SNAPSHOT-2019-07-03-a
+      name: Linux / Swift 5.1 (2019-07-03)
 
     - stage: pretest
       name: Check Linux tests are sync’d
