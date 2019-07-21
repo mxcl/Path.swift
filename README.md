@@ -146,7 +146,8 @@ try Bundle.main.resources.join("foo").copy(to: .home)
 ## Directory listings
 
 We provide `ls()`, called because it behaves like the Terminal `ls` function,
-the name thus implies its behavior, ie. that it is not recursive.
+the name thus implies its behavior, ie. that it is not recursive and doesn’t
+list hidden files.
 
 ```swift
 for entry in Path.home.ls() {
@@ -167,6 +168,38 @@ let dirs = Path.home.ls().directories
 let files = Path.home.ls().files
 
 let swiftFiles = Path.home.ls().files(withExtension: "swift")
+```
+
+We provide `find()` for recursive listing:
+
+```swift
+Path.home.find().execute { path in
+    //…
+}
+```
+
+Which is configurable:
+
+```swift
+Path.home.find().maxDepth(1).extension("swift").kind(.file) { path in
+    //…
+}
+```
+
+And can be controlled:
+
+```swift
+Path.home.find().execute { path in
+    guard foo else { return .skip }
+    guard bar else { return .abort }
+    return .continue
+}
+```
+
+Or just get all paths at once:
+
+```swift
+let paths = Path.home.find().execute()
 ```
 
 # `Path.swift` is robust
