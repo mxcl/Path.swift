@@ -1,5 +1,5 @@
 # only run for: merge commits, releases and pull-requests
-if: type != push OR branch = master OR branch =~ /^\d+\.\d+(\.\d+)?(-\S*)?$/
+if: type != push OR branch = master OR branch =~ /^\d+\.\d+\.\d+(-.*)?$/
 
 stages:
   - name: pretest
