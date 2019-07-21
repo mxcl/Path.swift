@@ -13,6 +13,7 @@ extension PathTests {
         ("testConcatenation", testConcatenation),
         ("testCopyInto", testCopyInto),
         ("testCopyTo", testCopyTo),
+        ("testCopyToExistingDirectoryFails", testCopyToExistingDirectoryFails),
         ("testDataExtensions", testDataExtensions),
         ("testDelete", testDelete),
         ("testDynamicMember", testDynamicMember),

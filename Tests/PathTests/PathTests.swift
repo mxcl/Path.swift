@@ -204,7 +204,9 @@ class PathTests: XCTestCase {
             XCTAssertThrowsError(try root.foo.copy(to: root.bar))
             try root.foo.copy(to: root.bar, overwrite: true)
         }
+    }
 
+    func testCopyToExistingDirectoryFails() throws {
         // test copy errors if directory exists at destination, even with overwrite
         try Path.mktemp { root in
             try root.foo.touch()
