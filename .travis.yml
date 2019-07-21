@@ -68,6 +68,7 @@ jobs:
 
     - stage: deploy
       name: Jazzy
+      osx_image: xcode10.2
       install: gem install jazzy
       before_script: swift package generate-xcodeproj
       script: |
