@@ -1,6 +1,6 @@
 import Foundation
 
-public extension Path {
+public extension Pathish {
     //MARK: Filesystem Attributes
 
     /**
@@ -38,7 +38,7 @@ public extension Path {
     @discardableResult
     func chmod(_ octal: Int) throws -> Path {
         try FileManager.default.setAttributes([.posixPermissions: octal], ofItemAtPath: string)
-        return self
+        return Path(self)
     }
     
     /**
@@ -57,7 +57,7 @@ public extension Path {
             try FileManager.default.setAttributes(attrs, ofItemAtPath: string)
         }
     #endif
-        return self
+        return Path(self)
     }
 
     /**
@@ -73,7 +73,7 @@ public extension Path {
         do {
             attrs = try FileManager.default.attributesOfItem(atPath: string)
         } catch CocoaError.fileReadNoSuchFile {
-            return self
+            return Path(self)
         }
         let b = attrs[.immutable] as? Bool ?? false
         if b {
@@ -81,14 +81,10 @@ public extension Path {
             try FileManager.default.setAttributes(attrs, ofItemAtPath: string)
         }
     #endif
-        return self
+        return Path(self)
     }
 
-    enum Kind {
-        case file, symlink, directory
-    }
-
-    var kind: Kind? {
+    var kind: Path.Kind? {
         var buf = stat()
         guard lstat(string, &buf) == 0 else {
             return nil
@@ -100,5 +96,11 @@ public extension Path {
         } else {
             return .file
         }
+    }
+}
+
+public extension Path {
+    enum Kind {
+        case file, symlink, directory
     }
 }

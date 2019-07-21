@@ -3,7 +3,7 @@ import Foundation
 
 class TemporaryDirectory {
     let url: URL
-    var path: Path { return Path(string: url.path) }
+    var path: DynamicPath { return DynamicPath(Path(string: url.path)) }
 
     /**
      Creates a new temporary directory.
@@ -51,7 +51,7 @@ class TemporaryDirectory {
 }
 
 extension Path {
-    static func mktemp<T>(body: (Path) throws -> T) throws -> T {
+    static func mktemp<T>(body: (DynamicPath) throws -> T) throws -> T {
         let tmp = try TemporaryDirectory()
         return try body(tmp.path)
     }

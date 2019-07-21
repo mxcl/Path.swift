@@ -1,4 +1,6 @@
 @testable import Path
+import func XCTest.XCTAssertEqual
+import Foundation
 import XCTest
 
 class PathTests: XCTestCase {
@@ -18,13 +20,13 @@ class PathTests: XCTestCase {
     func testEnumeration() throws {
         let tmpdir_ = try TemporaryDirectory()
         let tmpdir = tmpdir_.path
-        try tmpdir.a.mkdir().c.touch()
+        try tmpdir.join("a").mkdir().join("c").touch()
         try tmpdir.join("b.swift").touch()
-        try tmpdir.c.touch()
-        try tmpdir.join(".d").mkdir().e.touch()
+        try tmpdir.join("c").touch()
+        try tmpdir.join(".d").mkdir().join("e").touch()
 
         var paths = Set<String>()
-        let lsrv = try tmpdir.ls()
+        let lsrv = tmpdir.ls(.a)
         var dirs = 0
         for entry in lsrv {
             if entry.kind == .directory {
@@ -53,7 +55,7 @@ class PathTests: XCTestCase {
         
         var paths = Set<String>()
         var dirs = 0
-        for entry in try tmpdir.ls(includeHiddenFiles: false) {
+        for entry in tmpdir.ls() {
             if entry.kind == .directory {
                 dirs += 1
             }
@@ -65,8 +67,8 @@ class PathTests: XCTestCase {
     }
 
     func testRelativeTo() {
-        XCTAssertEqual((Path.root/"tmp/foo").relative(to: .root/"tmp"), "foo")
-        XCTAssertEqual((Path.root/"tmp/foo/bar").relative(to: .root/"tmp/baz"), "../foo/bar")
+        XCTAssertEqual((Path.root.tmp.foo).relative(to: Path.root/"tmp"), "foo")
+        XCTAssertEqual((Path.root.tmp.foo.bar).relative(to: Path.root/"tmp/baz"), "../foo/bar")
     }
 
     func testExists() throws {
@@ -105,7 +107,7 @@ class PathTests: XCTestCase {
     }
 
     func testMktemp() throws {
-        var path: Path!
+        var path: DynamicPath!
         try Path.mktemp {
             path = $0
             XCTAssert(path.isDirectory)
@@ -133,7 +135,7 @@ class PathTests: XCTestCase {
     }
 
     func testCodable() throws {
-        let input = [Path.root.foo, Path.root.foo.bar, Path.root]
+        let input = [Path.root.foo, Path.root.foo.bar, Path.root].map(Path.init)
         XCTAssertEqual(try JSONDecoder().decode([Path].self, from: try JSONEncoder().encode(input)), input)
     }
 
@@ -143,7 +145,7 @@ class PathTests: XCTestCase {
             Path.root,
             root,
             root.bar
-        ]
+        ].map(Path.init)
 
         let encoder = JSONEncoder()
         encoder.userInfo[.relativePath] = root
@@ -407,7 +409,7 @@ class PathTests: XCTestCase {
     }
 
     func testRelativeCodable() throws {
-        let path = Path.home.foo
+        let path = Path(Path.home.foo)
         let encoder = JSONEncoder()
         encoder.userInfo[.relativePath] = Path.home
         let data = try encoder.encode([path])
@@ -415,13 +417,15 @@ class PathTests: XCTestCase {
         decoder.userInfo[.relativePath] = Path.home
         XCTAssertEqual(try decoder.decode([Path].self, from: data), [path])
         decoder.userInfo[.relativePath] = Path.documents
-        XCTAssertEqual(try decoder.decode([Path].self, from: data), [Path.documents.foo])
+        XCTAssertEqual(try decoder.decode([Path].self, from: data), [Path(Path.documents.foo)])
         XCTAssertThrowsError(try JSONDecoder().decode([Path].self, from: data))
     }
 
     func testBundleExtensions() throws {
-        try Path.mktemp { tmpdir in
-            let bndl = Bundle(path: tmpdir.string)!
+        try Path.mktemp { tmpdir -> Void in
+            guard let bndl = Bundle(path: tmpdir.string) else {
+                return XCTFail("Couldn’t make Bundle for \(tmpdir)")
+            }
             XCTAssertEqual(bndl.path, tmpdir)
             XCTAssertEqual(bndl.sharedFrameworks, tmpdir.SharedFrameworks)
             XCTAssertEqual(bndl.privateFrameworks, tmpdir.Frameworks)
@@ -513,7 +517,7 @@ class PathTests: XCTestCase {
             let foo = try tmpdir.foo.touch()
             let bar = try tmpdir.bar.mkdir()
             XCTAssertThrowsError(try foo.symlink(as: bar))
-            XCTAssert(try foo.symlink(as: bar.foo).isSymlink)
+            XCTAssert(try foo.symlink(as: bar/"foo").isSymlink)
         }
     }
 
@@ -568,8 +572,8 @@ class PathTests: XCTestCase {
 
         try Path.mktemp { tmpdir in
             let foo = try tmpdir.foo.mkdir()
-            try foo.bar.mkdir().fuz.touch()
-            let baz = try foo.symlink(as: tmpdir.baz)
+            try foo.join("bar").mkdir().join("fuz").touch()
+            let baz = DynamicPath(try foo.symlink(as: tmpdir.baz))
             XCTAssert(baz.isSymlink)
             XCTAssert(baz.bar.isDirectory)
             XCTAssertEqual(baz.bar.join("..").string, "\(tmpdir)/baz")
@@ -582,7 +586,7 @@ class PathTests: XCTestCase {
         try Path.mktemp { tmpdir in
             let b = try tmpdir.a.b.mkdir(.p)
             let c = try tmpdir.a.c.touch()
-            let e = try c.symlink(as: b.e)
+            let e = try c.symlink(as: b/"e")
             let f = try e.symlink(as: tmpdir.f)
             XCTAssertEqual(try f.readlink(), e)
             XCTAssertEqual(try f.realpath(), c)
@@ -638,4 +642,12 @@ class PathTests: XCTestCase {
             XCTAssertEqual(bar.kind, .symlink)
         }
     }
+}
+
+private func XCTAssertEqual<P: Pathish, Q: Pathish>(_ p: P, _ q: Q, file: StaticString = #file, line: UInt = #line) {
+    XCTAssertEqual(p.string, q.string, file: file, line: line)
+}
+
+private func XCTAssertEqual<P: Pathish, Q: Pathish>(_ p: P?, _ q: Q?, file: StaticString = #file, line: UInt = #line) {
+    XCTAssertEqual(p?.string, q?.string, file: file, line: line)
 }

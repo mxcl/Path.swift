@@ -32,7 +32,7 @@ let foo = try Path.root.join("foo").copy(into: Path.root.join("bar").mkdir())
 print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
 
-// we support dynamic members (_use_sparingly_):
+// we support dynamic-member-syntax when joining named static members, eg:
 let prefs = Path.home.Library.Preferences  // => /Users/mxcl/Library/Preferences
 
 // a practical example: installing a helper executable
@@ -107,10 +107,11 @@ We support `@dynamicMemberLookup`:
 let ls = Path.root.usr.bin.ls  // => /usr/bin/ls
 ```
 
-This is less commonly useful than you would think, hence our documentation
-does not use it. Usually you are joining variables or other `String` arguments
-or trying to describe files (and files usually have extensions). However when
-you need it, it’s *lovely*.
+We only provide this for “starting” function, eg. `Path.home` or `Bundle.path`.
+This is because we found in practice it was easy to write incorrect code, since
+everything would compile if we allowed arbituary variables to take *any* named
+property as valid syntax. What we have is what you want most of the time but
+much less dangerous.
 
 ## Initializing from user-input
 

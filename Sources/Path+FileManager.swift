@@ -3,7 +3,7 @@ import Foundation
 import Glibc
 #endif
 
-public extension Path {
+public extension Pathish {
     //MARK: File Management
     
     /**
@@ -24,7 +24,7 @@ public extension Path {
      - SeeAlso: `copy(into:overwrite:)`
      */
     @discardableResult
-    func copy(to: Path, overwrite: Bool = false) throws -> Path {
+    func copy<P: Pathish>(to: P, overwrite: Bool = false) throws -> Path {
         if overwrite, let tokind = to.kind, tokind != .directory, kind != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
@@ -34,7 +34,7 @@ public extension Path {
         }
     #endif
         try FileManager.default.copyItem(atPath: string, toPath: to.string)
-        return to
+        return Path(to)
     }
 
     /**
@@ -60,7 +60,7 @@ public extension Path {
      - SeeAlso: `copy(to:overwrite:)`
      */
     @discardableResult
-    func copy(into: Path, overwrite: Bool = false) throws -> Path {
+    func copy<P: Pathish>(into: P, overwrite: Bool = false) throws -> Path {
         if into.kind == nil {
             try into.mkdir(.p)
         }
@@ -94,12 +94,12 @@ public extension Path {
      - SeeAlso: `move(into:overwrite:)`
      */
     @discardableResult
-    func move(to: Path, overwrite: Bool = false) throws -> Path {
+    func move<P: Pathish>(to: P, overwrite: Bool = false) throws -> Path {
         if overwrite, let kind = to.kind, kind != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
         try FileManager.default.moveItem(at: url, to: to.url)
-        return to
+        return Path(to)
     }
 
     /**
@@ -118,7 +118,7 @@ public extension Path {
      - SeeAlso: `move(to:overwrite:)`
      */
     @discardableResult
-    func move(into: Path, overwrite: Bool = false) throws -> Path {
+    func move<P: Pathish>(into: P, overwrite: Bool = false) throws -> Path {
         switch into.kind {
         case nil:
             try into.mkdir(.p)
@@ -154,7 +154,7 @@ public extension Path {
 
     /**
      Creates an empty file at this path or if the file exists, updates its modification time.
-     - Returns: `self` to allow chaining.
+     - Returns: A copy of `self` to allow chaining.
      */
     @inlinable
     @discardableResult
@@ -172,7 +172,7 @@ public extension Path {
             try FileManager.default.setAttributes([.modificationDate: Date()], ofItemAtPath: string)
         #endif
         }
-        return self
+        return Path(self)
     }
 
     /**
@@ -180,7 +180,7 @@ public extension Path {
      - Parameter options: Specify `mkdir(.p)` to create intermediary directories.
      - Note: We do not error if the directory already exists (even without `.p`)
        because *Path.swift* noops if the desired end result preexists.
-     - Returns: `self` to allow chaining.
+     - Returns: A copy of `self` to allow chaining.
      */
     @discardableResult
     func mkdir(_ options: MakeDirectoryOptions? = nil) throws -> Path {
@@ -199,7 +199,7 @@ public extension Path {
             throw error
         #endif
         }
-        return self
+        return Path(self)
     }
 
     /**
@@ -222,9 +222,9 @@ public extension Path {
      - Note: If `self` does not exist, is **not** an error.
      */
     @discardableResult
-    func symlink(as: Path) throws -> Path {
+    func symlink<P: Pathish>(as: P) throws -> Path {
         try FileManager.default.createSymbolicLink(atPath: `as`.string, withDestinationPath: string)
-        return `as`
+        return Path(`as`)
     }
 
     /**
@@ -232,7 +232,7 @@ public extension Path {
      - Note: If into does not exist, creates the directory with intermediate directories if necessary.
      */
     @discardableResult
-    func symlink(into dir: Path) throws -> Path {
+    func symlink<P: Pathish>(into dir: P) throws -> Path {
         switch dir.kind {
         case nil, .symlink?:
             try dir.mkdir(.p)

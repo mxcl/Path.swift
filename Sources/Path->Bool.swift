@@ -5,7 +5,7 @@ import func Glibc.access
 import Darwin
 #endif
 
-public extension Path {
+public extension Pathish {
     //MARK: Filesystem Properties
 
     /**

@@ -13,31 +13,31 @@ public extension Bundle {
      Returns the path for the shared-frameworks directory in this bundle.
      - Note: This is typically `ShareFrameworks`
     */
-    var sharedFrameworks: Path {
-        return sharedFrameworksPath.flatMap(Path.init) ?? defaultSharedFrameworksPath
+    var sharedFrameworks: DynamicPath {
+        return sharedFrameworksPath.flatMap(DynamicPath.init) ?? defaultSharedFrameworksPath
     }
 
     /**
      Returns the path for the private-frameworks directory in this bundle.
      - Note: This is typically `Frameworks`
     */
-    var privateFrameworks: Path {
-        return privateFrameworksPath.flatMap(Path.init) ?? defaultSharedFrameworksPath
+    var privateFrameworks: DynamicPath {
+        return privateFrameworksPath.flatMap(DynamicPath.init) ?? defaultSharedFrameworksPath
     }
 
     /// Returns the path for the resources directory in this bundle.
-    var resources: Path {
-        return resourcePath.flatMap(Path.init) ?? defaultResourcesPath
+    var resources: DynamicPath {
+        return resourcePath.flatMap(DynamicPath.init) ?? defaultResourcesPath
     }
 
     /// Returns the path for this bundle.
-    var path: Path {
-        return Path(string: bundlePath)
+    var path: DynamicPath {
+        return DynamicPath(string: bundlePath)
     }
     
     /// Returns the executable for this bundle, if there is one, not all bundles have one hence `Optional`.
-    var executable: Path? {
-        return executablePath.flatMap(Path.init)
+    var executable: DynamicPath? {
+        return executablePath.flatMap(DynamicPath.init)
     }
 }
 
@@ -45,14 +45,14 @@ public extension Bundle {
 public extension String {
     /// Initializes this `String` with the contents of the provided path.
     @inlinable
-    init(contentsOf path: Path) throws {
+    init<P: Pathish>(contentsOf path: P) throws {
         try self.init(contentsOfFile: path.string)
     }
 
     /// - Returns: `to` to allow chaining
     @inlinable
     @discardableResult
-    func write(to: Path, atomically: Bool = false, encoding: String.Encoding = .utf8) throws -> Path {
+    func write<P: Pathish>(to: P, atomically: Bool = false, encoding: String.Encoding = .utf8) throws -> P {
         try write(toFile: to.string, atomically: atomically, encoding: encoding)
         return to
     }
@@ -62,14 +62,14 @@ public extension String {
 public extension Data {
     /// Initializes this `Data` with the contents of the provided path.
     @inlinable
-    init(contentsOf path: Path) throws {
+    init<P: Pathish>(contentsOf path: P) throws {
         try self.init(contentsOf: path.url)
     }
 
     /// - Returns: `to` to allow chaining
     @inlinable
     @discardableResult
-    func write(to: Path, atomically: Bool = false) throws -> Path {
+    func write<P: Pathish>(to: P, atomically: Bool = false) throws -> P {
         let opts: NSData.WritingOptions
         if atomically {
         #if !os(Linux)
@@ -89,39 +89,39 @@ public extension Data {
 public extension FileHandle {
     /// Initializes this `FileHandle` for reading at the location of the provided path.
     @inlinable
-    convenience init(forReadingAt path: Path) throws {
+    convenience init<P: Pathish>(forReadingAt path: P) throws {
         try self.init(forReadingFrom: path.url)
     }
     
     /// Initializes this `FileHandle` for writing at the location of the provided path.
     @inlinable
-    convenience init(forWritingAt path: Path) throws {
+    convenience init<P: Pathish>(forWritingAt path: P) throws {
         try self.init(forWritingTo: path.url)
     }
     
     /// Initializes this `FileHandle` for reading and writing at the location of the provided path.
     @inlinable
-    convenience init(forUpdatingAt path: Path) throws {
+    convenience init<P: Pathish>(forUpdatingAt path: P) throws {
         try self.init(forUpdating: path.url)
     }
 }
 
 internal extension Bundle {
-    var defaultSharedFrameworksPath: Path {
+    var defaultSharedFrameworksPath: DynamicPath {
       #if os(macOS)
-        return path.join("Contents/Frameworks")
+        return path.Contents.Frameworks
       #elseif os(Linux)
-        return path.join("lib")
+        return path.lib
       #else
-        return path.join("Frameworks")
+        return path.Frameworks
       #endif
     }
 
-    var defaultResourcesPath: Path {
+    var defaultResourcesPath: DynamicPath {
       #if os(macOS)
-        return path.join("Contents/Resources")
+        return path.Contents.Resources
       #elseif os(Linux)
-        return path.join("share")
+        return path.share
       #else
         return path
       #endif

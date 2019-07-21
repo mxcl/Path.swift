@@ -32,11 +32,15 @@ let _realpath = Glibc.realpath
 
      let p1 = Path.root.usr.bin.ls  // => /usr/bin/ls
 
+ However we only provide this support off of the static members like `root` due
+ to the anti-pattern where Path.swift suddenly feels like Javascript otherwise.
+
  - Note: A `Path` does not necessarily represent an actual filesystem entry.
  */
+public struct Path: Pathish {
 
-@dynamicMemberLookup
-public struct Path: Equatable, Hashable, Comparable {
+    /// The normalized string representation of the underlying filesystem path
+    public let string: String
 
     init(string: String) {
         assert(string.first == "/")
@@ -70,11 +74,11 @@ public struct Path: Equatable, Hashable, Comparable {
             ifExists(withPrefix: "/var/automount", removeFirst: 2)
             ifExists(withPrefix: "/private", removeFirst: 1)
         #endif
-            self.string = join_(prefix: "/", pathComponents: pathComponents)
+            string = join_(prefix: "/", pathComponents: pathComponents)
 
         case "~":
             if description == "~" {
-                self = Path.home
+                string = Path.home.string
                 return
             }
             let tilded: String
@@ -96,7 +100,7 @@ public struct Path: Equatable, Hashable, Comparable {
             #endif
             }
             pathComponents.remove(at: 0)
-            self.string = join_(prefix: tilded, pathComponents: pathComponents)
+            string = join_(prefix: tilded, pathComponents: pathComponents)
 
         default:
             return nil
@@ -124,20 +128,15 @@ public struct Path: Equatable, Hashable, Comparable {
         // ^^ works even if the url is a file-reference url
     }
 
-    /// :nodoc:
-    public subscript(dynamicMember addendum: String) -> Path {
-        //NOTE it’s possible for the string to be anything if we are invoked via
-        // explicit subscript thus we use our fully sanitized `join` function
-        return Path(string: join_(prefix: string, appending: addendum))
+    /// Converts anything that is `Pathish` to a `Path`
+    public init<P: Pathish>(_ path: P) {
+        string = path.string
     }
+}
 
-//MARK: Properties
-
-    /// The underlying filesystem path
-    public let string: String
-
+public extension Pathish {
     /// Returns a `URL` representing this file path.
-    public var url: URL {
+    var url: URL {
         return URL(fileURLWithPath: string)
     }
 
@@ -147,7 +146,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - SeeAlso: https://developer.apple.com/documentation/foundation/nsurl/1408631-filereferenceurl
      - Important: On Linux returns an file scheme NSURL for this path string.
      */
-    public var fileReferenceURL: NSURL? {
+    var fileReferenceURL: NSURL? {
     #if !os(Linux)
         // https://bugs.swift.org/browse/SR-2728
         return (url as NSURL).perform(#selector(NSURL.fileReferenceURL))?.takeUnretainedValue() as? NSURL
@@ -164,7 +163,7 @@ public struct Path: Equatable, Hashable, Comparable {
 
      - Note: always returns a valid path, `Path.root.parent` *is* `Path.root`.
      */
-    public var parent: Path {
+    var parent: Path {
         let index = string.lastIndex(of: "/")!
         let substr = string[string.indices.startIndex..<index]
         return Path(string: String(substr))
@@ -177,7 +176,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - Note: We special case eg. `foo.tar.gz`.
      */
     @inlinable
-    public var `extension`: String {
+    var `extension`: String {
         //FIXME efficiency
         switch true {
         case string.hasSuffix(".tar.gz"):
@@ -204,7 +203,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - Important: The first element is always "/" to be consistent with `NSString.pathComponents`.
     */
     @inlinable
-    public var components: [String] {
+    var components: [String] {
         return ["/"] + string.split(separator: "/").map(String.init)
     }
 
@@ -225,7 +224,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - Returns: A new joined path.
      - SeeAlso: `Path./(_:_:)`
      */
-    public func join<S>(_ addendum: S) -> Path where S: StringProtocol {
+    func join<S>(_ addendum: S) -> Path where S: StringProtocol {
         return Path(string: join_(prefix: string, appending: addendum))
     }
 
@@ -246,7 +245,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - SeeAlso: `join(_:)`
      */
     @inlinable
-    public static func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
+    static func /<S>(lhs: Self, rhs: S) -> Path where S: StringProtocol {
         return lhs.join(rhs)
     }
 
@@ -257,7 +256,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - Parameter base: The base to which we calculate the relative path.
      - ToDo: Another variant that returns `nil` if result would start with `..`
      */
-    public func relative(to base: Path) -> String {
+    func relative<P: Pathish>(to base: P) -> String {
         // Split the two paths into their components.
         // FIXME: The is needs to be optimized to avoid unncessary copying.
         let pathComps = (string as NSString).pathComponents
@@ -296,7 +295,7 @@ public struct Path: Equatable, Hashable, Comparable {
      - Returns: A string that is the filename’s basename.
      - Parameter dropExtension: If `true` returns the basename without its file extension.
      */
-    public func basename(dropExtension: Bool = false) -> String {
+    func basename(dropExtension: Bool = false) -> String {
         var lastPathComponent: Substring {
             let slash = string.lastIndex(of: "/")!
             let index = string.index(after: slash)
@@ -321,27 +320,25 @@ public struct Path: Equatable, Hashable, Comparable {
      If the path represents an actual entry that is a symlink, returns the symlink’s
      absolute destination.
 
-     - Important: This is not exhaustive, the resulting path may still contain
-     symlink.
-     - Important: The path will only be different if the last path component is a
-     symlink, any symlinks in prior components are not resolved.
+     - Important: This is not exhaustive, the resulting path may still contain a symlink.
+     - Important: The path will only be different if the last path component is a symlink, any symlinks in prior components are not resolved.
      - Note: If file exists but isn’t a symlink, returns `self`.
      - Note: If symlink destination does not exist, is **not** an error.
      */
-    public func readlink() throws -> Path {
+    func readlink() throws -> Path {
         do {
             let rv = try FileManager.default.destinationOfSymbolicLink(atPath: string)
             return Path(rv) ?? parent/rv
         } catch CocoaError.fileReadUnknown {
             // file is not symlink, return `self`
             assert(exists)
-            return self
+            return Path(string: string)
         } catch {
         #if os(Linux)
             // ugh: Swift on Linux
             let nsError = error as NSError
             if nsError.domain == NSCocoaErrorDomain, nsError.code == CocoaError.fileReadUnknown.rawValue, exists {
-                return self
+                return Path(self)
             }
         #endif
             throw error
@@ -349,7 +346,7 @@ public struct Path: Equatable, Hashable, Comparable {
     }
 
     /// Recursively resolves symlinks in this path.
-    public func realpath() throws -> Path {
+    func realpath() throws -> Path {
         guard let rv = _realpath(string, nil) else { throw CocoaError.error(.fileNoSuchFile) }
         defer { free(rv) }
         guard let rvv = String(validatingUTF8: rv) else { throw CocoaError.error(.fileReadUnknownStringEncoding) }
@@ -367,7 +364,7 @@ public struct Path: Equatable, Hashable, Comparable {
     /// Returns the locale-aware sort order for the two paths.
     /// :nodoc:
     @inlinable
-    public static func <(lhs: Path, rhs: Path) -> Bool {
+    static func <(lhs: Self, rhs: Self) -> Bool {
         return lhs.string.compare(rhs.string, locale: .current) == .orderedAscending
     }
 }
@@ -405,4 +402,28 @@ private func join_<S>(prefix: String, pathComponents: S) -> String where S: Sequ
         }
     }
     return rv
+}
+
+/// A path that supports arbituary dot notation, eg. Path.root.usr.bin
+@dynamicMemberLookup
+public struct DynamicPath: Pathish {
+    /// The normalized string representation of the underlying filesystem path
+    public let string: String
+
+    init(string: String) {
+        assert(string.hasPrefix("/"))
+        self.string = string
+    }
+
+    /// Converts a `Path` to a `DynamicPath`
+    public init(_ path: Path) {
+        string = path.string
+    }
+
+    /// :nodoc:
+    public subscript(dynamicMember addendum: String) -> DynamicPath {
+        //NOTE it’s possible for the string to be anything if we are invoked via
+        // explicit subscript thus we use our fully sanitized `join` function
+        return DynamicPath(string: join_(prefix: string, appending: addendum))
+    }
 }
