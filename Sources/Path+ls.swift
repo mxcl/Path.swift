@@ -1,24 +1,6 @@
 import Foundation
 
 public extension Path {
-    /**
-     A file entry from a directory listing.
-     - SeeAlso: `ls()`
-    */
-    struct Entry {
-        /// The kind of this directory entry.
-        public enum Kind {
-            /// The path is a file.
-            case file
-            /// The path is a directory.
-            case directory
-        }
-        /// The kind of this entry.
-        public let kind: Kind
-        /// The path of this entry.
-        public let path: Path
-    }
-
     class Finder {
         fileprivate init(path: Path) {
             self.path = path
@@ -110,7 +92,7 @@ public extension Pathish {
      - Parameter options: Configure the listing.
      - Important: On Linux the listing is always `ls -a`
      */
-    func ls(_ options: ListDirectoryOptions? = nil) -> [Path.Entry] {
+    func ls(_ options: ListDirectoryOptions? = nil) -> [Path] {
         guard let urls = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) else {
             fputs("warning: could not list: \(self)\n", stderr)
             return []
@@ -119,7 +101,7 @@ public extension Pathish {
             guard let path = Path(url.path) else { return nil }
             if options != .a, path.basename().hasPrefix(".") { return nil }
             // ^^ we don’t use the Foundation `skipHiddenFiles` because it considers weird things hidden and we are mirroring `ls`
-            return .init(kind: path.isDirectory ? .directory : .file, path: path)
+            return path
         }
     }
 
@@ -128,26 +110,20 @@ public extension Pathish {
     }
 }
 
-/// Convenience functions for the array return value of `Path.ls()`
-public extension Array where Element == Path.Entry {
-    /// Filters the list of entries to be a list of Paths that are directories.
+/// Convenience functions for the arraies of `Path`
+public extension Array where Element == Path {
+    /// Filters the list of entries to be a list of Paths that are directories. Symlinks to directories are not returned.
     var directories: [Path] {
-        return compactMap {
-            $0.kind == .directory ? $0.path : nil
+        return filter {
+            $0.isDirectory
         }
     }
 
-    /// Filters the list of entries to be a list of Paths that are files.
+    /// Filters the list of entries to be a list of Paths that exist and are *not* directories. Thus expect symlinks, etc.
+    /// - Note: symlinks that point to files that do not exist are *not* returned.
     var files: [Path] {
-        return compactMap {
-            $0.kind == .file ? $0.path : nil
-        }
-    }
-
-    /// Filters the list of entries to be a list of Paths that are files with the specified extension.
-    func files(withExtension ext: String) -> [Path] {
-        return compactMap {
-            $0.kind == .file && $0.path.extension == ext ? $0.path : nil
+        return filter {
+            $0.exists && !$0.isDirectory
         }
     }
 }

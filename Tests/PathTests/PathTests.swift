@@ -28,24 +28,23 @@ class PathTests: XCTestCase {
         var paths = Set<String>()
         let lsrv = tmpdir.ls(.a)
         var dirs = 0
-        for entry in lsrv {
-            if entry.kind == .directory {
+        for path in lsrv {
+            if path.isDirectory {
                 dirs += 1
             }
-            paths.insert(entry.path.basename())
+            paths.insert(path.basename())
         }
         XCTAssertEqual(dirs, 2)
         XCTAssertEqual(dirs, lsrv.directories.count)
         XCTAssertEqual(["a", ".d"], Set(lsrv.directories.map{ $0.relative(to: tmpdir) }))
         XCTAssertEqual(["b.swift", "c"], Set(lsrv.files.map{ $0.relative(to: tmpdir) }))
-        XCTAssertEqual(["b.swift"], Set(lsrv.files(withExtension: "swift").map{ $0.relative(to: tmpdir) }))
-        XCTAssertEqual(["c"], Set(lsrv.files(withExtension: "").map{ $0.relative(to: tmpdir) }))
+        XCTAssertEqual(["b.swift"], Set(lsrv.files.filter{ $0.extension == "swift" }.map{ $0.relative(to: tmpdir) }))
+        XCTAssertEqual(["c"], Set(lsrv.files.filter{ $0.extension == "" }.map{ $0.relative(to: tmpdir) }))
         XCTAssertEqual(paths, ["a", "b.swift", "c", ".d"])
         
     }
 
     func testEnumerationSkippingHiddenFiles() throws {
-    #if !os(Linux)
         let tmpdir_ = try TemporaryDirectory()
         let tmpdir = tmpdir_.path
         try tmpdir.join("a").mkdir().join("c").touch()
@@ -55,15 +54,14 @@ class PathTests: XCTestCase {
         
         var paths = Set<String>()
         var dirs = 0
-        for entry in tmpdir.ls() {
-            if entry.kind == .directory {
+        for path in tmpdir.ls() {
+            if path.isDirectory {
                 dirs += 1
             }
-            paths.insert(entry.path.basename())
+            paths.insert(path.basename())
         }
         XCTAssertEqual(dirs, 1)
         XCTAssertEqual(paths, ["a", "b", "c"])
-    #endif
     }
 
     func testRelativeTo() {

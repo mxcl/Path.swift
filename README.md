@@ -151,24 +151,25 @@ the name thus implies its behavior, ie. that it is not recursive and doesn’t
 list hidden files.
 
 ```swift
-for entry in Path.home.ls() {
-    print(entry.path)
-    print(entry.kind)  // .directory or .file
-}
-
-for entry in Path.home.ls() where entry.kind == .file {
+for path in Path.home.ls() {
     //…
 }
 
-for entry in Path.home.ls() where entry.path.mtime > yesterday {
+for path in Path.home.ls() where path.isFile {
+    //…
+}
+
+for path in Path.home.ls() where path.mtime > yesterday {
     //…
 }
 
 let dirs = Path.home.ls().directories
+// ^^ directories that *exist*
 
 let files = Path.home.ls().files
+// ^^ files that both *exist* and are *not* directories
 
-let swiftFiles = Path.home.ls().files(withExtension: "swift")
+let swiftFiles = Path.home.ls().files.filter{ $0.extension == "swift" }
 ```
 
 We provide `find()` for recursive listing:
