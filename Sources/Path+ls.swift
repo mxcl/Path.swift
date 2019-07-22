@@ -1,14 +1,19 @@
 import Foundation
 
 public extension Path {
+    /// The builder for `Path.find()`
     class Finder {
         fileprivate init(path: Path) {
             self.path = path
         }
 
+        /// The `path` find operations operate on.
         public let path: Path
+        /// The maximum directory depth find operations will dip. Zero means no subdirectories.
         fileprivate(set) public var maxDepth: Int? = nil
+        /// The kinds of filesystem entries find operations will return.
         fileprivate(set) public var kinds: Set<Path.Kind>?
+        /// The file extensions find operations will return. Files *and* directories unless you filter for `kinds`.
         fileprivate(set) public var extensions: Set<String>?
     }
 }
@@ -83,9 +88,7 @@ public extension Path.Finder {
     }
 }
 
-public extension Pathish {    
-    //MARK: Directory Listings
-
+public extension Pathish {
     /**
      Same as the `ls` command ∴ output is ”shallow” and unsorted.
      - Note: as per `ls`, by default we do *not* return hidden files. Specify `.a` for hidden files.
@@ -105,6 +108,7 @@ public extension Pathish {
         }
     }
 
+    /// Recursively find files under this path. If the path is a file, no files will be found.
     func find() -> Path.Finder {
         return .init(path: Path(self))
     }
@@ -128,7 +132,7 @@ public extension Array where Element == Path {
     }
 }
 
-/// Options for `Path.mkdir(_:)`
+/// Options for `Path.ls(_:)`
 public enum ListDirectoryOptions {
     /// Creates intermediary directories; works the same as `mkdir -p`.
     case a

@@ -36,6 +36,7 @@ let _realpath = Glibc.realpath
  to the anti-pattern where Path.swift suddenly feels like Javascript otherwise.
 
  - Note: A `Path` does not necessarily represent an actual filesystem entry.
+ - SeeAlso: `Pathish` for most methods you will use on `Path` instances.
  */
 public struct Path: Pathish {
 

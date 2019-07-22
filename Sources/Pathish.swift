@@ -7,6 +7,9 @@ public protocol Pathish: Hashable, Comparable {
 }
 
 public extension Pathish {
+    /// Two `Path`s are equal if their strings are identical. Strings are normalized upon construction, yet
+    /// if the files are different symlinks to the same file the equality check will not succeed. Use `realpath`
+    /// in such circumstances.
     static func ==<P: Pathish> (lhs: Self, rhs: P) -> Bool {
         return lhs.string == rhs.string
     }
