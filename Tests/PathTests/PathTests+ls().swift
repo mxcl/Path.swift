@@ -2,39 +2,50 @@ import XCTest
 import Path
 
 extension PathTests {
-    func testFindMaxDepth0() throws {
-    #if !os(Linux) || swift(>=5)
+    func testFindMaxDepth1() throws {
         try Path.mktemp { tmpdir in
             try tmpdir.a.touch()
             try tmpdir.b.touch()
             try tmpdir.c.mkdir().join("e").touch()
 
-            XCTAssertEqual(
-                Set(tmpdir.find().maxDepth(0).execute()),
-                Set([tmpdir.a, tmpdir.b, tmpdir.c].map(Path.init)))
+            do {
+                let finder = tmpdir.find().depth(max: 1)
+                XCTAssertEqual(finder.depth, 1...1)
+            #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(Set(finder), Set([tmpdir.a, tmpdir.b, tmpdir.c].map(Path.init)))
+            #endif
+            }
+            do {
+                let finder = tmpdir.find().depth(max: 0)
+                XCTAssertEqual(finder.depth, 0...0)
+            #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(Set(finder), Set())
+            #endif
+            }
         }
-    #endif
     }
 
-    func testFindMaxDepth1() throws {
-    #if !os(Linux) || swift(>=5)
+    func testFindMaxDepth2() throws {
         try Path.mktemp { tmpdir in
             try tmpdir.a.touch()
             try tmpdir.b.mkdir().join("c").touch()
             try tmpdir.b.d.mkdir().join("e").touch()
 
-        #if !os(Linux)
-            XCTAssertEqual(
-                Set(tmpdir.find().maxDepth(1).execute()),
-                Set([tmpdir.a, tmpdir.b, tmpdir.b.c].map(Path.init)))
-        #else
-            // Linux behavior is different :-/
-            XCTAssertEqual(
-                Set(tmpdir.find().maxDepth(1).execute()),
-                Set([tmpdir.a, tmpdir.b, tmpdir.b.d, tmpdir.b.c].map(Path.init)))
-        #endif
+            do {
+                let finder = tmpdir.find().depth(max: 2)
+                XCTAssertEqual(finder.depth, 1...2)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.a, tmpdir.b, tmpdir.b.d, tmpdir.b.c].map(Path.init)))
+            }
+            do {
+                let finder = tmpdir.find().depth(max: 3)
+                XCTAssertEqual(finder.depth, 1...3)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.a, tmpdir.b, tmpdir.b.d, tmpdir.b.c, tmpdir.b.d.e].map(Path.init)))
+            }
         }
-    #endif
     }
 
     func testFindExtension() throws {
@@ -43,10 +54,10 @@ extension PathTests {
             try tmpdir.join("bar.txt").touch()
 
             XCTAssertEqual(
-                Set(tmpdir.find().extension("json").execute()),
+                Set(tmpdir.find().extension("json")),
                 [tmpdir.join("foo.json")])
             XCTAssertEqual(
-                Set(tmpdir.find().extension("txt").extension("json").execute()),
+                Set(tmpdir.find().extension("txt").extension("json")),
                 [tmpdir.join("foo.json"), tmpdir.join("bar.txt")])
         }
     }
@@ -57,13 +68,13 @@ extension PathTests {
             try tmpdir.bar.touch()
 
             XCTAssertEqual(
-                Set(tmpdir.find().kind(.file).execute()),
+                Set(tmpdir.find().type(.file)),
                 [tmpdir.join("bar")])
             XCTAssertEqual(
-                Set(tmpdir.find().kind(.directory).execute()),
+                Set(tmpdir.find().type(.directory)),
                 [tmpdir.join("foo")])
             XCTAssertEqual(
-                Set(tmpdir.find().kind(.file).kind(.directory).execute()),
+                Set(tmpdir.find().type(.file).type(.directory)),
                 Set(["foo", "bar"].map(tmpdir.join)))
         }
     }

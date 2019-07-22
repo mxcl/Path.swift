@@ -3,7 +3,7 @@ custom_categories:
   - name: Path
     children:
       - Path
-      - /(_:_:)
+      - Pathish
 xcodebuild_arguments:
   - UseModernBuildSystem=NO
 output:

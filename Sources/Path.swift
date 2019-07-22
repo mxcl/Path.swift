@@ -136,6 +136,8 @@ public struct Path: Pathish {
 }
 
 public extension Pathish {
+    //MARK: Filesystem Representation
+
     /// Returns a `URL` representing this file path.
     var url: URL {
         return URL(fileURLWithPath: string)
@@ -201,14 +203,14 @@ public extension Pathish {
 
     /**
      Splits the string representation on the directory separator.
-     - Important: The first element is always "/" to be consistent with `NSString.pathComponents`.
+     - Important: `NSString.pathComponents` will always return an initial `/` in its array for absolute paths to indicate that the path was absolute, we don’t do this because we are *always* absolute paths.
     */
     @inlinable
     var components: [String] {
-        return ["/"] + string.split(separator: "/").map(String.init)
+        return string.split(separator: "/").map(String.init)
     }
 
-//MARK: Pathing
+    //MARK:- Pathing
 
     /**
      Joins a path and a string to produce a new path.
@@ -405,7 +407,7 @@ private func join_<S>(prefix: String, pathComponents: S) -> String where S: Sequ
     return rv
 }
 
-/// A path that supports arbituary dot notation, eg. Path.root.usr.bin
+/// A path that supports arbituary dot notation, eg. `Path.root.usr.bin`
 @dynamicMemberLookup
 public struct DynamicPath: Pathish {
     /// The normalized string representation of the underlying filesystem path
@@ -417,7 +419,7 @@ public struct DynamicPath: Pathish {
     }
 
     /// Converts a `Path` to a `DynamicPath`
-    public init(_ path: Path) {
+    public init<P: Pathish>(_ path: P) {
         string = path.string
     }
 

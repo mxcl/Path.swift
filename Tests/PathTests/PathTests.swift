@@ -76,10 +76,10 @@ class PathTests: XCTestCase {
         try Path.mktemp { tmpdir in
             XCTAssertTrue(tmpdir.exists)
             XCTAssertFalse(try tmpdir.bar.symlink(as: tmpdir.foo).exists)
-            XCTAssertTrue(tmpdir.foo.kind == .symlink)
+            XCTAssertTrue(tmpdir.foo.type == .symlink)
             XCTAssertTrue(try tmpdir.bar.touch().symlink(as: tmpdir.baz).exists)
-            XCTAssertTrue(tmpdir.bar.kind == .file)
-            XCTAssertTrue(tmpdir.kind == .directory)
+            XCTAssertTrue(tmpdir.bar.type == .file)
+            XCTAssertTrue(tmpdir.type == .directory)
         }
     }
 
@@ -393,18 +393,18 @@ class PathTests: XCTestCase {
 
             // regression test: can delete a symlink that points to a non-existent file
             let bar5 = try tmpdir.bar4.symlink(as: tmpdir.bar5)
-            XCTAssertEqual(bar5.kind, .symlink)
+            XCTAssertEqual(bar5.type, .symlink)
             XCTAssertFalse(bar5.exists)
             XCTAssertNoThrow(try bar5.delete())
-            XCTAssertEqual(bar5.kind, nil)
+            XCTAssertEqual(bar5.type, nil)
 
             // test that deleting a symlink *only* deletes the symlink
             let bar7 = try tmpdir.bar6.touch().symlink(as: tmpdir.bar7)
-            XCTAssertEqual(bar7.kind, .symlink)
+            XCTAssertEqual(bar7.type, .symlink)
             XCTAssertTrue(bar7.exists)
             XCTAssertNoThrow(try bar7.delete())
-            XCTAssertEqual(bar7.kind, nil)
-            XCTAssertEqual(tmpdir.bar6.kind, .file)
+            XCTAssertEqual(bar7.type, nil)
+            XCTAssertEqual(tmpdir.bar6.type, .file)
         }
     }
 
@@ -619,8 +619,8 @@ class PathTests: XCTestCase {
     }
 
     func testPathComponents() throws {
-        XCTAssertEqual(Path.root.foo.bar.components, ["/", "foo", "bar"])
-        XCTAssertEqual(Path.root.components, ["/"])
+        XCTAssertEqual(Path.root.foo.bar.components, ["foo", "bar"])
+        XCTAssertEqual(Path.root.components, [])
     }
 
     func testFlatMap() throws {
@@ -637,9 +637,9 @@ class PathTests: XCTestCase {
         try Path.mktemp { tmpdir in
             let foo = try tmpdir.foo.touch()
             let bar = try foo.symlink(as: tmpdir.bar)
-            XCTAssertEqual(tmpdir.kind, .directory)
-            XCTAssertEqual(foo.kind, .file)
-            XCTAssertEqual(bar.kind, .symlink)
+            XCTAssertEqual(tmpdir.type, .directory)
+            XCTAssertEqual(foo.type, .file)
+            XCTAssertEqual(bar.type, .symlink)
         }
     }
 }

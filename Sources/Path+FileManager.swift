@@ -4,8 +4,9 @@ import Glibc
 #endif
 
 public extension Pathish {
+
     //MARK: File Management
-    
+
     /**
      Copies a file.
 
@@ -25,7 +26,7 @@ public extension Pathish {
      */
     @discardableResult
     func copy<P: Pathish>(to: P, overwrite: Bool = false) throws -> Path {
-        if overwrite, let tokind = to.kind, tokind != .directory, kind != .directory {
+        if overwrite, let tokind = to.type, tokind != .directory, type != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
     #if os(Linux) && !swift(>=5.2) // check if fixed
@@ -61,11 +62,11 @@ public extension Pathish {
      */
     @discardableResult
     func copy<P: Pathish>(into: P, overwrite: Bool = false) throws -> Path {
-        if into.kind == nil {
+        if into.type == nil {
             try into.mkdir(.p)
         }
         let rv = into/basename()
-        if overwrite, let kind = rv.kind, kind != .directory {
+        if overwrite, let kind = rv.type, kind != .directory {
             try FileManager.default.removeItem(at: rv.url)
         }
     #if os(Linux) && !swift(>=5.2) // check if fixed
@@ -95,7 +96,7 @@ public extension Pathish {
      */
     @discardableResult
     func move<P: Pathish>(to: P, overwrite: Bool = false) throws -> Path {
-        if overwrite, let kind = to.kind, kind != .directory {
+        if overwrite, let kind = to.type, kind != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
         try FileManager.default.moveItem(at: url, to: to.url)
@@ -119,13 +120,13 @@ public extension Pathish {
      */
     @discardableResult
     func move<P: Pathish>(into: P, overwrite: Bool = false) throws -> Path {
-        switch into.kind {
+        switch into.type {
         case nil:
             try into.mkdir(.p)
             fallthrough
         case .directory?:
             let rv = into/basename()
-            if overwrite, let rvkind = rv.kind, rvkind != .directory {
+            if overwrite, let rvkind = rv.type, rvkind != .directory {
                 try FileManager.default.removeItem(at: rv.url)
             }
             try FileManager.default.moveItem(at: url, to: rv.url)
@@ -147,7 +148,7 @@ public extension Pathish {
     */
     @inlinable
     func delete() throws {
-        if kind != nil {
+        if type != nil {
             try FileManager.default.removeItem(at: url)
         }
     }
@@ -159,7 +160,7 @@ public extension Pathish {
     @inlinable
     @discardableResult
     func touch() throws -> Path {
-        if kind == nil {
+        if type == nil {
             guard FileManager.default.createFile(atPath: string, contents: nil) else {
                 throw CocoaError.error(.fileWriteUnknown)
             }
@@ -233,7 +234,7 @@ public extension Pathish {
      */
     @discardableResult
     func symlink<P: Pathish>(into dir: P) throws -> Path {
-        switch dir.kind {
+        switch dir.type {
         case nil, .symlink?:
             try dir.mkdir(.p)
             fallthrough

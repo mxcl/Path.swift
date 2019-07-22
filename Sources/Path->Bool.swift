@@ -6,6 +6,7 @@ import Darwin
 #endif
 
 public extension Pathish {
+
     //MARK: Filesystem Properties
 
     /**

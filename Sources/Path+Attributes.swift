@@ -30,6 +30,29 @@ public extension Pathish {
         }
     }
 
+    /// The type of the entry.
+    /// - SeeAlso: `Path.EntryType`
+    @available(*, deprecated, message: "- SeeAlso: Path.type")
+    var kind: Path.EntryType? {
+        return type
+    }
+
+    /// The type of the entry.
+    /// - SeeAlso: `Path.EntryType`
+    var type: Path.EntryType? {
+        var buf = stat()
+        guard lstat(string, &buf) == 0 else {
+            return nil
+        }
+        if buf.st_mode & S_IFMT == S_IFLNK {
+            return .symlink
+        } else if buf.st_mode & S_IFMT == S_IFDIR {
+            return .directory
+        } else {
+            return .file
+        }
+    }
+
     /**
      Sets the file’s attributes using UNIX octal notation.
 
@@ -40,6 +63,8 @@ public extension Pathish {
         try FileManager.default.setAttributes([.posixPermissions: octal], ofItemAtPath: string)
         return Path(self)
     }
+
+    //MARK: Filesystem Locking
     
     /**
      Applies the macOS filesystem “lock” attribute.
@@ -83,24 +108,17 @@ public extension Pathish {
     #endif
         return Path(self)
     }
-
-    var kind: Path.Kind? {
-        var buf = stat()
-        guard lstat(string, &buf) == 0 else {
-            return nil
-        }
-        if buf.st_mode & S_IFMT == S_IFLNK {
-            return .symlink
-        } else if buf.st_mode & S_IFMT == S_IFDIR {
-            return .directory
-        } else {
-            return .file
-        }
-    }
 }
 
+/// The `extension` that provides `Kind`.
 public extension Path {
-    enum Kind {
-        case file, symlink, directory
+    /// A filesystem entry’s kind, file, directory, symlink etc.
+    enum EntryType: CaseIterable {
+        /// The entry is a file.
+        case file
+        /// The entry is a symlink.
+        case symlink
+        /// The entry is a directory.
+        case directory
     }
 }

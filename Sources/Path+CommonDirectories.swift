@@ -1,8 +1,9 @@
 import Foundation
 
+/// The `extension` that provides static properties that are common directories.
 extension Path {
     //MARK: Common Directories
-    
+
     /// Returns a `Path` containing `FileManager.default.currentDirectoryPath`.
     public static var cwd: DynamicPath {
         return .init(string: FileManager.default.currentDirectoryPath)
