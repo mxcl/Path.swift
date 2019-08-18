@@ -11,16 +11,16 @@ extension PathTests {
             do {
                 let finder = tmpdir.find().depth(max: 1)
                 XCTAssertEqual(finder.depth, 1...1)
-            #if !os(Linux) || swift(>=5)
+              #if !os(Linux) || swift(>=5)
                 XCTAssertEqual(Set(finder), Set([tmpdir.a, tmpdir.b, tmpdir.c].map(Path.init)))
-            #endif
+              #endif
             }
             do {
                 let finder = tmpdir.find().depth(max: 0)
                 XCTAssertEqual(finder.depth, 0...0)
-            #if !os(Linux) || swift(>=5)
+              #if !os(Linux) || swift(>=5)
                 XCTAssertEqual(Set(finder), Set())
-            #endif
+              #endif
             }
         }
     }
@@ -34,16 +34,20 @@ extension PathTests {
             do {
                 let finder = tmpdir.find().depth(max: 2)
                 XCTAssertEqual(finder.depth, 1...2)
+              #if !os(Linux) || swift(>=5)
                 XCTAssertEqual(
                     Set(finder),
                     Set([tmpdir.a, tmpdir.b, tmpdir.b.d, tmpdir.b.c].map(Path.init)))
+              #endif
             }
             do {
                 let finder = tmpdir.find().depth(max: 3)
                 XCTAssertEqual(finder.depth, 1...3)
+              #if !os(Linux) || swift(>=5)
                 XCTAssertEqual(
                     Set(finder),
                     Set([tmpdir.a, tmpdir.b, tmpdir.b.d, tmpdir.b.c, tmpdir.b.d.e].map(Path.init)))
+              #endif
             }
         }
     }

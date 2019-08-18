@@ -30,7 +30,7 @@ public extension Pathish {
             try FileManager.default.removeItem(at: to.url)
         }
     #if os(Linux) && !swift(>=5.2) // check if fixed
-        if !overwrite, to.kind != nil {
+        if !overwrite, to.type != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
     #endif
@@ -70,7 +70,7 @@ public extension Pathish {
             try FileManager.default.removeItem(at: rv.url)
         }
     #if os(Linux) && !swift(>=5.2) // check if fixed
-        if !overwrite, rv.kind != nil {
+        if !overwrite, rv.type != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
     #endif

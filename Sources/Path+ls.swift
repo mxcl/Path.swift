@@ -13,7 +13,7 @@ public extension Path {
 
         private let enumerator: FileManager.DirectoryEnumerator!
 
-        /// The range of directory depths for which the find operation will return entries.b
+        /// The range of directory depths for which the find operation will return entries.
         private(set) public var depth: ClosedRange<Int> = 1...Int.max
 
         /// The kinds of filesystem entries find operations will return.
