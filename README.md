@@ -183,7 +183,7 @@ Path.home.find().execute { path in
 Which is configurable:
 
 ```swift
-Path.home.find().maxDepth(1).extension("swift").kind(.file) { path in
+Path.home.find().depth(max: 1).extension("swift").type(.file) { path in
     //…
 }
 ```
@@ -300,7 +300,7 @@ for that as the check was deemed too expensive to be worthwhile.
 If a `Path` is a symlink but the destination of the link does not exist `exists`
 returns `false`. This seems to be the correct thing to do since symlinks are
 meant to be an abstraction for filesystems. To instead verify that there is
-no filesystem entry there at all check if `kind` is `nil`.
+no filesystem entry there at all check if `type` is `nil`.
 
 
 ## We do not provide change directory functionality

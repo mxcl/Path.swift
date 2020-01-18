@@ -66,7 +66,7 @@ extension PathTests {
         }
     }
 
-    func testFindKinds() throws {
+    func testFindTypes() throws {
         try Path.mktemp { tmpdir in
             try tmpdir.foo.mkdir()
             try tmpdir.bar.touch()
