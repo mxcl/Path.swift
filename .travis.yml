@@ -122,10 +122,10 @@ jobs:
 
     - name: CocoaPods
       osx_image: xcode10.2
-      install: |
-        brew install mxcl/made/swift-sh
-        curl -O https://raw.githubusercontent.com/mxcl/ops/master/deploy
-        chmod u+x deploy
+      env: HOMEBREW_NO_INSTALL_CLEANUP=1
+      install:
+        - brew install mxcl/made/swift-sh
+        - curl -O https://raw.githubusercontent.com/mxcl/ops/master/deploy
+        - chmod u+x deploy
       before_script: ./deploy generate-podspec
       script: pod trunk push
-      after_success: ./deploy publish-release
