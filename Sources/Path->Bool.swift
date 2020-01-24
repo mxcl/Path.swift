@@ -11,7 +11,8 @@ public extension Pathish {
 
     /**
      - Returns: `true` if the path represents an actual filesystem entry.
-     - Note: If `self` is a symlink the return value represents the destination.
+     - Note: If `self` is a symlink the return value represents the destination, thus if the destination doesn’t exist this returns `false` even if the symlink exists.
+     - Note: To determine if a symlink exists, use `.type`.
      */
     var exists: Bool {
         return FileManager.default.fileExists(atPath: string)

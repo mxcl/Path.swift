@@ -176,7 +176,7 @@ public extension Pathish {
      Returns the filename extension of this path.
      - Remark: If there is no extension returns "".
      - Remark: If the filename ends with any number of ".", returns "".
-     - Note: We special case eg. `foo.tar.gz`.
+     - Note: We special case eg. `foo.tar.gz`—there are a limited number of these specializations, feel free to PR more.
      */
     @inlinable
     var `extension`: String {
