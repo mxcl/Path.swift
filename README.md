@@ -44,10 +44,8 @@ Swift), we provide a thoughtful and comprehensive (yet concise) API.
 
 # Support mxcl
 
-Hi, I’m Max Howell and I have written a lot of open source software, and
-probably you already use some of it (Homebrew anyone?). I work full-time on
-open source and it’s hard; currently I earn *less* than minimum wage. Please
-help me continue my work, I appreciate it x
+Hi, I’m Max Howell and I have written a lot of open source software—generally
+a good deal of my free time 👨🏻‍💻.
 
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
@@ -337,27 +335,18 @@ actual filesystem path, however we also check the URL has a `file` scheme first.
 SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift.git", from: "0.13.0"))
+package.append(.package(url: "https://github.com/mxcl/Path.swift.git", from: "1.0.0"))
 ```
 
 CocoaPods:
 
 ```ruby
-pod 'Path.swift', '~> 0.13'
+pod 'Path.swift', '~> 1.0.0'
 ```
 
 Carthage:
 
 > Waiting on: [@Carthage#1945](https://github.com/Carthage/Carthage/pull/1945).
-
-## Pre‐1.0 status
-
-We are pre 1.0, thus we can change the API as we like, and we will (to the
-pursuit of getting it *right*)! We will tag 1.0 as soon as possible.
-
-### Get push notifications for new releases
-
-https://mxcl.dev/canopy/
 
 # Alternatives
 

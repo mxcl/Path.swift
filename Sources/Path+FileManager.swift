@@ -29,7 +29,7 @@ public extension Pathish {
         if overwrite, let tokind = to.type, tokind != .directory, type != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
-    #if os(Linux) && !swift(>=5.2) // check if fixed
+    #if os(Linux) && !swift(>=5.3) // check if fixed
         if !overwrite, to.type != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
@@ -69,7 +69,7 @@ public extension Pathish {
         if overwrite, let kind = rv.type, kind != .directory {
             try FileManager.default.removeItem(at: rv.url)
         }
-    #if os(Linux) && !swift(>=5.2) // check if fixed
+    #if os(Linux) && !swift(>=5.3) // check if fixed
         if !overwrite, rv.type != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
@@ -204,7 +204,7 @@ public extension Pathish {
     }
 
     /**
-     Renames the file at path.
+     Renames the file (basename only) at path.
 
          Path.root.foo.bar.rename(to: "baz")  // => /foo/baz
 
