@@ -90,15 +90,18 @@ jobs:
       osx_image: xcode11
       env: HOMEBREW_NO_INSTALL_CLEANUP=1
       install: brew install mxcl/made/swift-sh
+      git.depth: false
       script:
         - set -e
         - export VERSION=$(echo $TRAVIS_TAG | cut -c 8-)
-        - git tag "$VERSION"
+        - git tag "$VERSION" --force
         - git remote set-url origin "https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git"
-        - git fetch --unshallow origin
         - git push origin "$VERSION"
         - swift sh <(curl https://raw.githubusercontent.com/mxcl/ops/master/deploy) publish-release
         - git push origin :$TRAVIS_TAG
+      after_failure: |
+        export VERSION=$(echo $TRAVIS_TAG | cut -c 8-)
+        git push origin :$VERSION
 
     - stage: publish
       name: Jazzy
