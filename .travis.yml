@@ -3,7 +3,9 @@ if: type != push OR branch = master OR branch =~ /^deploy-\d+\.\d+\.\d+(-.*)?$/ 
 
 stages:
   - name: pretest
+    if: NOT branch =~ /^deploy-\d+\.\d+\.\d+(-.*)?$/
   - name: test
+    if: NOT branch =~ /^deploy-\d+\.\d+\.\d+(-.*)?$/
   - name: deploy
     if: branch =~ /^deploy-\d+\.\d+\.\d+(-.*)?$/
   - name: publish
@@ -86,14 +88,16 @@ jobs:
     - stage: deploy
       name: Deploy
       osx_image: xcode11
+      env: HOMEBREW_NO_INSTALL_CLEANUP=1
+      install: brew install mxcl/made/swift-sh
       script:
+        - set -e
         - export VERSION=$(echo $TRAVIS_TAG | cut -c 8-)
         - git tag "$VERSION"
-        - git remote set-url origin "https://$GITHUB_TOKEN@github.com/mxcl/homebrew-made.git"
+        - git remote set-url origin "https://$GITHUB_TOKEN@github.com/$TRAVIS_REPO_SLUG.git"
+        - git fetch --unshallow origin
         - git push origin "$VERSION"
-        - curl -O https://raw.githubusercontent.com/mxcl/ops/master/deploy
-        - chmod u+x deploy
-        - ./deploy publish-release
+        - swift sh <(curl https://raw.githubusercontent.com/mxcl/ops/master/deploy) publish-release
         - git push origin :$TRAVIS_TAG
 
     - stage: publish
