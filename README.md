@@ -73,29 +73,35 @@ try JSONEncoder().encode([Path.home, Path.home/"foo"])
 ]
 ```
 
-However, often you want to encode relative paths:
+Though we recommend encoding *relative* paths‡:
 
 ```swift
 let encoder = JSONEncoder()
 encoder.userInfo[.relativePath] = Path.home
-encoder.encode([Path.home, Path.home/"foo"])
+encoder.encode([Path.home, Path.home/"foo", Path.home/"../baz"])
 ```
 
 ```json
 [
     "",
     "foo",
+    "../baz"
 ]
 ```
 
-**Note** make sure you decode with this key set *also*, otherwise we `fatal`
-(unless the paths are absolute obv.)
+**Note** if you encode with this key set you *must* decode with the key
+set also:
 
 ```swift
 let decoder = JSONDecoder()
 decoder.userInfo[.relativePath] = Path.home
-decoder.decode(from: data)
+try decoder.decode(from: data)  // would throw if `.relativePath` not set
 ```
+
+> ‡ If you are saving files to a system provided location, eg. Documents then
+> the directory could change at Apple’s choice, or if say the user changes their
+> username. Using relative paths also provides you with the flexibility in
+> future to change where you are storing your files without hassle.
 
 ## Dynamic members
 
@@ -109,7 +115,7 @@ We only provide this for “starting” function, eg. `Path.home` or `Bundle.pat
 This is because we found in practice it was easy to write incorrect code, since
 everything would compile if we allowed arbituary variables to take *any* named
 property as valid syntax. What we have is what you want most of the time but
-much less dangerous.
+much less (potentially) dangerous (at runtime).
 
 ## Initializing from user-input
 
@@ -126,6 +132,28 @@ expect to be relative.
 
 Our initializer is nameless to be consistent with the equivalent operation for
 converting strings to `Int`, `Float` etc. in the standard library.
+
+## Initializing from known strings
+
+There’s no need to use the optional initializer in general if you have known
+strings that you need to be paths:
+
+```swift
+let absolutePath = "/known/path"
+let path1 = Path.root/pathString
+
+let pathWithoutInitialSlash = "known/path"
+let path2 = Path.root/pathWithoutInitialSlash
+
+assert(path1 == path2)
+
+let path3 = Path(absolutePath)!  // at your options
+
+assert(path2 == path3)
+
+// be cautious:
+let path4 = Path(pathWithoutInitialSlash)!  // CRASH!
+```
 
 ## Extensions
 
@@ -168,38 +196,46 @@ let files = Path.home.ls().files
 // ^^ files that both *exist* and are *not* directories
 
 let swiftFiles = Path.home.ls().files.filter{ $0.extension == "swift" }
+
+let includingHiddenFiles = Path.home.ls(.a)
 ```
+
+**Note** `ls()` does not throw, instead outputing a warning to the console if it
+fails to list the directory. The rationale for this is weak, please open a
+ticket for discussion.
 
 We provide `find()` for recursive listing:
 
 ```swift
-Path.home.find().execute { path in
+for path in Path.home.find() {
+    // descends all directories, and includes hidden files
+    // so it behaves the same as the terminal command `find`
+}
+```
+
+It is configurable:
+
+```swift
+for path in Path.home.find().depth(max: 1).extension("swift").type(.file) {
     //…
 }
 ```
 
-Which is configurable:
+It can be controlled with a closure syntax:
 
 ```swift
-Path.home.find().depth(max: 1).extension("swift").type(.file) { path in
+Path.home.find().depth(2...3).execute { path in
+    guard path.basename() != "foo.lock" else { return .abort }
+    if path.basename() == ".build", path.isDirectory { return .skip }
     //…
-}
-```
-
-And can be controlled:
-
-```swift
-Path.home.find().execute { path in
-    guard foo else { return .skip }
-    guard bar else { return .abort }
     return .continue
 }
 ```
 
-Or just get all paths at once:
+Or get everything at once as an array:
 
 ```swift
-let paths = Path.home.find().execute()
+let paths = Path.home.find().map(\.self)
 ```
 
 # `Path.swift` is robust
@@ -208,8 +244,8 @@ Some parts of `FileManager` are not exactly idiomatic. For example
 `isExecutableFile` returns `true` even if there is no file there, it is instead
 telling you that *if* you made a file there it *could* be executable. Thus we
 check the POSIX permissions of the file first, before returning the result of
-`isExecutableFile`. `Path.swift` has done the leg-work for you so you can get on
-with your work without worries.
+`isExecutableFile`. `Path.swift` has done the leg-work for you so you can just
+get on with it and not have to worry.
 
 There is also some magic going on in Foundation’s filesystem APIs, which we look
 for and ensure our API is deterministic, eg. [this test].
@@ -223,7 +259,8 @@ round them where necessary.
 
 # Rules & Caveats
 
-Paths are just string representations, there *might not* be a real file there.
+Paths are just (normalized) string representations, there *might not* be a real
+file there.
 
 ```swift
 Path.home/"b"      // => /Users/mxcl/b
@@ -231,7 +268,7 @@ Path.home/"b"      // => /Users/mxcl/b
 // joining multiple strings works as you’d expect
 Path.home/"b"/"c"  // => /Users/mxcl/b/c
 
-// joining multiple parts at a time is fine
+// joining multiple parts simultaneously is fine
 Path.home/"b/c"    // => /Users/mxcl/b/c
 
 // joining with absolute paths omits prefixed slash
@@ -264,13 +301,13 @@ Path("/foo/bar/../baz")  // => /foo/baz
 
 // symlinks are not resolved
 Path.root.bar.symlink(as: "foo")
-Path("foo")        // => /foo
-Path.foo           // => /foo
+Path("/foo")        // => /foo
+Path.root.foo       // => /foo
 
 // unless you do it explicitly
-try Path.foo.readlink()  // => /bar
-                         // `readlink` only resolves the *final* path component,
-                         // thus use `realpath` if there are multiple symlinks
+try Path.root.foo.readlink()  // => /bar
+                              // `readlink` only resolves the *final* path component,
+                              // thus use `realpath` if there are multiple symlinks
 ```
 
 *Path.swift* has the general policy that if the desired end result preexists,
@@ -280,7 +317,7 @@ then it’s a noop:
 * If you try to make a directory and it already exists, we do nothing.
 * If you call `readlink` on a non-symlink, we return `self`
 
-However notably if you try to copy or move a file with specifying `overwrite`
+However notably if you try to copy or move a file without specifying `overwrite`
 and the file already exists at the destination and is identical, we don’t check
 for that as the check was deemed too expensive to be worthwhile.
 
@@ -291,9 +328,9 @@ for that as the check was deemed too expensive to be worthwhile.
     equality check is required.
 * There are several symlink paths on Mac that are typically automatically
     resolved by Foundation, eg. `/private`, we attempt to do the same for
-    functions that you would expect it (notably `realpath`), we *do* the same for
-    `Path.init`, but *do not* if you are joining a path that ends up being one of
-    these paths, (eg. `Path.root.join("var/private')`).
+    functions that you would expect it (notably `realpath`), we *do* the same
+    for `Path.init`, but *do not* if you are joining a path that ends up being
+    one of these paths, (eg. `Path.root.join("var/private')`).
 
 If a `Path` is a symlink but the destination of the link does not exist `exists`
 returns `false`. This seems to be the correct thing to do since symlinks are
@@ -316,8 +353,8 @@ Apple recommend this because they provide a magic translation for
 
     file:///.file/id=6571367.15106761
 
-Therefore, if you are not using this feature you are fine. If you have URLs the correct
-way to get a `Path` is:
+Therefore, if you are not using this feature you are fine. If you have URLs the
+correct way to get a `Path` is:
 
 ```swift
 if let path = Path(url: url) {
@@ -329,6 +366,13 @@ Our initializer calls `path` on the URL which resolves any reference to an
 actual filesystem path, however we also check the URL has a `file` scheme first.
 
 [file-refs]: https://developer.apple.com/documentation/foundation/nsurl/1408631-filereferenceurl
+
+# In defense of our naming scheme
+
+Chainable syntax demands short method names, thus we adopted the naming scheme
+of the terminal, which is absolutely not very “Apple” when it comes to how they
+design their APIs, however for users of the terminal (which *surely* is most
+developers) it is snappy and familiar.
 
 # Installation
 
