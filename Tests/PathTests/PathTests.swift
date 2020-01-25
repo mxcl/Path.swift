@@ -146,15 +146,21 @@ class PathTests: XCTestCase {
         ].map(Path.init)
 
         let encoder = JSONEncoder()
-        encoder.userInfo[.relativePath] = root
-        let data = try encoder.encode(input)
 
-        XCTAssertEqual(try JSONSerialization.jsonObject(with: data) as? [String], ["..", "", "bar"])
+        func test<P: Pathish>(relativePath: P, line: UInt = #line) throws {
+            encoder.userInfo[.relativePath] = relativePath
+            let data = try encoder.encode(input)
 
-        let decoder = JSONDecoder()
-        XCTAssertThrowsError(try decoder.decode([Path].self, from: data))
-        decoder.userInfo[.relativePath] = root
-        XCTAssertEqual(try decoder.decode([Path].self, from: data), input)
+            XCTAssertEqual(try JSONSerialization.jsonObject(with: data) as? [String], ["..", "", "bar"], line: line)
+
+            let decoder = JSONDecoder()
+            XCTAssertThrowsError(try decoder.decode([Path].self, from: data), line: line)
+            decoder.userInfo[.relativePath] = relativePath
+            XCTAssertEqual(try decoder.decode([Path].self, from: data), input, line: line)
+        }
+
+        try test(relativePath: root)       // DynamicPath
+        try test(relativePath: Path(root)) // Path
     }
 
     func testJoin() {
@@ -313,6 +319,8 @@ class PathTests: XCTestCase {
     func testStringConvertibles() {
         XCTAssertEqual(Path.root.description, "/")
         XCTAssertEqual(Path.root.debugDescription, "Path(/)")
+        XCTAssertEqual(Path(Path.root).description, "/")
+        XCTAssertEqual(Path(Path.root).debugDescription, "Path(/)")
     }
 
     func testFilesystemAttributes() throws {
@@ -405,6 +413,9 @@ class PathTests: XCTestCase {
             XCTAssertNoThrow(try bar7.delete())
             XCTAssertEqual(bar7.type, nil)
             XCTAssertEqual(tmpdir.bar6.type, .file)
+
+            // for code-coverage
+            XCTAssertEqual(tmpdir.bar6.kind, .file)
         }
     }
 

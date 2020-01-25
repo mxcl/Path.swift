@@ -52,6 +52,90 @@ extension PathTests {
         }
     }
 
+    func testFindMinDepth() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.a.touch()
+            try tmpdir.b.mkdir().join("c").touch()
+            try tmpdir.b.d.mkdir().join("e").touch()
+            try tmpdir.b.d.f.mkdir().join("g").touch()
+
+            do {
+                let finder = tmpdir.find().depth(min: 2)
+                XCTAssertEqual(finder.depth, 2...Int.max)
+              #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.b.c, tmpdir.b.d, tmpdir.b.d.e, tmpdir.b.d.f, tmpdir.b.d.f.g].map(Path.init)),
+                    relativeTo: tmpdir)
+              #endif
+            }
+        }
+    }
+
+    func testFindDepth0() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.a.touch()
+            try tmpdir.b.mkdir().join("c").touch()
+            try tmpdir.b.d.mkdir().join("e").touch()
+            try tmpdir.b.d.f.mkdir().join("g").touch()
+
+            do {
+                let finder = tmpdir.find().depth(min: 0)
+                XCTAssertEqual(finder.depth, 0...Int.max)
+              #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.a, tmpdir.b, tmpdir.b.c, tmpdir.b.d, tmpdir.b.d.e, tmpdir.b.d.f, tmpdir.b.d.f.g].map(Path.init)),
+                    relativeTo: tmpdir)
+              #endif
+            }
+            do {
+                // this should work, even though it’s weird
+                let finder = tmpdir.find().depth(min: -1)
+                XCTAssertEqual(finder.depth, 0...Int.max)
+              #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.a, tmpdir.b, tmpdir.b.c, tmpdir.b.d, tmpdir.b.d.e, tmpdir.b.d.f, tmpdir.b.d.f.g].map(Path.init)),
+                    relativeTo: tmpdir)
+              #endif
+            }
+        }
+    }
+
+    func testFindDepthRange() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.a.touch()
+            try tmpdir.b.mkdir().join("c").touch()
+            try tmpdir.b.d.mkdir().join("e").touch()
+            try tmpdir.b.d.f.mkdir().join("g").touch()
+
+            do {
+                let range = 2...3
+                let finder = tmpdir.find().depth(range)
+                XCTAssertEqual(finder.depth, range)
+              #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.b.d, tmpdir.b.c, tmpdir.b.d.e, tmpdir.b.d.f].map(Path.init)),
+                    relativeTo: tmpdir)
+              #endif
+            }
+
+            do {
+                let range = 2..<4
+                let finder = tmpdir.find().depth(range)
+                XCTAssertEqual(finder.depth, 2...3)
+              #if !os(Linux) || swift(>=5)
+                XCTAssertEqual(
+                    Set(finder),
+                    Set([tmpdir.b.d, tmpdir.b.c, tmpdir.b.d.e, tmpdir.b.d.f].map(Path.init)),
+                    relativeTo: tmpdir)
+              #endif
+            }
+        }
+    }
+
     func testFindExtension() throws {
         try Path.mktemp { tmpdir in
             try tmpdir.join("foo.json").touch()
@@ -63,6 +147,53 @@ extension PathTests {
             XCTAssertEqual(
                 Set(tmpdir.find().extension("txt").extension("json")),
                 [tmpdir.join("foo.json"), tmpdir.join("bar.txt")])
+        }
+    }
+
+    //NOTE this is how iterators work, so we have a test to validate that behavior
+    func testFindCallingExecuteTwice() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.join("foo.json").touch()
+            try tmpdir.join("bar.txt").touch()
+
+            let finder = tmpdir.find()
+
+            XCTAssertEqual(finder.map{ $0 }.count, 2)
+            XCTAssertEqual(finder.map{ $0 }.count, 0)
+        }
+    }
+
+    func testFindExecute() throws {
+        try Path.mktemp { tmpdir in
+            try tmpdir.a.touch()
+            try tmpdir.b.mkdir().join("c").touch()
+            try tmpdir.b.d.mkdir().join("e").touch()
+            try tmpdir.b.d.f.mkdir().join("g").touch()
+
+            do {
+                var rv = Set<Path>()
+
+                tmpdir.find().execute {
+                    switch $0 {
+                        case Path(tmpdir.b.d): return .skip
+                        default:
+                            rv.insert($0)
+                            return .continue
+                    }
+                }
+
+                XCTAssertEqual(rv, Set([tmpdir.a, tmpdir.b, tmpdir.b.c].map(Path.init)))
+            }
+            do {
+                var x = 0
+
+                tmpdir.find().execute { _ in
+                    x += 1
+                    return .abort
+                }
+
+                XCTAssertEqual(x, 1)
+            }
         }
     }
 
@@ -80,6 +211,18 @@ extension PathTests {
             XCTAssertEqual(
                 Set(tmpdir.find().type(.file).type(.directory)),
                 Set(["foo", "bar"].map(tmpdir.join)))
+        }
+    }
+
+    func testLsOnNonexistentDirectoryReturnsEmptyArray() throws {
+        try Path.mktemp { tmpdir in
+            XCTAssertEqual(tmpdir.a.ls(), [])
+        }
+    }
+
+    func testFindOnNonexistentDirectoryHasNoContent() throws {
+        try Path.mktemp { tmpdir in
+            XCTAssertNil(tmpdir.a.find().next())
         }
     }
 }

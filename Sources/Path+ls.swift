@@ -14,7 +14,13 @@ public extension Path {
         private let enumerator: FileManager.DirectoryEnumerator!
 
         /// The range of directory depths for which the find operation will return entries.
-        private(set) public var depth: ClosedRange<Int> = 1...Int.max
+        private(set) public var depth: ClosedRange<Int> = 1...Int.max {
+            didSet {
+                if depth.lowerBound < 0 {
+                    depth = 0...depth.upperBound
+                }
+            }
+        }
 
         /// The kinds of filesystem entries find operations will return.
         public var types: Set<EntryType> {
@@ -42,11 +48,7 @@ extension Path.Finder: Sequence, IteratorProtocol {
                 continue
             }
             if enumerator.level < depth.lowerBound {
-                if path == self.path, depth.lowerBound == 0 {
-                    return path
-                } else {
-                    continue
-                }
+                continue
             }
           #endif
 
