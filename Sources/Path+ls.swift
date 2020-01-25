@@ -130,7 +130,11 @@ public extension Path.Finder {
         while let path = next() {
             switch try closure(path) {
             case .skip:
+              #if !os(Linux) || swift(>=5.0)
                 enumerator.skipDescendants()
+              #else
+                fputs("warning: skip is not implemented for Swift < 5.0\n", stderr)
+              #endif
             case .abort:
                 return
             case .continue:

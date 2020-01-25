@@ -169,7 +169,7 @@ extension PathTests {
             try tmpdir.b.mkdir().join("c").touch()
             try tmpdir.b.d.mkdir().join("e").touch()
             try tmpdir.b.d.f.mkdir().join("g").touch()
-
+          #if !os(Linux) || swift(>=5)
             do {
                 var rv = Set<Path>()
 
@@ -184,6 +184,7 @@ extension PathTests {
 
                 XCTAssertEqual(rv, Set([tmpdir.a, tmpdir.b, tmpdir.b.c].map(Path.init)))
             }
+          #endif
             do {
                 var x = 0
 
