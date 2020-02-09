@@ -31,6 +31,9 @@ print(bar.isFile)  // => true
 let foo = try Path.root.join("foo").copy(into: Path.root.join("bar").mkdir())
 print(foo)         // => /bar/foo
 print(foo.isFile)  // => true
+// ^^ the `into:` version will only copy *into* a directory, the `to:` version copies
+// to a file at that path, thus you will not accidentally copy into directories you
+// may not have realized existed.
 
 // we support dynamic-member-syntax when joining named static members, eg:
 let prefs = Path.home.Library.Preferences  // => /Users/mxcl/Library/Preferences
@@ -117,6 +120,25 @@ everything would compile if we allowed arbituary variables to take *any* named
 property as valid syntax. What we have is what you want most of the time but
 much less (potentially) dangerous (at runtime).
 
+### Pathish
+
+`Path`, and `DynamicPath` (the result of eg. `Path.root`) both conform to
+`Pathish` which is a protocol that contains all pathing functions. Thus if
+you create objects from a mixture of both you need to create generic
+functions or convert any `DynamicPath`s to `Path` first:
+
+```swift
+let path1 = Path("/usr/lib")!
+let path2 = Path.root.usr.bin
+var paths = [Path]()
+paths.append(path1)        // fine
+paths.append(path2)        // error
+paths.append(Path(path2))  // ok
+```
+
+This is inconvenient but as Swift stands there’s nothing we can think of
+that would help.
+
 ## Initializing from user-input
 
 The `Path` initializer returns `nil` unless fed an absolute path; thus to
@@ -140,7 +162,7 @@ strings that you need to be paths:
 
 ```swift
 let absolutePath = "/known/path"
-let path1 = Path.root/pathString
+let path1 = Path.root/absolutePath
 
 let pathWithoutInitialSlash = "known/path"
 let path2 = Path.root/pathWithoutInitialSlash
@@ -278,6 +300,9 @@ Path.home/"/b"     // => /Users/mxcl/b
 Path.home.foo.bar.join("..")  // => /Users/mxcl/foo
 Path.home.foo.bar.join(".")   // => /Users/mxcl/foo/bar
 
+// though note that we provide `.parent`:
+Path.home.foo.bar.parent      // => /Users/mxcl/foo
+
 // of course, feel free to join variables:
 let b = "b"
 let c = "c"
@@ -342,9 +367,13 @@ no filesystem entry there at all check if `type` is `nil`.
 
 Changing directory is dangerous, you should *always* try to avoid it and thus
 we don’t even provide the method. If you are executing a sub-process then
-use `Process.currentDirectoryURL`.
+use `Process.currentDirectoryURL` to change *its* working directory when it 
+executes.
 
-If you must then use `FileManager.changeCurrentDirectory`.
+If you must change directory then use `FileManager.changeCurrentDirectory` as
+early in your process as *possible*. Altering the global state of your app’s
+environment is fundamentally dangerous creating hard to debug issues that
+you won‘t find for potentially *years*.
 
 # I thought I should only use `URL`s?
 
