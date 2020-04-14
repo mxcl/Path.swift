@@ -79,6 +79,13 @@ extension Path {
     public static var applicationSupport: DynamicPath {
         return path(for: .applicationSupportDirectory)
     }
+
+    /**
+     Returns the path of the temporary directory for the current user.
+     */
+    public static var temporary: DynamicPath {
+        return DynamicPath(string: NSTemporaryDirectory())
+    }
 }
 
 #if !os(Linux)

@@ -61,6 +61,7 @@ extension PathTests {
         ("testStringConvertibles", testStringConvertibles),
         ("testStringExtensions", testStringExtensions),
         ("testSymlinkFunctions", testSymlinkFunctions),
+        ("testTemporary", testTemporary),
         ("testTimes", testTimes),
         ("testTouchThrowsIfCannotWrite", testTouchThrowsIfCannotWrite),
         ("testURLInitializer", testURLInitializer),

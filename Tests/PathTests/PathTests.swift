@@ -659,6 +659,10 @@ class PathTests: XCTestCase {
         XCTAssertNil(Path("./foo"))
         XCTAssertEqual(Path("/foo"), Path.root.foo)
     }
+
+    func testTemporary() {
+        XCTAssertEqual(Path.temporary.string, NSTemporaryDirectory())
+    }
 }
 
 private func XCTAssertEqual<P: Pathish, Q: Pathish>(_ p: P, _ q: Q, file: StaticString = #file, line: UInt = #line) {
