@@ -164,7 +164,7 @@ public extension Pathish {
             if options != .a, path.basename().hasPrefix(".") { return nil }
             // ^^ we don’t use the Foundation `skipHiddenFiles` because it considers weird things hidden and we are mirroring `ls`
             return path
-        }
+        }.sorted()
     }
 
     /// Recursively find files under this path. If the path is a file, no files will be found.
