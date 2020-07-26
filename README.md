@@ -434,7 +434,7 @@ Carthage:
 [docs]: https://mxcl.dev/Path.swift/Structs/Path.html
 [badge-jazzy]: https://raw.githubusercontent.com/mxcl/Path.swift/gh-pages/badge.svg?sanitize=true
 [badge-codecov]: https://codecov.io/gh/mxcl/Path.swift/branch/master/graph/badge.svg
-[badge-ci]: https://travis-ci.com/mxcl/Path.swift.svg
+[badge-ci]: https://github.com/mxcl/Path.swift/workflows/Checks/badge.svg
 [travis]: https://travis-ci.com/mxcl/Path.swift
 [codecov]: https://codecov.io/gh/mxcl/Path.swift
 [badge-version]: https://img.shields.io/cocoapods/v/Path.swift.svg?label=version
