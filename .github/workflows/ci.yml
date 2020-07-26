@@ -1,0 +1,77 @@
+name: CI
+on: [pull_request]
+jobs:
+  smoke:
+    runs-on: macos-latest
+    steps:
+    - uses: technote-space/auto-cancel-redundant-job@v1
+    - uses: actions/checkout@v2
+    - run: swift test --generate-linuxmain
+    - run: git diff --exit-code
+  macOS:
+    needs: smoke
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        #- 10.3   # Swift 5.0 (doesn’t work on GHA macOS image :-/)
+        - 11.3   # Swift 5.1
+        - ^11.4  # Swift 5.2
+        - latest # Swift 5.3
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup-xcode
+      uses: maxim-lobanov/setup-xcode@1.0
+      with:
+        xcode-version: ${{ matrix.xcode }}
+    - run: swift --version
+    - run: swift test --parallel
+  otherOS:
+    needs: smoke
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        destination:
+        - platform=iOS Simulator,OS=latest,name=iPhone 11
+        - platform=tvOS Simulator,OS=latest,name=Apple TV
+        - platform=macOS # for code-coverage
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift package generate-xcodeproj --enable-code-coverage
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: Path.swift.xcodeproj
+        scheme: Path.swift-Package
+        destination: ${{ matrix.destination }}
+        action: test
+    - uses: codecov/codecov-action@v1
+  watchOS:
+    needs: smoke
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift package generate-xcodeproj --enable-code-coverage
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: Path.swift.xcodeproj
+        scheme: Path.swift-Package
+        destination: platform=watchOS Simulator,OS=latest,name=Apple Watch Series 5 - 40mm
+        action: build
+  linux:
+    needs: smoke
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        swift:
+        # - 4.0.3 fails for some reason
+        - 4.2
+        - 5.0.3
+        - 5.1
+        - 5.2
+        # - 5.3 not available yet sigh
+    steps:
+    - uses: actions/checkout@v2
+    - uses: fwal/setup-swift@v1
+      with:
+        swift-version: ${{ matrix.swift }}
+    - run: swift test --parallel

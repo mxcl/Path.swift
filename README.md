@@ -430,7 +430,7 @@ Carthage:
 
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
-[badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.0%20%7C%205.1%20%7C%205.2-orange.svg
+[badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.0%20%7C%205.1%20%7C%205.2%20%7C%205.3-orange.svg
 [docs]: https://mxcl.dev/Path.swift/Structs/Path.html
 [badge-jazzy]: https://raw.githubusercontent.com/mxcl/Path.swift/gh-pages/badge.svg?sanitize=true
 [badge-codecov]: https://codecov.io/gh/mxcl/Path.swift/branch/master/graph/badge.svg
