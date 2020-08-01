@@ -74,4 +74,21 @@ jobs:
     - uses: fwal/setup-swift@v1
       with:
         swift-version: ${{ matrix.swift }}
+    - run: swift test --parallel --enable-code-coverage
+      if: ${{ matrix.swift != '4.2' }}
     - run: swift test --parallel
+      if: ${{ matrix.swift == '4.2' }}
+    - name: Generate Coverage Report
+      if: ${{ matrix.swift != '4.2' }}
+      run: |
+        sudo apt-get -qq update && sudo apt-get -qq install llvm-10
+        export b=$(swift build --show-bin-path) && llvm-cov-10 \
+          export -format lcov \
+          -instr-profile=$b/codecov/default.profdata \
+          --ignore-filename-regex='\.build/' \
+          $b/Path.swiftPackageTests.xctest \
+          > info.lcov
+    - uses: codecov/codecov-action@v1
+      if: ${{ matrix.swift != '4.2' }}
+      with:
+        file: ./info.lcov
