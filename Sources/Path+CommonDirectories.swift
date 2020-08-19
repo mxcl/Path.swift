@@ -14,6 +14,18 @@ extension Path {
         return .init(string: "/")
     }
 
+#if swift(>=5.3)
+    public static func source(for filePath: String = #filePath) -> (file: DynamicPath, directory: DynamicPath) {
+        let file = DynamicPath(string: filePath)
+        return (file: file, directory: .init(file.parent))
+    }
+#else
+    public static func source(for filePath: String = #file) -> (file: DynamicPath, directory: DynamicPath) {
+        let file = DynamicPath(string: filePath)
+        return (file: file, directory: .init(file.parent))
+    }
+#endif
+
     /// Returns a `Path` representing the user’s home directory
     public static var home: DynamicPath {
         let string: String
