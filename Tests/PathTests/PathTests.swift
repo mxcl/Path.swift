@@ -305,6 +305,13 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root.string, "/")
         XCTAssertEqual(Path.home.string, NSHomeDirectory())
         XCTAssertEqual(Path.documents.string, NSHomeDirectory() + "/Documents")
+    #if swift(>=5.3)
+        let filePath = Path(#filePath)!
+    #else
+        let filePath = Path(#file)!
+    #endif
+        XCTAssertEqual(Path.source().file, filePath)
+        XCTAssertEqual(Path.source().directory, filePath.parent)
     #if !os(Linux)
         XCTAssertEqual(Path.caches.string, NSHomeDirectory() + "/Library/Caches")
         XCTAssertEqual(Path.cwd.string, FileManager.default.currentDirectoryPath)
@@ -659,12 +666,4 @@ class PathTests: XCTestCase {
         XCTAssertNil(Path("./foo"))
         XCTAssertEqual(Path("/foo"), Path.root.foo)
     }
-}
-
-private func XCTAssertEqual<P: Pathish, Q: Pathish>(_ p: P, _ q: Q, file: StaticString = #file, line: UInt = #line) {
-    XCTAssertEqual(p.string, q.string, file: file, line: line)
-}
-
-private func XCTAssertEqual<P: Pathish, Q: Pathish>(_ p: P?, _ q: Q?, file: StaticString = #file, line: UInt = #line) {
-    XCTAssertEqual(p?.string, q?.string, file: file, line: line)
 }
