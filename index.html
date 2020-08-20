@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Path  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a title="Path  Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="index.html">Path 1.2.0 Docs</a> (99% documented)</p>
+        <p class="header-right"><a href="https://github.com/mxcl/Path.swift"><img src="img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right">
+          <form role="search" action="search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="index.html">Path Reference</a>
+        <img id="carat" src="img/carat.png" />
+        Path  Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="Path.html">Path</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/Path.html">Path</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Path/EntryType.html">– EntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Structs/Path/Finder.html">– Finder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Protocols/Pathish.html">Pathish</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Other%20Enums.html">Other Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Enums/ListDirectoryOptions.html">ListDirectoryOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Enums/MakeDirectoryOptions.html">MakeDirectoryOptions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Bundle.html">Bundle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/CodingUserInfoKey.html">CodingUserInfoKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/Data.html">Data</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/FileHandle.html">FileHandle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="Other%20Structs.html">Other Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="Structs/DynamicPath.html">DynamicPath</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            
+            <h1 id='path-swift-img-src-https-img-shields-io-badge-platforms-macos-20-7c-20linux-20-7c-20ios-20-7c-20tvos-20-7c-20watchos-lightgrey-svg-alt-badge-platforms-img-src-https-img-shields-io-badge-swift-4-2-20-7c-205-0-20-7c-205-1-20-7c-205-2-20-7c-205-3-orange-svg-alt-badge-languages-a-href-https-travis-ci-com-mxcl-path-swift-img-src-https-github-com-mxcl-path-swift-workflows-checks-badge-svg-alt-badge-ci-a-a-href-https-mxcl-dev-path-swift-structs-path-html-img-src-https-raw-githubusercontent-com-mxcl-path-swift-gh-pages-badge-svg-sanitize-true-alt-badge-jazzy-a-a-href-https-codecov-io-gh-mxcl-path-swift-img-src-https-codecov-io-gh-mxcl-path-swift-branch-master-graph-badge-svg-alt-badge-codecov-a-a-href-https-cocoapods-org-pods-path-swift-img-src-https-img-shields-io-cocoapods-v-path-swift-svg-label-version-alt-badge-version-a' class='heading'>Path.swift <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg" alt="badge-platforms"> <img src="https://img.shields.io/badge/swift-4.2%20%7C%205.0%20%7C%205.1%20%7C%205.2%20%7C%205.3-orange.svg" alt="badge-languages"> <a href="https://travis-ci.com/mxcl/Path.swift"><img src="https://github.com/mxcl/Path.swift/workflows/Checks/badge.svg" alt="badge-ci"></a> <a href="https://mxcl.dev/Path.swift/Structs/Path.html"><img src="https://raw.githubusercontent.com/mxcl/Path.swift/gh-pages/badge.svg?sanitize=true" alt="badge-jazzy"></a> <a href="https://codecov.io/gh/mxcl/Path.swift"><img src="https://codecov.io/gh/mxcl/Path.swift/branch/master/graph/badge.svg" alt="badge-codecov"></a> <a href="https://cocoapods.org/pods/Path.swift"><img src="https://img.shields.io/cocoapods/v/Path.swift.svg?label=version" alt="badge-version"></a></h1>
+
+<p>A file-system pathing library focused on developer experience and robust end
+results.</p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">Path</span>
+
+<span class="c1">// convenient static members</span>
+<span class="k">let</span> <span class="nv">home</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span>
+
+<span class="c1">// pleasant joining syntax</span>
+<span class="k">let</span> <span class="nv">docs</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"Documents"</span>
+
+<span class="c1">// paths are *always* absolute thus avoiding common bugs</span>
+<span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">Path</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="p">??</span> <span class="kt">Path</span><span class="o">.</span><span class="n">cwd</span><span class="o">/</span><span class="n">userInput</span>
+
+<span class="c1">// elegant, chainable syntax</span>
+<span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">.</span><span class="nf">mkdir</span><span class="p">()</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">touch</span><span class="p">()</span><span class="o">.</span><span class="nf">chmod</span><span class="p">(</span><span class="mi">0</span><span class="n">o555</span><span class="p">)</span>
+
+<span class="c1">// sensible considerations</span>
+<span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">mkdir</span><span class="p">()</span>
+<span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">mkdir</span><span class="p">()</span>  <span class="c1">// doesn’t throw ∵ we already have the desired result</span>
+
+<span class="c1">// easy file-management</span>
+<span class="k">let</span> <span class="nv">bar</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"bar"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">bar</span><span class="p">)</span>         <span class="c1">// =&gt; /bar</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">isFile</span><span class="p">)</span>  <span class="c1">// =&gt; true</span>
+
+<span class="c1">// careful API considerations so as to avoid common bugs</span>
+<span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">mkdir</span><span class="p">())</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>         <span class="c1">// =&gt; /bar/foo</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">foo</span><span class="o">.</span><span class="n">isFile</span><span class="p">)</span>  <span class="c1">// =&gt; true</span>
+<span class="c1">// ^^ the `into:` version will only copy *into* a directory, the `to:` version copies</span>
+<span class="c1">// to a file at that path, thus you will not accidentally copy into directories you</span>
+<span class="c1">// may not have realized existed.</span>
+
+<span class="c1">// we support dynamic-member-syntax when joining named static members, eg:</span>
+<span class="k">let</span> <span class="nv">prefs</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="kt">Library</span><span class="o">.</span><span class="kt">Preferences</span>  <span class="c1">// =&gt; /Users/mxcl/Library/Preferences</span>
+
+<span class="c1">// a practical example: installing a helper executable</span>
+<span class="k">try</span> <span class="kt">Bundle</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">helper</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">usr</span><span class="o">.</span><span class="n">local</span><span class="o">.</span><span class="n">bin</span><span class="p">)</span><span class="o">.</span><span class="nf">chmod</span><span class="p">(</span><span class="mi">0</span><span class="n">o500</span><span class="p">)</span>
+</code></pre>
+
+<p>We emphasize safety and correctness, just like Swift, and also (again like
+Swift), we provide a thoughtful and comprehensive (yet concise) API.</p>
+<h1 id='support-mxcl' class='heading'>Support mxcl</h1>
+
+<p>Hi, I’m Max Howell and I have written a lot of open source software—generally
+a good deal of my free time 👨🏻‍💻.</p>
+
+<p><a href="https://www.patreon.com/mxcl">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a></p>
+
+<p><a href="http://mxcl.dev/#donate">Other donation/tipping options</a></p>
+<h1 id='handbook' class='heading'>Handbook</h1>
+
+<p>Our <a href="https://mxcl.dev/Path.swift/Structs/Path.html">online API documentation</a> covers 100% of our public API and is
+automatically updated for new releases.</p>
+<h2 id='codable' class='heading'>Codable</h2>
+
+<p>We support <code>Codable</code> as you would expect:</p>
+<pre class="highlight swift"><code><span class="k">try</span> <span class="kt">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="nf">encode</span><span class="p">([</span><span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="p">,</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"foo"</span><span class="p">])</span>
+</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="s2">"/Users/mxcl"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"/Users/mxcl/foo"</span><span class="p">,</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<p>Though we recommend encoding <em>relative</em> paths‡:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">encoder</span> <span class="o">=</span> <span class="kt">JSONEncoder</span><span class="p">()</span>
+<span class="n">encoder</span><span class="o">.</span><span class="n">userInfo</span><span class="p">[</span><span class="o">.</span><span class="n">relativePath</span><span class="p">]</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span>
+<span class="n">encoder</span><span class="o">.</span><span class="nf">encode</span><span class="p">([</span><span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="p">,</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"foo"</span><span class="p">,</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"../baz"</span><span class="p">])</span>
+</code></pre>
+<pre class="highlight json"><code><span class="p">[</span><span class="w">
+    </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"foo"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"../baz"</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+
+<p><strong>Note</strong> if you encode with this key set you <em>must</em> decode with the key
+set also:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">decoder</span> <span class="o">=</span> <span class="kt">JSONDecoder</span><span class="p">()</span>
+<span class="n">decoder</span><span class="o">.</span><span class="n">userInfo</span><span class="p">[</span><span class="o">.</span><span class="n">relativePath</span><span class="p">]</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span>
+<span class="k">try</span> <span class="n">decoder</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="nv">from</span><span class="p">:</span> <span class="n">data</span><span class="p">)</span>  <span class="c1">// would throw if `.relativePath` not set</span>
+</code></pre>
+
+<blockquote>
+<p>‡ If you are saving files to a system provided location, eg. Documents then
+the directory could change at Apple’s choice, or if say the user changes their
+username. Using relative paths also provides you with the flexibility in
+future to change where you are storing your files without hassle.</p>
+</blockquote>
+<h2 id='dynamic-members' class='heading'>Dynamic members</h2>
+
+<p>We support <code>@dynamicMemberLookup</code>:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">ls</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">usr</span><span class="o">.</span><span class="n">bin</span><span class="o">.</span><span class="n">ls</span>  <span class="c1">// =&gt; /usr/bin/ls</span>
+</code></pre>
+
+<p>We only provide this for “starting” function, eg. <code><a href="Structs/Path.html#/s:4PathAAV4homeAA07DynamicA0VvpZ">Path.home</a></code> or <code><a href="Extensions/Bundle.html#/s:So8NSBundleC4PathE4pathAC07DynamicB0Vvp">Bundle.path</a></code>.
+This is because we found in practice it was easy to write incorrect code, since
+everything would compile if we allowed arbituary variables to take <em>any</em> named
+property as valid syntax. What we have is what you want most of the time but
+much less (potentially) dangerous (at runtime).</p>
+<h3 id='pathish' class='heading'>Pathish</h3>
+
+<p><code><a href="Structs/Path.html">Path</a></code>, and <code><a href="Structs/DynamicPath.html">DynamicPath</a></code> (the result of eg. <code><a href="Structs/Path.html#/s:4PathAAV4rootAA07DynamicA0VvpZ">Path.root</a></code>) both conform to
+<code><a href="Protocols/Pathish.html">Pathish</a></code> which is a protocol that contains all pathing functions. Thus if
+you create objects from a mixture of both you need to create generic
+functions or convert any <code><a href="Structs/DynamicPath.html">DynamicPath</a></code>s to <code><a href="Structs/Path.html">Path</a></code> first:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">path1</span> <span class="o">=</span> <span class="kt">Path</span><span class="p">(</span><span class="s">"/usr/lib"</span><span class="p">)</span><span class="o">!</span>
+<span class="k">let</span> <span class="nv">path2</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">usr</span><span class="o">.</span><span class="n">bin</span>
+<span class="k">var</span> <span class="nv">paths</span> <span class="o">=</span> <span class="p">[</span><span class="kt">Path</span><span class="p">]()</span>
+<span class="n">paths</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="n">path1</span><span class="p">)</span>        <span class="c1">// fine</span>
+<span class="n">paths</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="n">path2</span><span class="p">)</span>        <span class="c1">// error</span>
+<span class="n">paths</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="kt">Path</span><span class="p">(</span><span class="n">path2</span><span class="p">))</span>  <span class="c1">// ok</span>
+</code></pre>
+
+<p>This is inconvenient but as Swift stands there’s nothing we can think of
+that would help.</p>
+<h2 id='initializing-from-user-input' class='heading'>Initializing from user-input</h2>
+
+<p>The <code><a href="Structs/Path.html">Path</a></code> initializer returns <code>nil</code> unless fed an absolute path; thus to
+initialize from user-input that may contain a relative path use this form:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">Path</span><span class="p">(</span><span class="n">userInput</span><span class="p">)</span> <span class="p">??</span> <span class="kt">Path</span><span class="o">.</span><span class="n">cwd</span><span class="o">/</span><span class="n">userInput</span>
+</code></pre>
+
+<p>This is explicit, not hiding anything that code-review may miss and preventing
+common bugs like accidentally creating <code><a href="Structs/Path.html">Path</a></code> objects from strings you did not
+expect to be relative.</p>
+
+<p>Our initializer is nameless to be consistent with the equivalent operation for
+converting strings to <code>Int</code>, <code>Float</code> etc. in the standard library.</p>
+<h2 id='initializing-from-known-strings' class='heading'>Initializing from known strings</h2>
+
+<p>There’s no need to use the optional initializer in general if you have known
+strings that you need to be paths:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">absolutePath</span> <span class="o">=</span> <span class="s">"/known/path"</span>
+<span class="k">let</span> <span class="nv">path1</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="n">absolutePath</span>
+
+<span class="k">let</span> <span class="nv">pathWithoutInitialSlash</span> <span class="o">=</span> <span class="s">"known/path"</span>
+<span class="k">let</span> <span class="nv">path2</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="n">pathWithoutInitialSlash</span>
+
+<span class="nf">assert</span><span class="p">(</span><span class="n">path1</span> <span class="o">==</span> <span class="n">path2</span><span class="p">)</span>
+
+<span class="k">let</span> <span class="nv">path3</span> <span class="o">=</span> <span class="kt">Path</span><span class="p">(</span><span class="n">absolutePath</span><span class="p">)</span><span class="o">!</span>  <span class="c1">// at your options</span>
+
+<span class="nf">assert</span><span class="p">(</span><span class="n">path2</span> <span class="o">==</span> <span class="n">path3</span><span class="p">)</span>
+
+<span class="c1">// be cautious:</span>
+<span class="k">let</span> <span class="nv">path4</span> <span class="o">=</span> <span class="kt">Path</span><span class="p">(</span><span class="n">pathWithoutInitialSlash</span><span class="p">)</span><span class="o">!</span>  <span class="c1">// CRASH!</span>
+</code></pre>
+<h2 id='extensions' class='heading'>Extensions</h2>
+
+<p>We have some extensions to Apple APIs:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">bashProfile</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">String</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">".bash_profile"</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">history</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">Data</span><span class="p">(</span><span class="nv">contentsOf</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">".history"</span><span class="p">)</span>
+
+<span class="n">bashProfile</span> <span class="o">+=</span> <span class="s">"</span><span class="se">\n\n</span><span class="s">foo"</span>
+
+<span class="k">try</span> <span class="n">bashProfile</span><span class="o">.</span><span class="nf">write</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">".bash_profile"</span><span class="p">)</span>
+
+<span class="k">try</span> <span class="kt">Bundle</span><span class="o">.</span><span class="n">main</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="o">.</span><span class="n">home</span><span class="p">)</span>
+</code></pre>
+<h2 id='directory-listings' class='heading'>Directory listings</h2>
+
+<p>We provide <code>ls()</code>, called because it behaves like the Terminal <code>ls</code> function,
+the name thus implies its behavior, ie. that it is not recursive and doesn’t
+list hidden files.</p>
+<pre class="highlight swift"><code><span class="k">for</span> <span class="n">path</span> <span class="k">in</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">path</span> <span class="k">in</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">()</span> <span class="k">where</span> <span class="n">path</span><span class="o">.</span><span class="n">isFile</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">path</span> <span class="k">in</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">()</span> <span class="k">where</span> <span class="n">path</span><span class="o">.</span><span class="n">mtime</span> <span class="o">&gt;</span> <span class="n">yesterday</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">dirs</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">()</span><span class="o">.</span><span class="n">directories</span>
+<span class="c1">// ^^ directories that *exist*</span>
+
+<span class="k">let</span> <span class="nv">files</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">()</span><span class="o">.</span><span class="n">files</span>
+<span class="c1">// ^^ files that both *exist* and are *not* directories</span>
+
+<span class="k">let</span> <span class="nv">swiftFiles</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">()</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">filter</span><span class="p">{</span> <span class="nv">$0</span><span class="o">.</span><span class="kd">extension</span> <span class="o">==</span> <span class="s">"swift"</span> <span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">includingHiddenFiles</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">ls</span><span class="p">(</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+</code></pre>
+
+<p><strong>Note</strong> <code>ls()</code> does not throw, instead outputing a warning to the console if it
+fails to list the directory. The rationale for this is weak, please open a
+ticket for discussion.</p>
+
+<p>We provide <code>find()</code> for recursive listing:</p>
+<pre class="highlight swift"><code><span class="k">for</span> <span class="n">path</span> <span class="k">in</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">find</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// descends all directories, and includes hidden files</span>
+    <span class="c1">// so it behaves the same as the terminal command `find`</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>It is configurable:</p>
+<pre class="highlight swift"><code><span class="k">for</span> <span class="n">path</span> <span class="k">in</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">find</span><span class="p">()</span><span class="o">.</span><span class="nf">depth</span><span class="p">(</span><span class="nv">max</span><span class="p">:</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="nf">extension</span><span class="p">(</span><span class="s">"swift"</span><span class="p">)</span><span class="o">.</span><span class="nf">type</span><span class="p">(</span><span class="o">.</span><span class="n">file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>It can be controlled with a closure syntax:</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">find</span><span class="p">()</span><span class="o">.</span><span class="nf">depth</span><span class="p">(</span><span class="mi">2</span><span class="o">...</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">execute</span> <span class="p">{</span> <span class="n">path</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="n">path</span><span class="o">.</span><span class="nf">basename</span><span class="p">()</span> <span class="o">!=</span> <span class="s">"foo.lock"</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="o">.</span><span class="n">abort</span> <span class="p">}</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="nf">basename</span><span class="p">()</span> <span class="o">==</span> <span class="s">".build"</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">isDirectory</span> <span class="p">{</span> <span class="k">return</span> <span class="o">.</span><span class="n">skip</span> <span class="p">}</span>
+    <span class="c1">//…</span>
+    <span class="k">return</span> <span class="o">.</span><span class="k">continue</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Or get everything at once as an array:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">paths</span> <span class="o">=</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">find</span><span class="p">()</span><span class="o">.</span><span class="nf">map</span><span class="p">(</span><span class="err">\</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+</code></pre>
+<h1 id='code-path-swift-code-is-robust' class='heading'><code>Path.swift</code> is robust</h1>
+
+<p>Some parts of <code>FileManager</code> are not exactly idiomatic. For example
+<code>isExecutableFile</code> returns <code>true</code> even if there is no file there, it is instead
+telling you that <em>if</em> you made a file there it <em>could</em> be executable. Thus we
+check the POSIX permissions of the file first, before returning the result of
+<code>isExecutableFile</code>. <code>Path.swift</code> has done the leg-work for you so you can just
+get on with it and not have to worry.</p>
+
+<p>There is also some magic going on in Foundation’s filesystem APIs, which we look
+for and ensure our API is deterministic, eg. <a href="https://github.com/mxcl/Path.swift/blob/master/Tests/PathTests/PathTests.swift#L539-L554">this test</a>.</p>
+<h1 id='code-path-swift-code-is-properly-cross-platform' class='heading'><code>Path.swift</code> is properly cross-platform</h1>
+
+<p><code>FileManager</code> on Linux is full of holes. We have found the holes and worked
+round them where necessary.</p>
+<h1 id='rules-amp-caveats' class='heading'>Rules &amp; Caveats</h1>
+
+<p>Paths are just (normalized) string representations, there <em>might not</em> be a real
+file there.</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"b"</span>      <span class="c1">// =&gt; /Users/mxcl/b</span>
+
+<span class="c1">// joining multiple strings works as you’d expect</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"b"</span><span class="o">/</span><span class="s">"c"</span>  <span class="c1">// =&gt; /Users/mxcl/b/c</span>
+
+<span class="c1">// joining multiple parts simultaneously is fine</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"b/c"</span>    <span class="c1">// =&gt; /Users/mxcl/b/c</span>
+
+<span class="c1">// joining with absolute paths omits prefixed slash</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"/b"</span>     <span class="c1">// =&gt; /Users/mxcl/b</span>
+
+<span class="c1">// joining with .. or . works as expected</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">".."</span><span class="p">)</span>  <span class="c1">// =&gt; /Users/mxcl/foo</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"."</span><span class="p">)</span>   <span class="c1">// =&gt; /Users/mxcl/foo/bar</span>
+
+<span class="c1">// though note that we provide `.parent`:</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="n">parent</span>      <span class="c1">// =&gt; /Users/mxcl/foo</span>
+
+<span class="c1">// of course, feel free to join variables:</span>
+<span class="k">let</span> <span class="nv">b</span> <span class="o">=</span> <span class="s">"b"</span>
+<span class="k">let</span> <span class="nv">c</span> <span class="o">=</span> <span class="s">"c"</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="n">b</span><span class="o">/</span><span class="n">c</span>      <span class="c1">// =&gt; /Users/mxcl/b/c</span>
+
+<span class="c1">// tilde is not special here</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"~b"</span>     <span class="c1">// =&gt; /~b</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"~/b"</span>    <span class="c1">// =&gt; /~/b</span>
+
+<span class="c1">// but is here</span>
+<span class="kt">Path</span><span class="p">(</span><span class="s">"~/foo"</span><span class="p">)</span><span class="o">!</span>     <span class="c1">// =&gt; /Users/mxcl/foo</span>
+
+<span class="c1">// this works provided the user `Guest` exists</span>
+<span class="kt">Path</span><span class="p">(</span><span class="s">"~Guest"</span><span class="p">)</span>     <span class="c1">// =&gt; /Users/Guest</span>
+
+<span class="c1">// but if the user does not exist</span>
+<span class="kt">Path</span><span class="p">(</span><span class="s">"~foo"</span><span class="p">)</span>       <span class="c1">// =&gt; nil</span>
+
+<span class="c1">// paths with .. or . are resolved</span>
+<span class="kt">Path</span><span class="p">(</span><span class="s">"/foo/bar/../baz"</span><span class="p">)</span>  <span class="c1">// =&gt; /foo/baz</span>
+
+<span class="c1">// symlinks are not resolved</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="nf">symlink</span><span class="p">(</span><span class="nv">as</span><span class="p">:</span> <span class="s">"foo"</span><span class="p">)</span>
+<span class="kt">Path</span><span class="p">(</span><span class="s">"/foo"</span><span class="p">)</span>        <span class="c1">// =&gt; /foo</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">foo</span>       <span class="c1">// =&gt; /foo</span>
+
+<span class="c1">// unless you do it explicitly</span>
+<span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="nf">readlink</span><span class="p">()</span>  <span class="c1">// =&gt; /bar</span>
+                              <span class="c1">// `readlink` only resolves the *final* path component,</span>
+                              <span class="c1">// thus use `realpath` if there are multiple symlinks</span>
+</code></pre>
+
+<p><em>Path.swift</em> has the general policy that if the desired end result preexists,
+then it’s a noop:</p>
+
+<ul>
+<li>If you try to delete a file, but the file doesn&rsquo;t exist, we do nothing.</li>
+<li>If you try to make a directory and it already exists, we do nothing.</li>
+<li>If you call <code>readlink</code> on a non-symlink, we return <code>self</code></li>
+</ul>
+
+<p>However notably if you try to copy or move a file without specifying <code>overwrite</code>
+and the file already exists at the destination and is identical, we don’t check
+for that as the check was deemed too expensive to be worthwhile.</p>
+<h2 id='symbolic-links' class='heading'>Symbolic links</h2>
+
+<ul>
+<li>Two paths may represent the same <em>resolved</em> path yet not be equal due to
+symlinks in such cases you should use <code>realpath</code> on both first if an
+equality check is required.</li>
+<li>There are several symlink paths on Mac that are typically automatically
+resolved by Foundation, eg. <code>/private</code>, we attempt to do the same for
+functions that you would expect it (notably <code>realpath</code>), we <em>do</em> the same
+for <code>Path.init</code>, but <em>do not</em> if you are joining a path that ends up being
+one of these paths, (eg. <code>Path.root.join(&quot;var/private&#39;)</code>).</li>
+</ul>
+
+<p>If a <code><a href="Structs/Path.html">Path</a></code> is a symlink but the destination of the link does not exist <code>exists</code>
+returns <code>false</code>. This seems to be the correct thing to do since symlinks are
+meant to be an abstraction for filesystems. To instead verify that there is
+no filesystem entry there at all check if <code>type</code> is <code>nil</code>.</p>
+<h2 id='we-do-not-provide-change-directory-functionality' class='heading'>We do not provide change directory functionality</h2>
+
+<p>Changing directory is dangerous, you should <em>always</em> try to avoid it and thus
+we don’t even provide the method. If you are executing a sub-process then
+use <code>Process.currentDirectoryURL</code> to change <em>its</em> working directory when it 
+executes.</p>
+
+<p>If you must change directory then use <code>FileManager.changeCurrentDirectory</code> as
+early in your process as <em>possible</em>. Altering the global state of your app’s
+environment is fundamentally dangerous creating hard to debug issues that
+you won‘t find for potentially <em>years</em>.</p>
+<h1 id='i-thought-i-should-only-use-code-url-code-s' class='heading'>I thought I should only use <code>URL</code>s?</h1>
+
+<p>Apple recommend this because they provide a magic translation for
+<a href="https://developer.apple.com/documentation/foundation/nsurl/1408631-filereferenceurl">file-references embodied by URLs</a>, which gives you URLs like so:</p>
+<pre class="highlight plaintext"><code>file:///.file/id=6571367.15106761
+</code></pre>
+
+<p>Therefore, if you are not using this feature you are fine. If you have URLs the
+correct way to get a <code><a href="Structs/Path.html">Path</a></code> is:</p>
+<pre class="highlight swift"><code><span class="k">if</span> <span class="k">let</span> <span class="nv">path</span> <span class="o">=</span> <span class="kt">Path</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/*…*/</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Our initializer calls <code>path</code> on the URL which resolves any reference to an
+actual filesystem path, however we also check the URL has a <code>file</code> scheme first.</p>
+<h1 id='in-defense-of-our-naming-scheme' class='heading'>In defense of our naming scheme</h1>
+
+<p>Chainable syntax demands short method names, thus we adopted the naming scheme
+of the terminal, which is absolutely not very “Apple” when it comes to how they
+design their APIs, however for users of the terminal (which <em>surely</em> is most
+developers) it is snappy and familiar.</p>
+<h1 id='installation' class='heading'>Installation</h1>
+
+<p>SwiftPM:</p>
+<pre class="highlight swift"><code><span class="n">package</span><span class="o">.</span><span class="nf">append</span><span class="p">(</span><span class="o">.</span><span class="nf">package</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="s">"https://github.com/mxcl/Path.swift.git"</span><span class="p">,</span> <span class="nv">from</span><span class="p">:</span> <span class="s">"1.0.0"</span><span class="p">))</span>
+</code></pre>
+
+<p>CocoaPods:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s1">'Path.swift'</span><span class="p">,</span> <span class="s1">'~&gt; 1.0.0'</span>
+</code></pre>
+
+<p>Carthage:</p>
+
+<blockquote>
+<p>Waiting on: <a href="https://github.com/Carthage/Carthage/pull/1945">@Carthage#1945</a>.</p>
+</blockquote>
+<h1 id='alternatives' class='heading'>Alternatives</h1>
+
+<ul>
+<li><a href="https://github.com/dduan/Pathos">Pathos</a> by Daniel Duan</li>
+<li><a href="https://github.com/kylef/PathKit">PathKit</a> by Kyle Fuller</li>
+<li><a href="https://github.com/JohnSundell/Files">Files</a> by John Sundell</li>
+<li><a href="https://github.com/apple/swift-package-manager">Utility</a> by Apple</li>
+</ul>
+
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2020-08-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

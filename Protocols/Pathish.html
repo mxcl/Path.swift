@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pathish Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/Pathish" class="dashAnchor"></a>
+    <a title="Pathish Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html">Path 1.2.0 Docs</a> (99% documented)</p>
+        <p class="header-right"><a href="https://github.com/mxcl/Path.swift"><img src="../img/gh.png"/>View on GitHub</a></p>
+        <p class="header-right">
+          <form role="search" action="../search.json">
+            <input type="text" placeholder="Search documentation" data-typeahead>
+          </form>
+        </p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html">Path Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        Pathish Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Path.html">Path</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/Path.html">Path</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Path/EntryType.html">– EntryType</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Structs/Path/Finder.html">– Finder</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Protocols/Pathish.html">Pathish</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Enums.html">Other Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Enums/ListDirectoryOptions.html">ListDirectoryOptions</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Enums/MakeDirectoryOptions.html">MakeDirectoryOptions</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Array.html">Array</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Bundle.html">Bundle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/CodingUserInfoKey.html">CodingUserInfoKey</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/Data.html">Data</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/FileHandle.html">FileHandle</a>
+              </li>
+              <li class="nav-group-task">
+                <a href="../Extensions/String.html">String</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Other%20Structs.html">Other Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Structs/DynamicPath.html">DynamicPath</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>Pathish</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Pathish</span> <span class="p">:</span> <span class="kt">Comparable</span><span class="p">,</span> <span class="kt">Hashable</span></code></pre>
+
+                </div>
+              </div>
+            <p>A type that represents a filesystem path, if you conform your type
+to <code>Pathish</code> it is your responsibility to ensure the string is correctly normalized</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishP6stringSSvp"></a>
+                    <a name="//apple_ref/swift/Property/string" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishP6stringSSvp">string</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The normalized string representation of the underlying filesystem path</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">string</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Filesystem%20Attributes"></a>
+                <a name="//apple_ref/swift/Section/Filesystem Attributes" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Filesystem%20Attributes"></a>
+                  <h3 class="section-name"><p>Filesystem Attributes</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE5ctime10Foundation4DateVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/ctime" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE5ctime10Foundation4DateVSgvp">ctime</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the creation-time of the file.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Returns <code>nil</code> if there is no creation-time, this should only happen if the file doesn’t exist.
+
+</div><div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    On Linux this is filesystem dependendent and may not exist.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">ctime</span><span class="p">:</span> <span class="kt">Date</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE5mtime10Foundation4DateVSgvp"></a>
+                    <a name="//apple_ref/swift/Property/mtime" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE5mtime10Foundation4DateVSgvp">mtime</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the modification-time of the file.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If this returns <code>nil</code> and the file exists, something is very wrong.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">mtime</span><span class="p">:</span> <span class="kt">Date</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4kindA2AV9EntryTypeOSgvp"></a>
+                    <a name="//apple_ref/swift/Property/kind" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4kindA2AV9EntryTypeOSgvp">kind</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type of the entry.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Structs/Path/EntryType.html">Path.EntryType</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@available(*, deprecated, message: "- SeeAlso: Path.type")</span>
+<span class="k">var</span> <span class="nv">kind</span><span class="p">:</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span><span class="o">.</span><span class="kt">EntryType</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4typeA2AV9EntryTypeOSgvp"></a>
+                    <a name="//apple_ref/swift/Property/type" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4typeA2AV9EntryTypeOSgvp">type</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type of the entry.</p>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Structs/Path/EntryType.html">Path.EntryType</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">type</span><span class="p">:</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span><span class="o">.</span><span class="kt">EntryType</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE5chmodyA2AVSiKF"></a>
+                    <a name="//apple_ref/swift/Method/chmod(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE5chmodyA2AVSiKF">chmod(_:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Sets the file’s attributes using UNIX octal notation.</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo"</span><span class="p">)</span><span class="o">.</span><span class="nf">chmod</span><span class="p">(</span><span class="mi">0</span><span class="n">o555</span><span class="p">)</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">chmod</span><span class="p">(</span><span class="n">_</span> <span class="nv">octal</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Filesystem%20Locking"></a>
+                <a name="//apple_ref/swift/Section/Filesystem Locking" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Filesystem%20Locking"></a>
+                  <h3 class="section-name"><p>Filesystem Locking</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4lockA2AVyKF"></a>
+                    <a name="//apple_ref/swift/Method/lock()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4lockA2AVyKF">lock()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Applies the macOS filesystem “lock” attribute.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If file is already locked, does nothing.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If file doesn’t exist, throws.
+
+</div><div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    On Linux does nothing.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">lock</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE6unlockA2AVyKF"></a>
+                    <a name="//apple_ref/swift/Method/unlock()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE6unlockA2AVyKF">unlock()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If file isn‘t locked, does nothing.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If file doesn’t exist, does nothing.
+
+</div><div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    On Linux does nothing.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4lockA2AVyKF">lock()</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">unlock</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/File%20Management"></a>
+                <a name="//apple_ref/swift/Section/File Management" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/File%20Management"></a>
+                  <h3 class="section-name"><p>File Management</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4copy2to9overwriteA2AVqd___SbtKAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/copy(to:overwrite:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4copy2to9overwriteA2AVqd___SbtKAaBRd__lF">copy(to:<wbr>overwrite:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Copies a file.</p>
+<pre class="highlight swift"><code><span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"foo"</span><span class="p">)</span>
+<span class="c1">// =&gt; "/Users/mxcl/foo"</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>throws</code> if <code>to</code> is a directory.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If either <code>self</code> or <code>to are directories,</code>overwrite` is ignored.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Throws if <code>overwrite</code> is <code>false</code> yet <code>to</code> is <em>already</em> identical to
+<code>self</code> because even though <em>Path.swift’s</em> policy is to noop if the desired
+end result preexists, checking for this condition is too expensive a
+trade-off.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4copy4into9overwriteA2AVqd___SbtKAaBRd__lF">copy(into:overwrite:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="n">copy</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">P</span><span class="p">,</span> <span class="nv">overwrite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Destination filename.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If <code>true</code> and both <code>self</code> and <code>to</code> are files, overwrites <code>to</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>to</code> to allow chaining</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4copy4into9overwriteA2AVqd___SbtKAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/copy(into:overwrite:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4copy4into9overwriteA2AVqd___SbtKAaBRd__lF">copy(into:<wbr>overwrite:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Copies a file into a directory</p>
+<pre class="highlight swift"><code><span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="o">.</span><span class="n">home</span><span class="p">)</span>
+<span class="c1">// =&gt; "/Users/mxcl/bar"</span>
+
+<span class="c1">// Create ~/.local/bin, copy `ls` there and make the new copy executable</span>
+<span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bin/ls"</span><span class="p">)</span><span class="o">.</span><span class="nf">copy</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">".local/bin"</span><span class="p">)</span><span class="o">.</span><span class="nf">mkdir</span><span class="p">(</span><span class="o">.</span><span class="n">p</span><span class="p">))</span><span class="o">.</span><span class="nf">chmod</span><span class="p">(</span><span class="mi">0</span><span class="n">o500</span><span class="p">)</span>
+</code></pre>
+
+<p>If the destination does not exist, this function creates the directory
+(including intermediary directories if necessary) first.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>throws</code> if <code>into</code> is a file.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Throws if <code>overwrite</code> is <code>false</code> yet <code>to</code> is <em>already</em> identical to
+<code>self</code> because even though <em>Path.swift’s</em> policy is to noop if the desired
+end result preexists, checking for this condition is too expensive a
+trade-off.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4copy2to9overwriteA2AVqd___SbtKAaBRd__lF">copy(to:overwrite:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="n">copy</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="kt">P</span><span class="p">,</span> <span class="nv">overwrite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>into</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Destination directory</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true overwrites any file that already exists at <code>into</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The <code><a href="../Structs/Path.html">Path</a></code> of the newly copied file.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4move2to9overwriteA2AVqd___SbtKAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/move(to:overwrite:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4move2to9overwriteA2AVqd___SbtKAaBRd__lF">move(to:<wbr>overwrite:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Moves a file.</p>
+<pre class="highlight swift"><code><span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">move</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">Path</span><span class="o">.</span><span class="n">home</span><span class="o">/</span><span class="s">"foo"</span><span class="p">)</span>
+<span class="c1">// =&gt; "/Users/mxcl/foo"</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>throws</code> if <code>to</code> is a directory.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Throws if <code>overwrite</code> is <code>false</code> yet <code>to</code> is <em>already</em> identical to
+<code>self</code> because even though <em>Path.swift’s</em> policy is to noop if the desired
+end result preexists, checking for this condition is too expensive a
+trade-off.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4move4into9overwriteA2AVqd___SbtKAaBRd__lF">move(into:overwrite:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="n">move</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kt">P</span><span class="p">,</span> <span class="nv">overwrite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Destination filename.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true overwrites any file that already exists at <code>to</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>to</code> to allow chaining</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4move4into9overwriteA2AVqd___SbtKAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/move(into:overwrite:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4move4into9overwriteA2AVqd___SbtKAaBRd__lF">move(into:<wbr>overwrite:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Moves a file into a directory</p>
+<pre class="highlight swift"><code><span class="k">try</span> <span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"bar"</span><span class="p">)</span><span class="o">.</span><span class="nf">move</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="o">.</span><span class="n">home</span><span class="p">)</span>
+<span class="c1">// =&gt; "/Users/mxcl/bar"</span>
+</code></pre>
+
+<p>If the destination does not exist, this function creates the directory
+(including intermediary directories if necessary) first.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>throws</code> if <code>into</code> is a file.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4move2to9overwriteA2AVqd___SbtKAaBRd__lF">move(to:overwrite:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="n">move</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">into</span><span class="p">:</span> <span class="kt">P</span><span class="p">,</span> <span class="nv">overwrite</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>into</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Destination directory</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>overwrite</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If true <em>overwrites</em> any file that already exists at <code>into</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The <code><a href="../Structs/Path.html">Path</a></code> of destination filename.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE6deleteyyKF"></a>
+                    <a name="//apple_ref/swift/Method/delete()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE6deleteyyKF">delete()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Deletes the path, recursively if a directory.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    noop: if the path doesn’t exist
+∵ <em>Path.swift</em> doesn’t error if desired end result preexists.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    On UNIX will this function will succeed if the parent directory is writable and the current user has permission.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    This function will fail if the file or directory is “locked”
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If entry is a symlink, deletes the symlink.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4lockA2AVyKF">lock()</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">func</span> <span class="nf">delete</span><span class="p">()</span> <span class="k">throws</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE5touchA2AVyKF"></a>
+                    <a name="//apple_ref/swift/Method/touch()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE5touchA2AVyKF">touch()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates an empty file at this path or if the file exists, updates its modification time.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">@inlinable</span>
+<span class="kd">func</span> <span class="nf">touch</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A copy of <code>self</code> to allow chaining.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE5mkdiryA2AVAA20MakeDirectoryOptionsOSgKF"></a>
+                    <a name="//apple_ref/swift/Method/mkdir(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE5mkdiryA2AVAA20MakeDirectoryOptionsOSgKF">mkdir(_:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates the directory at this path.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    We do not error if the directory already exists (even without <code>.p</code>)
+because <em>Path.swift</em> noops if the desired end result preexists.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">mkdir</span><span class="p">(</span><span class="n">_</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Enums/MakeDirectoryOptions.html">MakeDirectoryOptions</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Specify <code>mkdir(.p)</code> to create intermediary directories.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A copy of <code>self</code> to allow chaining.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE6rename2toA2AVSS_tKF"></a>
+                    <a name="//apple_ref/swift/Method/rename(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE6rename2toA2AVSS_tKF">rename(to:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Renames the file (basename only) at path.</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">foo</span><span class="o">.</span><span class="n">bar</span><span class="o">.</span><span class="nf">rename</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="s">"baz"</span><span class="p">)</span>  <span class="c1">// =&gt; /foo/baz</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="nf">rename</span><span class="p">(</span><span class="n">to</span> <span class="nv">newname</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>to</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the new basename for the file</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The renamed path.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE7symlink2asA2AVqd___tKAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/symlink(as:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE7symlink2asA2AVqd___tKAaBRd__lF">symlink(as:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a symlink of this file at <code>as</code>.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If <code>self</code> does not exist, is <strong>not</strong> an error.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="n">symlink</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">as</span><span class="p">:</span> <span class="kt">P</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE7symlink4intoA2AVqd___tKAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/symlink(into:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE7symlink4intoA2AVqd___tKAaBRd__lF">symlink(into:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Creates a symlink of this file with the same filename in the <code>into</code> directory.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If into does not exist, creates the directory with intermediate directories if necessary.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
+<span class="kd">func</span> <span class="n">symlink</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="n">into</span> <span class="nv">dir</span><span class="p">:</span> <span class="kt">P</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Directory%20Listing"></a>
+                <a name="//apple_ref/swift/Section/Directory Listing" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Directory%20Listing"></a>
+                  <h3 class="section-name"><p>Directory Listing</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE2lsySayA2AVGAA20ListDirectoryOptionsOSgF"></a>
+                    <a name="//apple_ref/swift/Method/ls(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE2lsySayA2AVGAA20ListDirectoryOptionsOSgF">ls(_:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Same as the <code>ls</code> command ∴ output is ”shallow” and unsorted.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    as per <code>ls</code>, by default we do <em>not</em> return hidden files. Specify <code>.a</code> for hidden files.
+
+</div><div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    On Linux the listing is always <code>ls -a</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">ls</span><span class="p">(</span><span class="n">_</span> <span class="nv">options</span><span class="p">:</span> <span class="kt"><a href="../Enums/ListDirectoryOptions.html">ListDirectoryOptions</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="kt"><a href="../Structs/Path.html">Path</a></span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>options</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Configure the listing.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4findA2AV6FinderCyF"></a>
+                    <a name="//apple_ref/swift/Method/find()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4findA2AV6FinderCyF">find()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Recursively find files under this path. If the path is a file, no files will be found.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">find</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span><span class="o">.</span><span class="kt">Finder</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Filesystem%20Properties"></a>
+                <a name="//apple_ref/swift/Section/Filesystem Properties" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Filesystem%20Properties"></a>
+                  <h3 class="section-name"><p>Filesystem Properties</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE6existsSbvp"></a>
+                    <a name="//apple_ref/swift/Property/exists" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE6existsSbvp">exists</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If <code>self</code> is a symlink the return value represents the destination, thus if the destination doesn’t exist this returns <code>false</code> even if the symlink exists.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    To determine if a symlink exists, use <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4typeA2AV9EntryTypeOSgvp">.type</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">exists</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the path represents an actual filesystem entry.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE6isFileSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isFile" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE6isFileSbvp">isFile</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the path represents an actual filesystem entry that is <em>not</em> a directory.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isFile</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE11isDirectorySbvp"></a>
+                    <a name="//apple_ref/swift/Property/isDirectory" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE11isDirectorySbvp">isDirectory</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the path represents an actual directory.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isDirectory</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE10isReadableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isReadable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE10isReadableSbvp">isReadable</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the path represents an actual file that is also readable by the current user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isReadable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE10isWritableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isWritable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE10isWritableSbvp">isWritable</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the path represents an actual file that is also writable by the current user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isWritable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE11isDeletableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isDeletable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE11isDeletableSbvp">isDeletable</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the path represents an actual file that is also deletable by the current user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isDeletable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE12isExecutableSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isExecutable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE12isExecutableSbvp">isExecutable</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns true if the path represents an actual file that is also executable by the current user.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isExecutable</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE9isSymlinkSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isSymlink" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE9isSymlinkSbvp">isSymlink</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns <code>true</code> if the file is a symbolic-link (symlink).</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isSymlink</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Filesystem%20Representation"></a>
+                <a name="//apple_ref/swift/Section/Filesystem Representation" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Filesystem%20Representation"></a>
+                  <h3 class="section-name"><p>Filesystem Representation</p>
+</h3>
+                </div>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE3url10Foundation3URLVvp"></a>
+                    <a name="//apple_ref/swift/Property/url" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE3url10Foundation3URLVvp">url</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a <code>URL</code> representing this file path.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE16fileReferenceURLSo5NSURLCSgvp"></a>
+                    <a name="//apple_ref/swift/Property/fileReferenceURL" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE16fileReferenceURLSo5NSURLCSgvp">fileReferenceURL</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a file-reference URL.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    Only NSURL can be a file-reference-URL, hence we return NSURL.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <a href="https://developer.apple.com/documentation/foundation/nsurl/1408631-filereferenceurl">https://developer.apple.com/documentation/foundation/nsurl/1408631-filereferenceurl</a>
+
+</div><div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    On Linux returns an file scheme NSURL for this path string.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">fileReferenceURL</span><span class="p">:</span> <span class="kt">NSURL</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE6parentA2AVvp"></a>
+                    <a name="//apple_ref/swift/Property/parent" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE6parentA2AVvp">parent</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the parent directory for this path.</p>
+
+<p>Path is not aware of the nature of the underlying file, but this is
+irrlevant since the operation is the same irrespective of this fact.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    always returns a valid path, <code>Path.root.parent</code> <em>is</em> <code><a href="../Structs/Path.html#/s:4PathAAV4rootAA07DynamicA0VvpZ">Path.root</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">parent</span><span class="p">:</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE9extensionSSvp"></a>
+                    <a name="//apple_ref/swift/Property/extension" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE9extensionSSvp">extension</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the filename extension of this path.</p>
+<div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    If there is no extension returns &ldquo;&rdquo;.
+
+</div><div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    If the filename ends with any number of &ldquo;.&rdquo;, returns &ldquo;&rdquo;.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    We special case eg. <code>foo.tar.gz</code>—there are a limited number of these specializations, feel free to PR more.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">var</span> <span class="err">`</span><span class="kd">extension</span><span class="err">`</span><span class="p">:</span> <span class="kt">String</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE10componentsSaySSGvp"></a>
+                    <a name="//apple_ref/swift/Property/components" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE10componentsSaySSGvp">components</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Splits the string representation on the directory separator.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    <code>NSString.pathComponents</code> will always return an initial <code>/</code> in its array for absolute paths to indicate that the path was absolute, we don’t do this because we are <em>always</em> absolute paths.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="k">var</span> <span class="nv">components</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE4joinyA2AVqd__SyRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/join(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE4joinyA2AVqd__SyRd__lF">join(_:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Joins a path and a string to produce a new path.</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span>             <span class="c1">// =&gt; /a</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"a/b"</span><span class="p">)</span>           <span class="c1">// =&gt; /a/b</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"b"</span><span class="p">)</span>   <span class="c1">// =&gt; /a/b</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"a"</span><span class="p">)</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"/b"</span><span class="p">)</span>  <span class="c1">// =&gt; /a/b</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>..</code> and <code>.</code> components are interpreted.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    pathComponent <em>may</em> be multiple components.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    symlinks are <em>not</em> resolved.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code>Path./(_:_:)</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">join</span><span class="o">&lt;</span><span class="kt">S</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">addendum</span><span class="p">:</span> <span class="kt">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">S</span> <span class="p">:</span> <span class="kt">StringProtocol</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>pathComponent</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The string to join with this path.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new joined path.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE1doiyA2AVx_qd__tSyRd__lFZ"></a>
+                    <a name="//apple_ref/swift/Method//(_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE1doiyA2AVx_qd__tSyRd__lFZ">/(_:<wbr>_:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Joins a path and a string to produce a new path.</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"a"</span>       <span class="c1">// =&gt; /a</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"a/b"</span>     <span class="c1">// =&gt; /a/b</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"a"</span><span class="o">/</span><span class="s">"b"</span>   <span class="c1">// =&gt; /a/b</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">/</span><span class="s">"a"</span><span class="o">/</span><span class="s">"/b"</span>  <span class="c1">// =&gt; /a/b</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>..</code> and <code>.</code> components are interpreted.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    pathComponent <em>may</em> be multiple components.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    symlinks are <em>not</em> resolved.
+
+</div><div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="../Protocols/Pathish.html#/s:4Path7PathishPAAE4joinyA2AVqd__SyRd__lF">join(_:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">@inlinable</span>
+<span class="kd">static</span> <span class="kd">func</span> <span class="o">/</span> <span class="o">&lt;</span><span class="kt">S</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">lhs</span><span class="p">:</span> <span class="k">Self</span><span class="p">,</span> <span class="nv">rhs</span><span class="p">:</span> <span class="kt">S</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span> <span class="k">where</span> <span class="kt">S</span> <span class="p">:</span> <span class="kt">StringProtocol</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>lhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base path to join with <code>rhs</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>rhs</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The string to join with this <code>lhs</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new joined path.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE8relative2toSSqd___tAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/relative(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE8relative2toSSqd___tAaBRd__lF">relative(to:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns a string representing the relative path to <code>base</code>.</p>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If <code>base</code> is not a logical prefix for <code>self</code> your result will be prefixed some number of <code>../</code> components.
+
+</div><div class="aside aside-to-do">
+    <p class="aside-title">To do</p>
+    Another variant that returns <code>nil</code> if result would start with <code>..</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">relative</span><span class="o">&lt;</span><span class="kt">P</span><span class="o">&gt;</span><span class="p">(</span><span class="n">to</span> <span class="nv">base</span><span class="p">:</span> <span class="kt">P</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="k">where</span> <span class="kt">P</span> <span class="p">:</span> <span class="kt">Pathish</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>base</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The base to which we calculate the relative path.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE8basename13dropExtensionSSSb_tF"></a>
+                    <a name="//apple_ref/swift/Method/basename(dropExtension:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE8basename13dropExtensionSSSb_tF">basename(dropExtension:<wbr>)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The basename for the provided file, optionally dropping the file extension.</p>
+<pre class="highlight swift"><code><span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo.swift"</span><span class="p">)</span><span class="o">.</span><span class="nf">basename</span><span class="p">()</span>  <span class="c1">// =&gt; "foo.swift"</span>
+<span class="kt">Path</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="nf">join</span><span class="p">(</span><span class="s">"foo.swift"</span><span class="p">)</span><span class="o">.</span><span class="nf">basename</span><span class="p">(</span><span class="nv">dropExtension</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>  <span class="c1">// =&gt; "foo"</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">basename</span><span class="p">(</span><span class="nv">dropExtension</span><span class="p">:</span> <span class="kt">Bool</span> <span class="o">=</span> <span class="kc">false</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>dropExtension</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>If <code>true</code> returns the basename without its file extension.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A string that is the filename’s basename.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE8readlinkA2AVyKF"></a>
+                    <a name="//apple_ref/swift/Method/readlink()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE8readlinkA2AVyKF">readlink()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>If the path represents an actual entry that is a symlink, returns the symlink’s
+absolute destination.</p>
+<div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    This is not exhaustive, the resulting path may still contain a symlink.
+
+</div><div class="aside aside-important">
+    <p class="aside-title">Important</p>
+    The path will only be different if the last path component is a symlink, any symlinks in prior components are not resolved.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If file exists but isn’t a symlink, returns <code>self</code>.
+
+</div><div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If symlink destination does not exist, is <strong>not</strong> an error.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">readlink</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:4Path7PathishPAAE8realpathA2AVyKF"></a>
+                    <a name="//apple_ref/swift/Method/realpath()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:4Path7PathishPAAE8realpathA2AVyKF">realpath()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Recursively resolves symlinks in this path.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">realpath</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Structs/Path.html">Path</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2020-08-20)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

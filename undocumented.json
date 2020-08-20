@@ -1,0 +1,12 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/travis/build/mxcl/Path.swift/Sources/Path+CommonDirectories.swift",
+      "line": 23,
+      "symbol": "Path.source(for:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.static",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/travis/build/mxcl/Path.swift"
+}
