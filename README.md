@@ -408,7 +408,15 @@ developers) it is snappy and familiar.
 SwiftPM:
 
 ```swift
-package.append(.package(url: "https://github.com/mxcl/Path.swift.git", from: "1.0.0"))
+package.append(
+    .package(url: "https://github.com/mxcl/Path.swift.git", from: "1.0.0")
+)
+
+package.targets.append(
+    .target(name: "Foo", dependencies: [
+        .product(name: "Path", package: "Path.swift")
+    ])
+)
 ```
 
 CocoaPods:
