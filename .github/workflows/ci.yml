@@ -14,13 +14,14 @@ jobs:
     strategy:
       matrix:
         xcode:
-      # - 10.3   # Swift 5.0 (doesn’t work on GHA macOS image :-/)
-        - 11.3   # Swift 5.1
+      # -  10.3  # Swift 5.0 (doesn’t work on GHA macOS image :-/)
+        -  11.3  # Swift 5.1
         - ^11.4  # Swift 5.2
+      # - ^12.5  # Swift 5.4 (not yet available on GHA)
     steps:
     - uses: actions/checkout@v2
     - name: setup-xcode
-      uses: maxim-lobanov/setup-xcode@1.0
+      uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: ${{ matrix.xcode }}
     - run: swift --version
@@ -36,7 +37,7 @@ jobs:
         - platform=macOS
     steps:
     - uses: actions/checkout@v2
-    - uses: maxim-lobanov/setup-xcode@1.0
+    - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: 12  # Swift 5.3
     - run: swift --version
@@ -62,7 +63,7 @@ jobs:
         action: build
   linux-4-2:
     needs: smoke
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
     - uses: fwal/setup-swift@v1
@@ -71,14 +72,15 @@ jobs:
     - run: swift test --parallel  # doesn’t support code coverage
   linux:
     needs: smoke
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
         swift:
         - 5.0.3
         - 5.1
         - 5.2
-      # - 5.3 not yet available sigh
+      # - 5.3  # 1 test fails
+      # - 5.4
     steps:
     - uses: actions/checkout@v2
     - uses: fwal/setup-swift@v1
