@@ -29,7 +29,8 @@ public extension Pathish {
         if overwrite, let tokind = to.type, tokind != .directory, type != .directory {
             try FileManager.default.removeItem(at: to.url)
         }
-    #if os(Linux) && !swift(>=5.3) // check if fixed
+    #if os(Linux)
+        //NOTE doing manually due to inconsistency in Linux Foundation behavior
         if !overwrite, to.type != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }
@@ -69,7 +70,8 @@ public extension Pathish {
         if overwrite, let kind = rv.type, kind != .directory {
             try FileManager.default.removeItem(at: rv.url)
         }
-    #if os(Linux) && !swift(>=5.3) // check if fixed
+    #if os(Linux)
+        //NOTE doing manually due to inconsistency in Linux Foundation behavior
         if !overwrite, rv.type != nil {
             throw CocoaError.error(.fileWriteFileExists)
         }

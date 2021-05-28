@@ -47,6 +47,7 @@ extension PathTests {
         ("testMoveTo", testMoveTo),
         ("testNoUndesiredSymlinkResolution", testNoUndesiredSymlinkResolution),
         ("testOptionalInitializer", testOptionalInitializer),
+        ("testParent", testParent),
         ("testPathComponents", testPathComponents),
         ("testReadlinkOnFileReturnsSelf", testReadlinkOnFileReturnsSelf),
         ("testReadlinkOnNonExistantFileThrows", testReadlinkOnNonExistantFileThrows),

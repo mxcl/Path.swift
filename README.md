@@ -45,16 +45,13 @@ try Bundle.resources.helper.copy(into: Path.root.usr.local.bin).chmod(0o500)
 We emphasize safety and correctness, just like Swift, and also (again like
 Swift), we provide a thoughtful and comprehensive (yet concise) API.
 
-# Support mxcl
+# Sponsor @mxcl
 
 Hi, I’m Max Howell and I have written a lot of open source software—generally
-a good deal of my free time 👨🏻‍💻.
+a good deal of my free time 👨🏻‍💻. Sponsorship helps me justify creating new open
+source and maintaining it. Thank you.
 
-<a href="https://www.patreon.com/mxcl">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
-
-[Other donation/tipping options](http://mxcl.dev/#donate)
+[Sponsor @mxcl].
 
 # Handbook
 
@@ -367,7 +364,7 @@ no filesystem entry there at all check if `type` is `nil`.
 
 Changing directory is dangerous, you should *always* try to avoid it and thus
 we don’t even provide the method. If you are executing a sub-process then
-use `Process.currentDirectoryURL` to change *its* working directory when it 
+use `Process.currentDirectoryURL` to change *its* working directory when it
 executes.
 
 If you must change directory then use `FileManager.changeCurrentDirectory` as
@@ -438,7 +435,7 @@ Carthage:
 
 
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20Linux%20%7C%20iOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg
-[badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.0%20%7C%205.1%20%7C%205.2%20%7C%205.3-orange.svg
+[badge-languages]: https://img.shields.io/badge/swift-4.2%20%7C%205.x-orange.svg
 [docs]: https://mxcl.dev/Path.swift/Structs/Path.html
 [badge-jazzy]: https://raw.githubusercontent.com/mxcl/Path.swift/gh-pages/badge.svg?sanitize=true
 [badge-codecov]: https://codecov.io/gh/mxcl/Path.swift/branch/master/graph/badge.svg
@@ -447,3 +444,4 @@ Carthage:
 [codecov]: https://codecov.io/gh/mxcl/Path.swift
 [badge-version]: https://img.shields.io/cocoapods/v/Path.swift.svg?label=version
 [cocoapods]: https://cocoapods.org/pods/Path.swift
+[Sponsor @mxcl]: https://github.com/sponsors/mxcl

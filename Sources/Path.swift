@@ -168,6 +168,7 @@ public extension Pathish {
      */
     var parent: Path {
         let index = string.lastIndex(of: "/")!
+        guard index != string.indices.startIndex else { return Path(string: "/") }
         let substr = string[string.indices.startIndex..<index]
         return Path(string: String(substr))
     }
