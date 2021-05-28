@@ -7,9 +7,12 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: sersoft-gmbh/swifty-docs-action@v1
+    - uses: steven0351/publish-jazzy-docs@v1
       with:
-        module-version: ${{ github.event.inputs.version }}
+        personal_access_token: ${{ secrets.PAT }}
+        config: .github/jazzy.yml
+        version: ${{ github.event.release.tag_name }}
+        history: false
 
   pods:
     runs-on: macos-latest
@@ -18,4 +21,4 @@ jobs:
     - run: pod trunk push --allow-warnings
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        VERSION: ${{ github.event.inputs.version }}
+        VERSION: ${{ github.event.release.tag_name }}
