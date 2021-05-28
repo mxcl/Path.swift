@@ -1,0 +1,21 @@
+name: CD
+on:
+  release:
+    types: published
+jobs:
+  docs:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: sersoft-gmbh/swifty-docs-action@v1
+      with:
+        module-version: ${{ github.event.inputs.version }}
+
+  pods:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: pod trunk push --allow-warnings
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        VERSION: ${{ github.event.inputs.version }}

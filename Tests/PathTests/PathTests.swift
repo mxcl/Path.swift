@@ -192,6 +192,14 @@ class PathTests: XCTestCase {
         XCTAssertEqual(Path.root/"a/foo"/"../../../bar", Path.root/"bar")
     }
 
+    func testParent() {
+        XCTAssertEqual(Path("/root/boot")!.parent.string, "/root")
+        XCTAssertEqual(Path("/root/boot")!.parent.parent.string, "/")
+        XCTAssertEqual(Path("/root/boot")!.parent.parent.parent.string, "/")
+        XCTAssertEqual(Path("/root")!.parent.string, "/")
+        XCTAssertEqual(Path("/root")!.parent.parent.string, "/")
+    }
+
     func testDynamicMember() {
         XCTAssertEqual(Path.root.Documents, Path.root/"Documents")
 
@@ -199,7 +207,7 @@ class PathTests: XCTestCase {
         XCTAssertEqual(a.Documents, Path.home/"foo/Documents")
 
         // verify use of the dynamic-member-subscript works according to our rules
-        XCTAssertEqual(Path.home[dynamicMember: "../~foo"].string, "\(Path.home.parent.string)/~foo")
+        XCTAssertEqual(Path.home[dynamicMember: "../~foo"].string, Path(Path.home).parent.join("~foo").string)
     }
 
     func testCopyTo() throws {
@@ -380,17 +388,13 @@ class PathTests: XCTestCase {
 
     func testTimes() throws {
         try Path.mktemp { tmpdir in
-            let foo = try tmpdir.foo.touch()
             let now1 = Date().timeIntervalSince1970.rounded(.down)
-        #if !os(Linux)
-            XCTAssertEqual(foo.ctime?.timeIntervalSince1970.rounded(.down), now1)  //FIXME flakey
-        #endif
-            XCTAssertEqual(foo.mtime?.timeIntervalSince1970.rounded(.down), now1)  //FIXME flakey
             sleep(1)
-            try foo.touch()
-            let now2 = Date().timeIntervalSince1970.rounded(.down)
-            XCTAssertNotEqual(now1, now2)
-            XCTAssertEqual(foo.mtime?.timeIntervalSince1970.rounded(.down), now2)  //FIXME flakey
+            let foo = try tmpdir.foo.touch()
+        #if !os(Linux)
+            XCTAssertGreaterThan(foo.ctime?.timeIntervalSince1970.rounded(.down) ?? 0, now1)  //FIXME flakey
+        #endif
+            XCTAssertGreaterThan(foo.mtime?.timeIntervalSince1970.rounded(.down) ?? 0, now1)  //FIXME flakey
 
             XCTAssertNil(tmpdir.void.mtime)
             XCTAssertNil(tmpdir.void.ctime)
@@ -454,7 +458,7 @@ class PathTests: XCTestCase {
         #if os(macOS)
             XCTAssertEqual(bndl.defaultSharedFrameworksPath, tmpdir.Contents.Frameworks)
             XCTAssertEqual(bndl.defaultResourcesPath, tmpdir.Contents.Resources)
-        #elseif os(tvOS) || os(iOS)
+        #elseif os(tvOS) || os(iOS) || os(watchOS)
             XCTAssertEqual(bndl.defaultSharedFrameworksPath, tmpdir.Frameworks)
             XCTAssertEqual(bndl.defaultResourcesPath, tmpdir)
         #else
@@ -506,8 +510,19 @@ class PathTests: XCTestCase {
 
     func testTouchThrowsIfCannotWrite() throws {
         try Path.mktemp { tmpdir in
+
+            print(try FileManager.default.attributesOfItem(atPath: tmpdir.string)[.posixPermissions])
+
+            //FIXME fails in Docker image (only)
             try tmpdir.chmod(0o000)
+
+            let attrs = try FileManager.default.attributesOfItem(atPath: tmpdir.string)
+            XCTAssertEqual(attrs[.posixPermissions] as? Int, 0)
+
+            print(attrs[.posixPermissions])
+
             XCTAssertThrowsError(try tmpdir.bar.touch())
+            XCTAssertFalse(tmpdir.bar.exists)
         }
     }
 
