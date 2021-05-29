@@ -1,5 +1,11 @@
 name: CI
-on: pull_request
+on:
+  pull_request:
+    paths:
+      - '**/*.swift'
+      - .github/workflows/ci.yml
+  schedule:
+    - cron: '3 3 * * 5'  # 3:03 AM, every Friday
 jobs:
   smoke:
     runs-on: macos-latest
@@ -10,7 +16,7 @@ jobs:
     - run: git diff --exit-code
 
   apple:
-    runs-on: macos-latest
+    runs-on: macos-10.15
     strategy:
       matrix:
         destination:
@@ -34,50 +40,46 @@ jobs:
     - uses: codecov/codecov-action@v1
 
   linux-swift-4:
-    name: linux (4.2)
-    runs-on: ubuntu-18.04
+    name: linux (${{ matrix.swift }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        swift: ['4.2', '5.0']
+    container:
+      image: swift:${{ matrix.swift }}
     steps:
-    - uses: fwal/setup-swift@v1
-      with:
-        swift-version: 4.2
     - uses: actions/checkout@v2
-    - run: swift test --parallel
+    - run: useradd -ms /bin/bash mxcl
+    - run: chown -R mxcl .
+    - run: su mxcl -c 'swift test --parallel'
 
   linux:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         swift:
-        - '5.0'
         - '5.1'
         - '5.2'
         - '5.3'
+        - '5.4'
+    container:
+      image: swift:${{ matrix.swift }}
     steps:
-    - uses: fwal/setup-swift@v1
-      with:
-        swift-version: ${{ matrix.swift }}
     - uses: actions/checkout@v2
-    - run: swift test --parallel --enable-code-coverage
-    - name: Generate Coverage Report
+    - run: useradd -ms /bin/bash mxcl
+           # ^^ we need to be a normal user and not root for the tests to be valid
+    - run: chown -R mxcl .
+    - run: su mxcl -c 'swift test --parallel --enable-code-coverage'
+    - name: Generate `.lcov`
       run: |
-        sudo apt-get -qq update && sudo apt-get -qq install llvm-10
-        export b=$(swift build --show-bin-path) && llvm-cov-10 \
-          export -format lcov \
-          -instr-profile=$b/codecov/default.profdata \
-          --ignore-filename-regex='\.build/' \
-          $b/Path.swiftPackageTests.xctest \
+        apt-get -qq update && apt-get -qq install curl
+        b=$(swift build --show-bin-path)
+        llvm-cov export \
+          -format lcov \
+          -instr-profile="$b"/codecov/default.profdata \
+          --ignore-filename-regex='\.build|Tests' \
+          "$b"/*.xctest \
           > info.lcov
     - uses: codecov/codecov-action@v1
       with:
         file: ./info.lcov
-
-  # code coverage fails with 5.4 for some reason
-  linux-swift-5-4:
-    name: linux (5.4)
-    runs-on: ubuntu-18.04
-    steps:
-    - uses: fwal/setup-swift@v1
-      with:
-        swift-version: 5.4
-    - uses: actions/checkout@v2
-    - run: swift test --parallel
