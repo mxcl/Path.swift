@@ -1,14 +1,13 @@
-name: Checks
 on:
   push:
     branches:
       - master
     paths:
-      - Sources/**
-      - Tests/**
+      - '**/*.swift'
+      - .github/workflows/checks.yml
 jobs:
-  macOS:
-    runs-on: macos-latest
+  smoke:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - run: swift --version
