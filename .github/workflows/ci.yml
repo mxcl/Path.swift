@@ -16,27 +16,20 @@ jobs:
     - run: git diff --exit-code
 
   apple:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     strategy:
       matrix:
-        destination:
-        - platform=iOS Simulator,OS=latest,name=iPhone 12
-        - platform=tvOS Simulator,OS=latest,name=Apple TV
-      # - platform=watchOS Simulator,OS=latest,name=Apple Watch Series 5 - 40mm
-        # ^^ coming with Xcode 12.5 which is not yet available on GHA
-        - platform=macOS
+        platform:
+        - iOS
+        - tvOS
+        - macOS
+        - watchOS
     steps:
     - uses: actions/checkout@v2
-    - uses: maxim-lobanov/setup-xcode@v1
+    - uses: mxcl/xcodebuild@v1
       with:
-        xcode-version: 12.4
-    - run: swift package generate-xcodeproj --enable-code-coverage
-    - uses: sersoft-gmbh/xcodebuild-action@v1
-      with:
-        project: Path.swift.xcodeproj
-        scheme: Path.swift-Package
-        destination: ${{ matrix.destination }}
-        action: test
+        platform: ${{ matrix.platform }}
+        code-coverage: true
     - uses: codecov/codecov-action@v1
 
   linux-swift-4:
