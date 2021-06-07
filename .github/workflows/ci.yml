@@ -30,6 +30,7 @@ jobs:
       with:
         platform: ${{ matrix.platform }}
         code-coverage: true
+        warnings-as-errors: true
     - uses: codecov/codecov-action@v1
 
   linux-swift-4:
