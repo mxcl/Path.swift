@@ -1,4 +1,5 @@
 name: CI
+
 on:
   pull_request:
     paths:
@@ -6,17 +7,22 @@ on:
       - .github/workflows/ci.yml
   schedule:
     - cron: '3 3 * * 5'  # 3:03 AM, every Friday
+
+concurrency:
+  group: ${{ github.head_ref || 'scheduled' }}
+  cancel-in-progress: true
+
 jobs:
   smoke:
     runs-on: macos-latest
     steps:
-    - uses: technote-space/auto-cancel-redundant-job@v1
     - uses: actions/checkout@v2
     - run: swift test --generate-linuxmain
     - run: git diff --exit-code
 
   apple:
     runs-on: macos-latest
+    name: ${{ matrix.platform }}
     strategy:
       matrix:
         platform:
@@ -33,38 +39,36 @@ jobs:
         warnings-as-errors: true
     - uses: codecov/codecov-action@v1
 
-  linux-swift-4:
-    name: linux (${{ matrix.swift }})
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        swift: ['4.2', '5.0']
-    container:
-      image: swift:${{ matrix.swift }}
-    steps:
-    - uses: actions/checkout@v2
-    - run: useradd -ms /bin/bash mxcl
-    - run: chown -R mxcl .
-    - run: su mxcl -c 'swift test --parallel'
-
   linux:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         swift:
-        - '5.1'
-        - '5.2'
-        - '5.3'
-        - '5.4'
+          - swift:5.1
+          - swift:5.2
+          - swift:5.3
+          - swift:5.4
+          - swiftlang/swift:nightly-5.5
+        code-cov:
+          - true
+        include:
+          - swift: swift:4.2
+            code-cov: false
+          - swift: swift:5.0
+            code-cov: false
     container:
-      image: swift:${{ matrix.swift }}
+      image: ${{ matrix.swift }}
     steps:
     - uses: actions/checkout@v2
-    - run: useradd -ms /bin/bash mxcl
-           # ^^ we need to be a normal user and not root for the tests to be valid
-    - run: chown -R mxcl .
-    - run: su mxcl -c 'swift test --parallel --enable-code-coverage'
+    - run: |
+        useradd -ms /bin/bash mxcl
+        chown -R mxcl .
+      # ^^ we need to be a normal user and not root for the tests to be valid
+    - run: su mxcl -c "swift test --parallel $ARGS"
+      env:
+        ARGS: ${{ matrix.code-cov && '--enable-code-coverage' || '' }}
     - name: Generate `.lcov`
+      if: ${{ matrix.code-cov }}
       run: |
         apt-get -qq update && apt-get -qq install curl
         b=$(swift build --show-bin-path)
@@ -75,5 +79,14 @@ jobs:
           "$b"/*.xctest \
           > info.lcov
     - uses: codecov/codecov-action@v1
+      if: ${{ matrix.code-cov }}
       with:
         file: ./info.lcov
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: seanmiddleditch/gha-setup-vsdevenv@v3
+      - uses: mxcl/setup-swift@v1
+      - uses: actions/checkout@v2
+      - run: swift test --parallel
