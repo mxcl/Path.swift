@@ -45,6 +45,7 @@ extension PathTests {
         ("testMktemp", testMktemp),
         ("testMoveInto", testMoveInto),
         ("testMoveTo", testMoveTo),
+        ("testNewStuff", testNewStuff),
         ("testNoUndesiredSymlinkResolution", testNoUndesiredSymlinkResolution),
         ("testOptionalInitializer", testOptionalInitializer),
         ("testParent", testParent),
