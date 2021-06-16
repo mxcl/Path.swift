@@ -108,3 +108,13 @@ func defaultUrl(for searchPath: FileManager.SearchPathDirectory) -> DynamicPath 
 }
 #endif
 
+#if swift(>=5.5)
+extension Pathish where Self == Path {
+    static var home: DynamicPath { Path.home }
+    static var root: DynamicPath { Path.root }
+    static var cwd: DynamicPath { Path.cwd }
+    static var documents: DynamicPath { Path.documents }
+    static var caches: DynamicPath { Path.caches }
+    static var applicationSupport: DynamicPath { Path.applicationSupport }
+}
+#endif

@@ -3,7 +3,20 @@ import func XCTest.XCTAssertEqual
 import Foundation
 import XCTest
 
+extension PathStruct {
+    var foo: Int { fatalError()}
+}
+
 class PathTests: XCTestCase {
+    func testNewStuff() {
+    #if swift(>=5.5)
+        func foo<P: Pathish>(_ path: P) {}
+
+        foo(.home)
+        foo(.root)
+    #endif
+    }
+
     func testConcatenation() {
         XCTAssertEqual((Path.root/"bar").string, "/bar")
         XCTAssertEqual(Path.cwd.string, FileManager.default.currentDirectoryPath)

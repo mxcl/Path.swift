@@ -7,6 +7,8 @@ import func Glibc.realpath
 let _realpath = Glibc.realpath
 #endif
 
+public typealias PathStruct = Path
+
 /**
  A `Path` represents an absolute path on a filesystem.
 

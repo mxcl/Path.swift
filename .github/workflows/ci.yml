@@ -6,11 +6,13 @@ on:
       - .github/workflows/ci.yml
   schedule:
     - cron: '3 3 * * 5'  # 3:03 AM, every Friday
+concurrency:
+  group: ${{ github.head_ref || 'push' }}
+  cancel-in-progress: true
 jobs:
   smoke:
     runs-on: macos-latest
     steps:
-    - uses: technote-space/auto-cancel-redundant-job@v1
     - uses: actions/checkout@v2
     - run: swift test --generate-linuxmain
     - run: git diff --exit-code
