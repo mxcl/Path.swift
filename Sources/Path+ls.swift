@@ -198,6 +198,6 @@ public extension Array where Element == Path {
 
 /// Options for `Path.ls(_:)`
 public enum ListDirectoryOptions {
-    /// Creates intermediary directories; works the same as `mkdir -p`.
+    /// Lists hidden files also
     case a
 }
