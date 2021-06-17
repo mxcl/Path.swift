@@ -1,16 +1,16 @@
 import Foundation
 
 /// The `extension` that provides static properties that are common directories.
-extension Path {
+private enum Foo {
     //MARK: Common Directories
 
     /// Returns a `Path` containing `FileManager.default.currentDirectoryPath`.
-    public static var cwd: DynamicPath {
+    static var cwd: DynamicPath {
         return .init(string: FileManager.default.currentDirectoryPath)
     }
 
     /// Returns a `Path` representing the root path.
-    public static var root: DynamicPath {
+    static var root: DynamicPath {
         return .init(string: "/")
     }
 
@@ -27,7 +27,7 @@ extension Path {
 #endif
 
     /// Returns a `Path` representing the user’s home directory
-    public static var home: DynamicPath {
+    static var home: DynamicPath {
         let string: String
       #if os(macOS)
         if #available(OSX 10.12, *) {
@@ -70,7 +70,7 @@ extension Path {
      - Note: There is no standard location for documents on Linux, thus we return `~/Documents`.
      - Note: You should create a subdirectory before creating any files.
      */
-    public static var documents: DynamicPath {
+    static var documents: DynamicPath {
         return path(for: .documentDirectory)
     }
 
@@ -79,7 +79,7 @@ extension Path {
      - Note: On Linux this is `XDG_CACHE_HOME`.
      - Note: You should create a subdirectory before creating any files.
      */
-    public static var caches: DynamicPath {
+    static var caches: DynamicPath {
         return path(for: .cachesDirectory)
     }
 
@@ -88,7 +88,7 @@ extension Path {
      - Note: On Linux is `XDG_DATA_HOME`.
      - Note: You should create a subdirectory before creating any files.
      */
-    public static var applicationSupport: DynamicPath {
+    static var applicationSupport: DynamicPath {
         return path(for: .applicationSupportDirectory)
     }
 }
@@ -108,13 +108,35 @@ func defaultUrl(for searchPath: FileManager.SearchPathDirectory) -> DynamicPath 
 }
 #endif
 
+/// The `extension` that provides static properties that are common directories.
 #if swift(>=5.5)
-extension Pathish where Self == Path {
-    static var home: DynamicPath { Path.home }
-    static var root: DynamicPath { Path.root }
-    static var cwd: DynamicPath { Path.cwd }
-    static var documents: DynamicPath { Path.documents }
-    static var caches: DynamicPath { Path.caches }
-    static var applicationSupport: DynamicPath { Path.applicationSupport }
+public extension Pathish where Self == Path {
+    static var home: DynamicPath { return Foo.home }
+    static var root: DynamicPath { return Foo.root }
+    static var cwd: DynamicPath { return Foo.cwd }
+    static var documents: DynamicPath { return Foo.documents }
+    static var caches: DynamicPath { return Foo.caches }
+    static var applicationSupport: DynamicPath { return Foo.applicationSupport }
+    static func source(for filePath: String = #filePath) -> (file: DynamicPath, directory: DynamicPath) {
+        return Foo.source(for: filePath)
+    }
+}
+#else
+public extension Path {
+    static var home: DynamicPath { return Foo.home }
+    static var root: DynamicPath { return Foo.root }
+    static var cwd: DynamicPath { return Foo.cwd }
+    static var documents: DynamicPath { return Foo.documents }
+    static var caches: DynamicPath { return Foo.caches }
+    static var applicationSupport: DynamicPath { return Foo.applicationSupport }
+#if swift(>=5.3)
+    static func source(for filePath: String = #filePath) -> (file: DynamicPath, directory: DynamicPath) {
+        return Foo.source(for: filePath)
+    }
+#else
+    static func source(for file: String = #file) -> (file: DynamicPath, directory: DynamicPath) {
+        return Foo.source(for: file)
+    }
+#endif
 }
 #endif

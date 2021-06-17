@@ -54,12 +54,13 @@ jobs:
     strategy:
       matrix:
         swift:
-        - '5.1'
-        - '5.2'
-        - '5.3'
-        - '5.4'
+        - swift:5.1
+        - swift:5.2
+        - swift:5.3
+        - swift:5.4
+        - swiftlang/swift:nightly-5.5
     container:
-      image: swift:${{ matrix.swift }}
+      image: ${{ matrix.swift }}
     steps:
     - uses: actions/checkout@v2
     - run: useradd -ms /bin/bash mxcl
