@@ -136,6 +136,27 @@ extension PathTests {
         }
     }
 
+    func testFindHidden() throws {
+        try Path.mktemp { tmpdir in
+            let dotFoo = try tmpdir.join(".foo.txt").touch()
+            let tmpDotA = try tmpdir.join(".a").mkdir()
+            let tmpDotAFoo = try tmpdir.join(".a").join("foo.txt").touch()
+            let tmpB = try tmpdir.b.mkdir()
+            let tmpBFoo = try tmpdir.b.join("foo.txt").touch()
+
+            XCTAssertEqual(
+                Set(tmpdir.find().hidden(true)),
+                Set([dotFoo,tmpDotA,tmpDotAFoo,tmpB,tmpBFoo]),
+                relativeTo: tmpdir)
+            
+            XCTAssertEqual(
+                Set(tmpdir.find().hidden(false)),
+                Set([tmpB,tmpBFoo]),
+                relativeTo: tmpdir)
+                    
+        }
+    }
+    
     func testFindExtension() throws {
         try Path.mktemp { tmpdir in
             try tmpdir.join("foo.json").touch()

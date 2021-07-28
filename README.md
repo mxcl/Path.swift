@@ -227,7 +227,7 @@ We provide `find()` for recursive listing:
 
 ```swift
 for path in Path.home.find() {
-    // descends all directories, and includes hidden files
+    // descends all directories, and includes hidden files by default
     // so it behaves the same as the terminal command `find`
 }
 ```
@@ -235,7 +235,7 @@ for path in Path.home.find() {
 It is configurable:
 
 ```swift
-for path in Path.home.find().depth(max: 1).extension("swift").type(.file) {
+for path in Path.home.find().depth(max: 1).extension("swift").type(.file).hidden(false) {
     //…
 }
 ```
