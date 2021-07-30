@@ -149,11 +149,12 @@ extension PathTests {
                 Set([dotFoo,tmpDotA,tmpDotAFoo,tmpB,tmpBFoo]),
                 relativeTo: tmpdir)
             
+            #if !os(Linux) || swift(>=5)
             XCTAssertEqual(
                 Set(tmpdir.find().hidden(false)),
                 Set([tmpB,tmpBFoo]),
                 relativeTo: tmpdir)
-                    
+            #endif
         }
     }
     

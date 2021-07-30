@@ -53,12 +53,12 @@ extension Path.Finder: Sequence, IteratorProtocol {
             if enumerator.level < depth.lowerBound {
                 continue
             }
-          #endif
-
+          
             if !hidden, path.basename().hasPrefix(".") {
                 enumerator.skipDescendants()
                 continue
             }
+          #endif
             if let type = path.type, !types.contains(type) { continue }
             if let exts = extensions, !exts.contains(path.extension) { continue }
             return path
@@ -124,6 +124,9 @@ public extension Path.Finder {
     
     /// Whether to skip hidden files and folders.
     func hidden(_ hidden: Bool) -> Path.Finder {
+        #if os(Linux) && !swift(>=5.0)
+          fputs("warning: hidden not implemented for Swift < 5\n", stderr)
+        #endif
         self.hidden = hidden
         return self
     }
