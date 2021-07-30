@@ -31,6 +31,9 @@ public extension Path {
 
         /// The file extensions find operations will return. Files *and* directories unless you filter for `kinds`.
         private(set) public var extensions: Set<String>?
+        
+        /// Whether to return hidden files
+        public var hidden:Bool = true
     }
 }
 
@@ -50,8 +53,12 @@ extension Path.Finder: Sequence, IteratorProtocol {
             if enumerator.level < depth.lowerBound {
                 continue
             }
+          
+            if !hidden, path.basename().hasPrefix(".") {
+                enumerator.skipDescendants()
+                continue
+            }
           #endif
-
             if let type = path.type, !types.contains(type) { continue }
             if let exts = extensions, !exts.contains(path.extension) { continue }
             return path
@@ -112,6 +119,15 @@ public extension Path.Finder {
     func `extension`(_ ext: String) -> Path.Finder {
         extensions = extensions ?? []
         extensions!.insert(ext)
+        return self
+    }
+    
+    /// Whether to skip hidden files and folders.
+    func hidden(_ hidden: Bool) -> Path.Finder {
+        #if os(Linux) && !swift(>=5.0)
+          fputs("warning: hidden not implemented for Swift < 5\n", stderr)
+        #endif
+        self.hidden = hidden
         return self
     }
 

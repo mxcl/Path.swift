@@ -29,6 +29,7 @@ extension PathTests {
         ("testFindDepthRange", testFindDepthRange),
         ("testFindExecute", testFindExecute),
         ("testFindExtension", testFindExtension),
+        ("testFindHidden", testFindHidden),
         ("testFindMaxDepth1", testFindMaxDepth1),
         ("testFindMaxDepth2", testFindMaxDepth2),
         ("testFindMinDepth", testFindMinDepth),
