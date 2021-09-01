@@ -1,3 +1,0 @@
-ignore:
-  - Tests/PathTests/etc.swift
-  - Tests/PathTests/TemporaryDirectory.swift
