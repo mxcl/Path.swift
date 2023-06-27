@@ -426,6 +426,10 @@ Carthage:
 
 > Waiting on: [@Carthage#1945](https://github.com/Carthage/Carthage/pull/1945).
 
+# Naming Conflicts with `SwiftUI.Path`, etc.
+
+We have a typealias of `PathStruct` you can use instead.
+
 # Alternatives
 
 * [Pathos](https://github.com/dduan/Pathos) by Daniel Duan
