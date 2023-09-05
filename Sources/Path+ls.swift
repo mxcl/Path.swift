@@ -5,7 +5,7 @@ public extension Path {
     class Finder {
         fileprivate init(path: Path) {
             self.path = path
-            self.enumerator = FileManager.default.enumerator(atPath: path.string)
+            self.enumerator = FileManager.default.enumerator(at: path.url, includingPropertiesForKeys: [.isDirectoryKey])
         }
 
         /// The `path` find operations operate on.
@@ -42,8 +42,8 @@ extension Path.Finder: Sequence, IteratorProtocol {
         guard let enumerator = enumerator else {
             return nil
         }
-        while let relativePath = enumerator.nextObject() as? String {
-            let path = self.path/relativePath
+        while let url = enumerator.nextObject() as? URL {
+            guard let path = Path(url: url) else { continue }
 
           #if !os(Linux) || swift(>=5.0)
             if enumerator.level > depth.upperBound {
@@ -55,7 +55,9 @@ extension Path.Finder: Sequence, IteratorProtocol {
             }
           
             if !hidden, path.basename().hasPrefix(".") {
-                enumerator.skipDescendants()
+                if url.isDirectory {
+                    enumerator.skipDescendants()
+                }
                 continue
             }
           #endif
@@ -216,4 +218,10 @@ public extension Array where Element == Path {
 public enum ListDirectoryOptions {
     /// Lists hidden files also
     case a
+}
+
+private extension URL {
+    var isDirectory: Bool {
+        (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
+    }
 }
