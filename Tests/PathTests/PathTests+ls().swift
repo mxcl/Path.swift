@@ -157,6 +157,31 @@ extension PathTests {
             #endif
         }
     }
+
+    func testFindHiddenFileAlongsideDirectory() throws {
+        try Path.mktemp { tmpdir in
+            let dotFoo = try tmpdir.join(".foo.txt").touch()
+            let tmpDotA = try tmpdir.join(".a").mkdir()
+            let tmpDotAFoo = try tmpdir.join(".a").join("foo.txt").touch()
+            let tmpB = try tmpdir.b.mkdir()
+            let tmpBFoo = try tmpB.join("foo.txt").touch()
+            let dotBar = try tmpB.join(".bar.txt").touch()
+            let tmpC = try tmpdir.b.c.mkdir()
+            let bar = try tmpC.join("bar.txt").touch()
+
+            XCTAssertEqual(
+                Set(tmpdir.find().hidden(true)),
+                Set([dotFoo,tmpDotA,tmpDotAFoo,tmpB,tmpBFoo,tmpC,dotBar,bar]),
+                relativeTo: tmpdir)
+            
+            #if !os(Linux) || swift(>=5)
+            XCTAssertEqual(
+                Set(tmpdir.find().hidden(false)),
+                Set([tmpB,tmpBFoo,tmpC,bar]),
+                relativeTo: tmpdir)
+            #endif
+        }
+    }
     
     func testFindExtension() throws {
         try Path.mktemp { tmpdir in
