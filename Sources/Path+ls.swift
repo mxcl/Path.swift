@@ -255,6 +255,6 @@ public enum ListDirectoryOptions {
 
 private extension URL {
     var isDirectory: Bool {
-        (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
+        return (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
     }
 }
