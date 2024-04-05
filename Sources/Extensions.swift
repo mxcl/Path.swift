@@ -9,6 +9,13 @@ public extension Bundle {
         return str.flatMap(Path.init)
     }
 
+    /// Returns the path for requested resource in this bundle.
+    func path2(forResource: String, ofType: String?, inDirectory: String?) -> Path? {
+        let f: (String?, String?, String?) -> String? = path(forResource:ofType:inDirectory:)
+        let str = f(forResource, ofType, inDirectory)
+        return str.flatMap(Path.init)
+    }
+
     /**
      Returns the path for the shared-frameworks directory in this bundle.
      - Note: This is typically `ShareFrameworks`
