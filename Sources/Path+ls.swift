@@ -169,6 +169,7 @@ public extension Pathish {
      - Note: as per `ls`, by default we do *not* return hidden files. Specify `.a` for hidden files.
      - Parameter options: Configure the listing.
      - Important: On Linux the listing is always `ls -a`
+     - WARNING: we actually sort the output :( sorry. Will fix in a major version bump.
      */
     func ls(_ options: ListDirectoryOptions? = nil) -> [Path] {
         guard let urls = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) else {
