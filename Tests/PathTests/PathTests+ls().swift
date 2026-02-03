@@ -286,8 +286,8 @@ extension PathTests {
             XCTAssertEqual(sortedWithHidden[1].basename(), "another.txt")
             XCTAssertEqual(sortedWithHidden[2].basename(), "visible.txt")
             
-            // Test .a_unsorted (unsorted with hidden)
-            let unsortedWithHidden = tmpdir.ls(.a_unsorted)
+            // Test .aUnsorted (unsorted with hidden)
+            let unsortedWithHidden = tmpdir.ls(.aUnsorted)
             XCTAssertEqual(unsortedWithHidden.count, 3)
             XCTAssertTrue(unsortedWithHidden.contains(tmpdir.join("visible.txt")))
             XCTAssertTrue(unsortedWithHidden.contains(tmpdir.join(".hidden.txt")))

@@ -171,7 +171,7 @@ public extension Pathish {
      - Parameter options: Configure the listing.
      - Important: On Linux the listing is always `ls -a`
      - WARNING: ⚠️ **PERFORMANCE**: By default, output is sorted using locale-specific sorting which can be **VERY EXPENSIVE** 
-       for large directories (0.5+ seconds). For better performance, use `.unsorted` or `.a_unsorted` options.
+       for large directories (0.5+ seconds). For better performance, use `.unsorted` or `.aUnsorted` options.
      - Note: Sorting will be removed by default in the next major version bump.
      */
     func ls(_ options: ListDirectoryOptions? = nil) -> [Path] {
@@ -187,7 +187,7 @@ public extension Pathish {
         case .a:
             shouldSort = true
             includeHidden = true
-        case .a_unsorted:
+        case .aUnsorted:
             shouldSort = false
             includeHidden = true
         case .unsorted:
@@ -242,7 +242,7 @@ public enum ListDirectoryOptions {
     /// Lists hidden files also
     case a
     /// Lists hidden files also without sorting
-    case a_unsorted
+    case aUnsorted
     /// Disables sorting for better performance
     /// - WARNING: Sorting is locale-specific and can be expensive for large directories.
     ///   Use this option when you don't need sorted output and performance is critical.
