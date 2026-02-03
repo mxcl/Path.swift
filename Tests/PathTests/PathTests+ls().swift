@@ -248,4 +248,57 @@ extension PathTests {
             XCTAssertNil(tmpdir.a.find().next())
         }
     }
+    
+    func testLsUnsortedOption() throws {
+        try Path.mktemp { tmpdir in
+            // Create files with names that would be sorted differently
+            try tmpdir.join("zebra.txt").touch()
+            try tmpdir.join("apple.txt").touch()
+            try tmpdir.join("banana.txt").touch()
+            
+            // Test default (sorted) behavior
+            let sortedResults = tmpdir.ls()
+            XCTAssertEqual(sortedResults.count, 3)
+            XCTAssertEqual(sortedResults[0].basename(), "apple.txt")
+            XCTAssertEqual(sortedResults[1].basename(), "banana.txt")
+            XCTAssertEqual(sortedResults[2].basename(), "zebra.txt")
+            
+            // Test unsorted behavior - just verify we get all files, order doesn't matter
+            let unsortedResults = tmpdir.ls(.unsorted)
+            XCTAssertEqual(unsortedResults.count, 3)
+            XCTAssertTrue(unsortedResults.contains(tmpdir.join("apple.txt")))
+            XCTAssertTrue(unsortedResults.contains(tmpdir.join("banana.txt")))
+            XCTAssertTrue(unsortedResults.contains(tmpdir.join("zebra.txt")))
+        }
+    }
+    
+    func testLsUnsortedWithHidden() throws {
+        try Path.mktemp { tmpdir in
+            // Create regular and hidden files
+            try tmpdir.join("visible.txt").touch()
+            try tmpdir.join(".hidden.txt").touch()
+            try tmpdir.join("another.txt").touch()
+            
+            // Test .a (sorted with hidden)
+            let sortedWithHidden = tmpdir.ls(.a)
+            XCTAssertEqual(sortedWithHidden.count, 3)
+            XCTAssertEqual(sortedWithHidden[0].basename(), ".hidden.txt")
+            XCTAssertEqual(sortedWithHidden[1].basename(), "another.txt")
+            XCTAssertEqual(sortedWithHidden[2].basename(), "visible.txt")
+            
+            // Test .a_unsorted (unsorted with hidden)
+            let unsortedWithHidden = tmpdir.ls(.a_unsorted)
+            XCTAssertEqual(unsortedWithHidden.count, 3)
+            XCTAssertTrue(unsortedWithHidden.contains(tmpdir.join("visible.txt")))
+            XCTAssertTrue(unsortedWithHidden.contains(tmpdir.join(".hidden.txt")))
+            XCTAssertTrue(unsortedWithHidden.contains(tmpdir.join("another.txt")))
+            
+            // Test .unsorted (unsorted without hidden)
+            let unsortedNoHidden = tmpdir.ls(.unsorted)
+            XCTAssertEqual(unsortedNoHidden.count, 2)
+            XCTAssertTrue(unsortedNoHidden.contains(tmpdir.join("visible.txt")))
+            XCTAssertTrue(unsortedNoHidden.contains(tmpdir.join("another.txt")))
+            XCTAssertFalse(unsortedNoHidden.contains(tmpdir.join(".hidden.txt")))
+        }
+    }
 }
