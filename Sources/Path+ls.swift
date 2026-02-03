@@ -238,14 +238,15 @@ public extension Array where Element == Path {
 }
 
 /// Options for `Path.ls(_:)`
+/// 
+/// - WARNING: Sorting is locale-specific and can be expensive for large directories (0.5+ seconds).
+///   Use `.unsorted` or `.aUnsorted` when you don't need sorted output and performance is critical.
+/// - Note: In the next major version, sorting will be removed by default.
 public enum ListDirectoryOptions {
-    /// Lists hidden files also
+    /// Lists hidden files also (sorted)
     case a
-    /// Lists hidden files also without sorting
+    /// Lists hidden files also (unsorted for better performance)
     case aUnsorted
     /// Disables sorting for better performance
-    /// - WARNING: Sorting is locale-specific and can be expensive for large directories.
-    ///   Use this option when you don't need sorted output and performance is critical.
-    /// - Note: In the next major version, sorting will be removed by default.
     case unsorted
 }
