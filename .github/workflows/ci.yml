@@ -1,9 +1,6 @@
 name: CI
 on:
   pull_request:
-    paths:
-      - '**/*.swift'
-      - .github/workflows/ci.yml
   schedule:
     - cron: '3 3 * * 5'  # 3:03 AM, every Friday
 

@@ -2,9 +2,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - '**/*.swift'
-      - .github/workflows/checks.yml
 jobs:
   smoke:
     runs-on: ubuntu-latest
