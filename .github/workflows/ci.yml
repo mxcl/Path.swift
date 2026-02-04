@@ -52,14 +52,19 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: mxcl/get-swift-version@v1
-      id: swift
-
     - uses: actions/checkout@v2
 
     - run: useradd -ms /bin/bash mxcl
     - run: chown -R mxcl .
     # ^^ we need to be a normal user and not root for the tests to be valid
+
+    - name: Get Swift Version
+      id: swift
+      run: |
+        version=$(swift --version | head -n1 | sed 's/.*Swift version \([0-9.]*\).*/\1/')
+        marketing_version=$(echo $version | cut -d. -f1)
+        echo "marketing-version=$marketing_version" >> $GITHUB_OUTPUT
+        echo "Swift version: $version (marketing: $marketing_version)"
 
     - run: echo ARGS=--enable-code-coverage >> $GITHUB_ENV
       if: ${{ steps.swift.outputs.marketing-version > 5 }}
