@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   verify-linuxmain:
-    runs-on: macos-10.15
+    runs-on: macos-13
     steps:
     - uses: actions/checkout@v2
     - run: swift test --generate-linuxmain
@@ -21,8 +21,9 @@ jobs:
     strategy:
       matrix:
         os:
-          - macos-10.15
-          - macos-11
+          - macos-13
+          - macos-14
+          - macos-15
         platform:
           - iOS
           - tvOS
@@ -48,7 +49,12 @@ jobs:
         - swift:5.2
         - swift:5.3
         - swift:5.4
-        - swiftlang/swift:nightly-5.5
+        - swift:5.5
+        - swift:5.6
+        - swift:5.7
+        - swift:5.8
+        - swift:5.9
+        - swift:5.10
     container:
       image: ${{ matrix.swift }}
     steps:
