@@ -496,6 +496,13 @@ class PathTests: XCTestCase {
         }
     }
 
+    func testStringEncodingExtensions() throws {
+        let string = try String(contentsOf: Path(#file)!, encoding: .utf8)
+        try Path.mktemp { tmpdir in
+            _ = try string.write(to: tmpdir.foo, encoding: .utf8)
+        }
+    }
+
     func testFileHandleExtensions() throws {
         _ = try FileHandle(forReadingAt: Path(#file)!)
         _ = try FileHandle(forWritingAt: Path(#file)!)
