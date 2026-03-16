@@ -9,22 +9,24 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  apple:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        platform:
-          - iOS
-          - tvOS
-          - macOS
-          - watchOS
-    steps:
-    - uses: actions/checkout@v6
-    - uses: mxcl/xcodebuild@latest
-      with:
-        platform: ${{ matrix.platform }}
-        code-coverage: true
-    - uses: codecov/codecov-action@v5
+  # we want to test more macOS versions but GitHub make that difficult without
+  # constant maintenance because runners are deprecated and removed
+  # apple:
+  #   runs-on: macos-latest
+  #   strategy:
+  #     matrix:
+  #       platform:
+  #         - iOS
+  #         - tvOS
+  #         - macOS
+  #         - watchOS
+  #   steps:
+  #   - uses: actions/checkout@v6
+  #   - uses: mxcl/xcodebuild@latest
+  #     with:
+  #       platform: ${{ matrix.platform }}
+  #       code-coverage: true
+  #   - uses: codecov/codecov-action@v5
 
   linux:
     runs-on: ubuntu-latest
@@ -50,7 +52,7 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Get Swift version
       id: swift
