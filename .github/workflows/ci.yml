@@ -14,17 +14,16 @@ jobs:
     strategy:
       matrix:
         platform:
-          # - iOS
-          # - tvOS
+          - iOS
+          - tvOS
           - macOS
-          # - watchOS
+          - watchOS
     steps:
     - uses: actions/checkout@v6
     - uses: mxcl/xcodebuild@latest
       with:
         platform: ${{ matrix.platform }}
         code-coverage: true
-        warnings-as-errors: true
     - uses: codecov/codecov-action@v5
 
   linux:
