@@ -9,13 +9,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify-linuxmain:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v4
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
-
   apple:
     runs-on: macos-latest
     strategy:
@@ -58,7 +51,7 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: mxcl/get-swift-version@latest
+    - uses: mxcl/get-swift-version@v1
       id: swift
 
     - uses: actions/checkout@v4
