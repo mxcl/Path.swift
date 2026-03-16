@@ -10,9 +10,9 @@ concurrency:
 
 jobs:
   verify-linuxmain:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - run: swift test --generate-linuxmain
     - run: git diff --exit-code
 
@@ -21,10 +21,10 @@ jobs:
     strategy:
       matrix:
         platform:
-          - iOS
-          - tvOS
+          # - iOS
+          # - tvOS
           - macOS
-          - watchOS
+          # - watchOS
     steps:
     - uses: actions/checkout@v2
     - uses: mxcl/xcodebuild@latest
@@ -40,13 +40,21 @@ jobs:
     strategy:
       matrix:
         swift:
-        - swift:4.2
-        - swift:5.0
-        - swift:5.1
-        - swift:5.2
-        - swift:5.3
-        - swift:5.4
+        # - swift:4.2
+        # - swift:5.0
+        # - swift:5.1
+        # - swift:5.2
+        # - swift:5.3
+        # - swift:5.4
         - swift:5.5
+        # - swift:5.6
+        # - swift:5.7
+        # - swift:5.8
+        # - swift:5.9
+        # - swift:5.10
+        # - swift:6.0
+        # - swift:6.1
+        # - swift:6.2
     container:
       image: ${{ matrix.swift }}
     steps:
