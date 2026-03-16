@@ -1,33 +1,16 @@
 name: CI
 on:
   pull_request:
-<<<<<<< HEAD
-  schedule:
-    - cron: '3 3 * * 5'  # 3:03 AM, every Friday
-=======
->>>>>>> origin/master
 
 concurrency:
   group: ${{ github.head_ref || 'push' }}
   cancel-in-progress: true
 
 jobs:
-<<<<<<< HEAD
-  verify-linuxmain:
-    runs-on: macos-13
-    steps:
-    - uses: actions/checkout@v4
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
-
-  apple:
-    runs-on: macos-13
-=======
   # we want to test more macOS versions but GitHub make that difficult without
   # constant maintenance because runners are deprecated and removed
   apple:
     runs-on: macos-latest
->>>>>>> origin/master
     strategy:
       matrix:
         platform:
@@ -36,13 +19,8 @@ jobs:
           - macOS
           - watchOS
     steps:
-<<<<<<< HEAD
-    - uses: actions/checkout@v4
-    - uses: mxcl/xcodebuild@v1
-=======
     - uses: actions/checkout@v6
     - uses: mxcl/xcodebuild@latest
->>>>>>> origin/master
       with:
         platform: ${{ matrix.platform }}
         code-coverage: true
@@ -54,6 +32,11 @@ jobs:
     strategy:
       matrix:
         swift:
+        - swift:4.2
+        - swift:5.0
+        - swift:5.1
+        - swift:5.2
+        - swift:5.3
         - swift:5.4
         - swift:5.5
         - swift:5.6
@@ -61,12 +44,6 @@ jobs:
         - swift:5.8
         - swift:5.9
         - swift:5.10
-<<<<<<< HEAD
-    container:
-      image: ${{ matrix.swift }}
-    steps:
-    - uses: actions/checkout@v4
-=======
         # - swift:6.0 strangely fails
         - swift:6.1
         - swift:6.2
@@ -80,19 +57,10 @@ jobs:
       run: |
         ver=$(swift --version | head -1 | sed 's/.*Swift version \([0-9]*\).*/\1/')
         echo "marketing-version=$ver" >> $GITHUB_OUTPUT
->>>>>>> origin/master
 
     - run: useradd -ms /bin/bash mxcl
     - run: chown -R mxcl .
     # ^^ we need to be a normal user and not root for the tests to be valid
-
-    - name: Get Swift Version
-      id: swift
-      run: |
-        version=$(swift --version | head -n1 | sed 's/.*Swift version \([0-9.]*\).*/\1/')
-        marketing_version=$(echo $version | cut -d. -f1)
-        echo "marketing-version=$marketing_version" >> $GITHUB_OUTPUT
-        echo "Swift version: $version (marketing: $marketing_version)"
 
     - run: echo ARGS=--enable-code-coverage >> $GITHUB_ENV
       if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
@@ -115,37 +83,3 @@ jobs:
       if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
       with:
         file: ./info.lcov
-  
-  linux-legacy:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        swift:
-        - swift:4.2
-        - swift:5.0
-        - swift:5.1
-        - swift:5.2
-        - swift:5.3
-    container:
-      image: ${{ matrix.swift }}
-    steps:
-    - name: Checkout code
-      run: |
-        apt-get update && apt-get install -y git
-        git clone --depth 1 --branch ${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}} https://github.com/$GITHUB_REPOSITORY .git-tmp || \
-        git clone --depth 1 https://github.com/$GITHUB_REPOSITORY .git-tmp
-        cd .git-tmp
-        git fetch origin $GITHUB_SHA
-        git checkout $GITHUB_SHA
-        cd ..
-        mv .git-tmp/* .
-        mv .git-tmp/.git .
-        rm -rf .git-tmp
-      # Manual checkout because actions/checkout@v3 and v4 both require node20 with glibc 2.28+
-      # These old Swift containers (Ubuntu 18.04) only have glibc 2.27
-
-    - run: useradd -ms /bin/bash mxcl
-    - run: chown -R mxcl .
-    # ^^ we need to be a normal user and not root for the tests to be valid
-
-    - run: su mxcl -c "swift test --parallel"
