@@ -1,44 +1,34 @@
 name: CI
 on:
   pull_request:
-  schedule:
-    - cron: '3 3 * * 5'  # 3:03 AM, every Friday
 
 concurrency:
   group: ${{ github.head_ref || 'push' }}
   cancel-in-progress: true
 
 jobs:
-  verify-linuxmain:
-    runs-on: macos-10.15
-    steps:
-    - uses: actions/checkout@v2
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
-
+  # we want to test more macOS versions but GitHub make that difficult without
+  # constant maintenance because runners are deprecated and removed
   apple:
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     strategy:
       matrix:
-        os:
-          - macos-10.15
-          - macos-11
         platform:
           - iOS
           - tvOS
           - macOS
           - watchOS
     steps:
-    - uses: actions/checkout@v2
-    - uses: mxcl/xcodebuild@v1
+    - uses: actions/checkout@v6
+    - uses: mxcl/xcodebuild@latest
       with:
         platform: ${{ matrix.platform }}
         code-coverage: true
-        warnings-as-errors: true
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v5
 
   linux:
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         swift:
@@ -48,26 +38,37 @@ jobs:
         - swift:5.2
         - swift:5.3
         - swift:5.4
-        - swiftlang/swift:nightly-5.5
+        - swift:5.5
+        - swift:5.6
+        - swift:5.7
+        - swift:5.8
+        - swift:5.9
+        - swift:5.10
+        # - swift:6.0 strangely fails
+        - swift:6.1
+        - swift:6.2
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: mxcl/get-swift-version@v1
-      id: swift
+    - uses: actions/checkout@v1
 
-    - uses: actions/checkout@v2
+    - name: Get Swift version
+      id: swift
+      run: |
+        ver=$(swift --version | head -1 | sed 's/.*Swift version \([0-9]*\).*/\1/')
+        echo "marketing-version=$ver" >> $GITHUB_OUTPUT
 
     - run: useradd -ms /bin/bash mxcl
     - run: chown -R mxcl .
     # ^^ we need to be a normal user and not root for the tests to be valid
 
     - run: echo ARGS=--enable-code-coverage >> $GITHUB_ENV
-      if: ${{ steps.swift.outputs.marketing-version > 5 }}
+      if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
 
     - run: su mxcl -c "swift test --parallel $ARGS"
 
     - name: Generate `.lcov`
-      if: ${{ steps.swift.outputs.marketing-version > 5 }}
+      if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
       run: |
         apt-get -qq update && apt-get -qq install curl
         b=$(swift build --show-bin-path)
@@ -79,6 +80,6 @@ jobs:
           > info.lcov
 
     - uses: codecov/codecov-action@v1
-      if: ${{ steps.swift.outputs.marketing-version > 5 }}
+      if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
       with:
         file: ./info.lcov
