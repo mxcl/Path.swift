@@ -52,7 +52,7 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: mxcl/get-swift-version@v1
+    - uses: mxcl/get-swift-version@latest
       id: swift
 
     - uses: actions/checkout@v2
