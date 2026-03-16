@@ -52,7 +52,7 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v1
 
     - name: Get Swift version
       id: swift
