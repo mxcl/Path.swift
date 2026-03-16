@@ -165,23 +165,47 @@ public extension Pathish {
     //MARK: Directory Listing
 
     /**
-     Same as the `ls` command ∴ output is ”shallow” and unsorted.
+     Same as the `ls` command ∴ output is "shallow".
+     
      - Note: as per `ls`, by default we do *not* return hidden files. Specify `.a` for hidden files.
      - Parameter options: Configure the listing.
      - Important: On Linux the listing is always `ls -a`
-     - WARNING: we actually sort the output :( sorry. Will fix in a major version bump.
+     - WARNING: ⚠️ **PERFORMANCE**: By default, output is sorted using locale-specific sorting which can be **VERY EXPENSIVE** 
+       for large directories (0.5+ seconds). For better performance, use `.unsorted` or `.aUnsorted` options.
+     - Note: Sorting will be removed by default in the next major version bump.
      */
     func ls(_ options: ListDirectoryOptions? = nil) -> [Path] {
         guard let urls = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil) else {
             fputs("warning: could not list: \(self)\n", stderr)
             return []
         }
-        return urls.compactMap { url in
+        
+        let shouldSort: Bool
+        let includeHidden: Bool
+        
+        switch options {
+        case .some(.a):
+            shouldSort = true
+            includeHidden = true
+        case .some(.aUnsorted):
+            shouldSort = false
+            includeHidden = true
+        case .some(.unsorted):
+            shouldSort = false
+            includeHidden = false
+        case .none:
+            shouldSort = true
+            includeHidden = false
+        }
+        
+        let paths = urls.compactMap { url -> Path? in
             guard let path = Path(url.path) else { return nil }
-            if options != .a, path.basename().hasPrefix(".") { return nil }
-            // ^^ we don’t use the Foundation `skipHiddenFiles` because it considers weird things hidden and we are mirroring `ls`
+            if !includeHidden, path.basename().hasPrefix(".") { return nil }
+            // ^^ we don't use the Foundation `skipHiddenFiles` because it considers weird things hidden and we are mirroring `ls`
             return path
-        }.sorted()
+        }
+        
+        return shouldSort ? paths.sorted() : paths
     }
 
     /// Recursively find files under this path. If the path is a file, no files will be found.
@@ -214,7 +238,15 @@ public extension Array where Element == Path {
 }
 
 /// Options for `Path.ls(_:)`
+/// 
+/// - WARNING: Sorting is locale-specific and can be expensive for large directories (0.5+ seconds).
+///   Use `.unsorted` or `.aUnsorted` when you don't need sorted output and performance is critical.
+/// - Note: In the next major version, sorting will be removed by default.
 public enum ListDirectoryOptions {
-    /// Lists hidden files also
+    /// Lists hidden files also (sorted)
     case a
+    /// Lists hidden files also (unsorted for better performance)
+    case aUnsorted
+    /// Disables sorting for better performance
+    case unsorted
 }

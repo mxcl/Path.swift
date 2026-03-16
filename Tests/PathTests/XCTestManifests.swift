@@ -42,6 +42,8 @@ extension PathTests {
         ("testKind", testKind),
         ("testLock", testLock),
         ("testLsOnNonexistentDirectoryReturnsEmptyArray", testLsOnNonexistentDirectoryReturnsEmptyArray),
+        ("testLsUnsortedOption", testLsUnsortedOption),
+        ("testLsUnsortedWithHidden", testLsUnsortedWithHidden),
         ("testMkpathIfExists", testMkpathIfExists),
         ("testMktemp", testMktemp),
         ("testMoveInto", testMoveInto),
