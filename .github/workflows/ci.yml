@@ -41,14 +41,14 @@ jobs:
         # - swift:5.3
         # - swift:5.4
         - swift:5.5
-        # - swift:5.6
-        # - swift:5.7
-        # - swift:5.8
-        # - swift:5.9
-        # - swift:5.10
-        # - swift:6.0
-        # - swift:6.1
-        # - swift:6.2
+        - swift:5.6
+        - swift:5.7
+        - swift:5.8
+        - swift:5.9
+        - swift:5.10
+        - swift:6.0
+        - swift:6.1
+        - swift:6.2
     container:
       image: ${{ matrix.swift }}
     steps:
