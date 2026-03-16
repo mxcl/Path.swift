@@ -1,8 +1,6 @@
 name: CI
 on:
   pull_request:
-  schedule:
-    - cron: '3 3 * * 5'  # 3:03 AM, every Friday
 
 concurrency:
   group: ${{ github.head_ref || 'push' }}
@@ -11,22 +9,22 @@ concurrency:
 jobs:
   # we want to test more macOS versions but GitHub make that difficult without
   # constant maintenance because runners are deprecated and removed
-  # apple:
-  #   runs-on: macos-latest
-  #   strategy:
-  #     matrix:
-  #       platform:
-  #         - iOS
-  #         - tvOS
-  #         - macOS
-  #         - watchOS
-  #   steps:
-  #   - uses: actions/checkout@v6
-  #   - uses: mxcl/xcodebuild@latest
-  #     with:
-  #       platform: ${{ matrix.platform }}
-  #       code-coverage: true
-  #   - uses: codecov/codecov-action@v5
+  apple:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        platform:
+          - iOS
+          - tvOS
+          - macOS
+          - watchOS
+    steps:
+    - uses: actions/checkout@v6
+    - uses: mxcl/xcodebuild@latest
+      with:
+        platform: ${{ matrix.platform }}
+        code-coverage: true
+    - uses: codecov/codecov-action@v5
 
   linux:
     runs-on: ubuntu-latest
@@ -34,20 +32,20 @@ jobs:
     strategy:
       matrix:
         swift:
-        # - swift:4.2
-        # - swift:5.0
-        # - swift:5.1
-        # - swift:5.2
-        # - swift:5.3
-        # - swift:5.4
-        # - swift:5.5
-        # - swift:5.6
-        # - swift:5.7
-        # - swift:5.8
-        # - swift:5.9
-        # - swift:5.10
-        # # - swift:6.0 strangely fails
-        # - swift:6.1
+        - swift:4.2
+        - swift:5.0
+        - swift:5.1
+        - swift:5.2
+        - swift:5.3
+        - swift:5.4
+        - swift:5.5
+        - swift:5.6
+        - swift:5.7
+        - swift:5.8
+        - swift:5.9
+        - swift:5.10
+        # - swift:6.0 strangely fails
+        - swift:6.1
         - swift:6.2
     container:
       image: ${{ matrix.swift }}
