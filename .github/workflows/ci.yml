@@ -34,21 +34,21 @@ jobs:
     strategy:
       matrix:
         swift:
-        - swift:4.2
-        - swift:5.0
-        - swift:5.1
-        - swift:5.2
-        - swift:5.3
-        - swift:5.4
-      #  - swift:5.5
-      #  - swift:5.6
-      #  - swift:5.7
-      #  - swift:5.8
-      #  - swift:5.9
-      #  - swift:5.10
-        # - swift:6.0 strangely fails
-      #  - swift:6.1
-       # - swift:6.2
+        # - swift:4.2
+        # - swift:5.0
+        # - swift:5.1
+        # - swift:5.2
+        # - swift:5.3
+        # - swift:5.4
+        # - swift:5.5
+        # - swift:5.6
+        # - swift:5.7
+        # - swift:5.8
+        # - swift:5.9
+        # - swift:5.10
+        # # - swift:6.0 strangely fails
+        # - swift:6.1
+        - swift:6.2
     container:
       image: ${{ matrix.swift }}
     steps:
@@ -65,12 +65,12 @@ jobs:
     # ^^ we need to be a normal user and not root for the tests to be valid
 
     - run: echo ARGS=--enable-code-coverage >> $GITHUB_ENV
-      if: ${{ steps.swift.outputs.marketing-version > 5 }}
+      if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
 
     - run: su mxcl -c "swift test --parallel $ARGS"
 
     - name: Generate `.lcov`
-      if: ${{ steps.swift.outputs.marketing-version > 5 }}
+      if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
       run: |
         apt-get -qq update && apt-get -qq install curl
         b=$(swift build --show-bin-path)
@@ -82,6 +82,6 @@ jobs:
           > info.lcov
 
     - uses: codecov/codecov-action@v1
-      if: ${{ steps.swift.outputs.marketing-version > 5 }}
+      if: ${{ steps.swift.outputs.marketing-version > 6.1 }}
       with:
         file: ./info.lcov
