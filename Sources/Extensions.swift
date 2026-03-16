@@ -44,9 +44,20 @@ public extension Bundle {
 /// Extensions on `String` that work with `Path` rather than `String` or `URL`
 public extension String {
     /// Initializes this `String` with the contents of the provided path.
+    /// - SeeAlso: `init(contentsOf:encoding:)`
+    @available(macOS, deprecated: 15, message: "Use `init(contentsOf:encoding:)` instead")
+    @available(iOS, deprecated: 18, message: "Use `init(contentsOf:encoding:)` instead")
+    @available(tvOS, deprecated: 18, message: "Use `init(contentsOf:encoding:)` instead")
+    @available(watchOS, deprecated: 11, message: "Use `init(contentsOf:encoding:)` instead")
     @inlinable
     init<P: Pathish>(contentsOf path: P) throws {
         try self.init(contentsOfFile: path.string)
+    }
+
+    /// Initializes this `String` with the contents of the provided path interpreted using a given encoding.
+    @inlinable
+    init<P: Pathish>(contentsOf path: P, encoding: String.Encoding) throws {
+        try self.init(contentsOfFile: path.string, encoding: encoding)
     }
 
     /// - Returns: `to` to allow chaining
