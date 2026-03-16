@@ -58,10 +58,10 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: mxcl/get-swift-version@v2
+    - uses: mxcl/get-swift-version@latest
       id: swift
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - run: useradd -ms /bin/bash mxcl
     - run: chown -R mxcl .
