@@ -51,10 +51,13 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: mxcl/get-swift-version@v1
-      id: swift
-
     - uses: actions/checkout@v4
+
+    - name: Get Swift version
+      id: swift
+      run: |
+        ver=$(swift --version | head -1 | sed 's/.*Swift version \([0-9]*\).*/\1/')
+        echo "marketing-version=$ver" >> $GITHUB_OUTPUT
 
     - run: useradd -ms /bin/bash mxcl
     - run: chown -R mxcl .
