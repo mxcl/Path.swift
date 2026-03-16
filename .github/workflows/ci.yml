@@ -19,7 +19,7 @@ jobs:
           - macOS
           # - watchOS
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
     - uses: mxcl/xcodebuild@latest
       with:
         platform: ${{ matrix.platform }}
@@ -51,7 +51,7 @@ jobs:
     container:
       image: ${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
 
     - name: Get Swift version
       id: swift
