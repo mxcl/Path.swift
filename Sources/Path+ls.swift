@@ -184,13 +184,13 @@ public extension Pathish {
         let includeHidden: Bool
         
         switch options {
-        case .a:
+        case .some(.a):
             shouldSort = true
             includeHidden = true
-        case .aUnsorted:
+        case .some(.aUnsorted):
             shouldSort = false
             includeHidden = true
-        case .unsorted:
+        case .some(.unsorted):
             shouldSort = false
             includeHidden = false
         case .none:
