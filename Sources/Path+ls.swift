@@ -255,6 +255,14 @@ public enum ListDirectoryOptions {
 
 private extension URL {
     var isDirectory: Bool {
-        return (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
+        #if swift(>=5.0) && !swift(>=5.1)
+            // fails for Swift 5.0 *only* (works in 4.2 :D)
+            // possibly only applies to Linux, but there’s no way to verify macOS anymore
+            var isDir: ObjCBool = false
+            FileManager.default.fileExists(atPath: path, isDirectory: &isDir)
+            return isDir.boolValue
+        #else
+            return (try? resourceValues(forKeys: [.isDirectoryKey]))?.isDirectory == true
+        #endif
     }
 }
