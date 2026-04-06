@@ -9,6 +9,10 @@ let _realpath = Glibc.realpath
 
 public typealias PathStruct = Path
 
+#if !swift(>=5.5)
+    private protocol Sendable {}
+#endif
+
 /**
  A `Path` represents an absolute path on a filesystem.
 
@@ -40,7 +44,7 @@ public typealias PathStruct = Path
  - Note: A `Path` does not necessarily represent an actual filesystem entry.
  - SeeAlso: `Pathish` for most methods you will use on `Path` instances.
  */
-public struct Path: Pathish {
+public struct Path: Pathish, Sendable {
 
     /// The normalized string representation of the underlying filesystem path
     public let string: String
